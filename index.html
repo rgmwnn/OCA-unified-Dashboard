@@ -1,1666 +1,1633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OCA Internal Performance Dashboard</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>OCA Internal Performance Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<style>
+/* ================================================================
+   CSS VARIABLES — OCA Brand System
+   ================================================================ */
+:root{
+  --bg:#FFFFFF;
+  --bg-soft:#F8F8F8;
+  --bg-sidebar:#111111;
+  --card:#FFFFFF;
+  --primary:#111111;
+  --primary-soft:#1F1F1F;
+  --brand-red:#ED1B3A;
+  --brand-red-dark:#B5122B;
+  --brand-red-soft:#FDE8EC;
+  --text-main:#111827;
+  --text-muted:#6B7280;
+  --border:#E5E7EB;
+  --warning-yellow:#FACC15;
+  --success-green:#22C55E;
+  --risk-red:#EF4444;
+  --header-h:60px;
+  --sidebar-w:232px;
+  --radius:10px;
+  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-md:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-soft);color:var(--text-main);min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;font-family:inherit}
+ul{list-style:none}
 
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+/* ================================================================
+   FILTER DROPDOWNS
+   ================================================================ */
+.filter-select{
+  background:#1F1F1F;
+  color:#FFFFFF;
+  border:1px solid rgba(237,27,58,.45);
+  font-family:'DM Sans',sans-serif;
+  font-size:.75rem;
+  padding:6px 26px 6px 10px;
+  border-radius:6px;
+  outline:none;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  min-width:110px;
+  transition:border-color .15s;
+}
+.filter-select:hover{border-color:var(--brand-red)}
+.filter-select:focus{border-color:var(--brand-red);box-shadow:0 0 0 2px rgba(237,27,58,.15)}
+.filter-select option{background:#FFFFFF;color:#111827;font-size:.8rem}
+.filter-select option:checked{background:#ED1B3A;color:#FFFFFF}
 
-  <style>
-    /* =============================================
-       CSS VARIABLES — OCA Brand Identity
-       ============================================= */
-    :root {
-      --bg:              #FFFFFF;
-      --bg-soft:         #F8F8F8;
-      --bg-sidebar:      #111111;
-      --card:            #FFFFFF;
-      --primary:         #111111;
-      --primary-soft:    #1F1F1F;
-      --brand-red:       #ED1B3A;
-      --brand-red-dark:  #B5122B;
-      --brand-red-soft:  #FDE8EC;
-      --text-main:       #111827;
-      --text-muted:      #6B7280;
-      --border:          #E5E7EB;
-      --warning-yellow:  #FACC15;
-      --success-green:   #22C55E;
-      --risk-red:        #EF4444;
-      --header-h:        60px;
-      --sidebar-w:       220px;
-      --radius:          10px;
-      --shadow:          0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-      --shadow-md:       0 2px 8px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.06);
-    }
+.section-filters{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;
+}
+.filter-group{display:flex;align-items:center;gap:6px}
+.filter-group label{
+  font-size:.65rem;font-weight:600;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;
+}
 
-    /* =============================================
-       RESET & BASE
-       ============================================= */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 14px; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-soft);
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+/* ================================================================
+   HEADER
+   ================================================================ */
+.header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:var(--primary);display:flex;align-items:center;
+  z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.header-logo-zone{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  display:flex;align-items:center;padding:0 16px;
+  border-right:1px solid rgba(255,255,255,.08);height:100%;
+}
+.header-logo-zone img{max-height:42px;max-width:190px;object-fit:contain;display:block}
+.logo-fallback{font-size:1.3rem;font-weight:700;color:var(--brand-red);letter-spacing:-.5px}
+.header-body{
+  flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+}
+.header-title-block .header-title{font-size:.9rem;font-weight:700;color:#fff;line-height:1.2}
+.header-title-block .header-subtitle{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:2px}
+.header-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.data-status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);background:rgba(255,255,255,.05);
+}
+.data-status-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
+.data-status-badge.loaded .dot{background:var(--success-green)}
+.data-status-badge.sample .dot{background:var(--warning-yellow)}
+.header-timestamp{font-size:.64rem;color:rgba(255,255,255,.32);font-family:'DM Mono',monospace}
+.btn-reset{
+  font-size:.68rem;font-weight:600;color:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;
+  cursor:pointer;background:transparent;transition:all .15s;
+}
+.btn-reset:hover{background:rgba(237,27,58,.2);border-color:rgba(237,27,58,.5);color:#fff}
 
-    /* =============================================
-       TOP HEADER
-       ============================================= */
-    .header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--header-h);
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      padding: 0 20px 0 0;
-      z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-    }
-    .header-logo-zone {
-      width: var(--sidebar-w);
-      min-width: var(--sidebar-w);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 16px;
-      border-right: 1px solid rgba(255,255,255,0.08);
-      height: 100%;
-    }
-    .header-logo-zone img {
-      max-height: 36px;
-      max-width: 160px;
-      object-fit: contain;
-      display: block;
-    }
-    .logo-fallback {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--brand-red);
-      letter-spacing: -0.5px;
-    }
-    .header-title-block {
-      flex: 1;
-      padding: 0 20px;
-    }
-    .header-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .header-subtitle {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 1px;
-    }
-    .header-filters {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .filter-label {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.45);
-      margin-right: 2px;
-    }
-    .filter-select {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.85);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.75rem;
-      padding: 5px 10px;
-      border-radius: 6px;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      min-width: 110px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.4)'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-      padding-right: 24px;
-    }
-    .filter-select:focus { border-color: var(--brand-red); }
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+.sidebar{
+  position:fixed;top:var(--header-h);left:0;
+  width:var(--sidebar-w);height:calc(100vh - var(--header-h));
+  background:var(--bg-sidebar);display:flex;flex-direction:column;
+  overflow-y:auto;z-index:90;
+}
+.sidebar-nav{padding:14px 0}
+.sidebar-section-label{
+  font-size:.58rem;font-weight:700;letter-spacing:.1em;
+  color:rgba(255,255,255,.2);padding:12px 16px 4px;text-transform:uppercase;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;padding:9px 16px;
+  font-size:.8rem;font-weight:500;color:rgba(255,255,255,.5);
+  cursor:pointer;transition:background .15s,color .15s;
+  border-left:3px solid transparent;user-select:none;
+}
+.nav-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(237,27,58,.12);color:#fff;border-left-color:var(--brand-red)}
+.nav-icon{width:15px;height:15px;opacity:.6;flex-shrink:0}
+.nav-item.active .nav-icon{opacity:1}
 
-    /* =============================================
-       SIDEBAR
-       ============================================= */
-    .sidebar {
-      position: fixed;
-      top: var(--header-h);
-      left: 0;
-      width: var(--sidebar-w);
-      height: calc(100vh - var(--header-h));
-      background: var(--bg-sidebar);
-      display: flex;
-      flex-direction: column;
-      padding: 20px 0;
-      overflow-y: auto;
-      z-index: 90;
-    }
-    .sidebar-section-label {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.25);
-      padding: 14px 20px 6px;
-      text-transform: uppercase;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 20px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.55);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      border-left: 3px solid transparent;
-      position: relative;
-    }
-    .nav-item:hover {
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.9);
-    }
-    .nav-item.active {
-      background: rgba(237,27,58,0.12);
-      color: #fff;
-      border-left-color: var(--brand-red);
-    }
-    .nav-item .nav-icon {
-      width: 18px;
-      height: 18px;
-      opacity: 0.7;
-      flex-shrink: 0;
-    }
-    .nav-item.active .nav-icon { opacity: 1; }
-    .nav-badge {
-      margin-left: auto;
-      background: var(--brand-red);
-      color: #fff;
-      font-size: 0.6rem;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 10px;
-    }
-    .sidebar-footer {
-      margin-top: auto;
-      padding: 16px 20px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .sidebar-footer-text {
-      font-size: 0.68rem;
-      color: rgba(255,255,255,0.2);
-      line-height: 1.6;
-    }
+.sidebar-bottom{margin-top:auto;padding-bottom:8px}
+.sidebar-period{
+  margin:8px 13px 0;padding:11px 12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;
+}
+.sidebar-period-title{font-size:.62rem;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.sidebar-period-text{font-size:.62rem;line-height:1.55;color:rgba(255,255,255,.32)}
 
-    /* =============================================
-       MAIN CONTENT AREA
-       ============================================= */
-    .main {
-      margin-left: var(--sidebar-w);
-      margin-top: var(--header-h);
-      padding: 24px;
-      min-height: calc(100vh - var(--header-h));
-    }
+.sidebar-disclaimer{
+  margin:12px 13px;padding:11px 11px 11px 13px;
+  border-left:2px solid var(--brand-red);background:rgba(237,27,58,.06);border-radius:8px;
+}
+.sidebar-disclaimer-title{font-size:.62rem;font-weight:700;color:#fff;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+.sidebar-disclaimer-text{font-size:.61rem;line-height:1.55;color:rgba(255,255,255,.48)}
 
-    /* =============================================
-       PAGE HEADER (section title)
-       ============================================= */
-    .page-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .page-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.3px;
-    }
-    .page-subtitle {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-    .badge-period {
-      background: var(--brand-red-soft);
-      color: var(--brand-red-dark);
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(237,27,58,0.2);
-    }
+/* ================================================================
+   MAIN
+   ================================================================ */
+.main{margin-left:var(--sidebar-w);margin-top:var(--header-h);padding:22px;min-height:calc(100vh - var(--header-h))}
 
-    /* =============================================
-       SECTION
-       ============================================= */
-    .section {
-      margin-bottom: 32px;
-    }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.2px;
-    }
-    .section-divider {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .section-tag {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      padding: 3px 9px;
-      border-radius: 20px;
-    }
+#loadingOverlay{
+  position:fixed;inset:0;background:rgba(17,17,17,.75);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px;
+}
+.spinner{
+  width:38px;height:38px;border:3px solid rgba(237,27,58,.2);
+  border-top-color:var(--brand-red);border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:rgba(255,255,255,.55);font-size:.8rem}
 
-    /* =============================================
-       CARDS
-       ============================================= */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-1px);
-    }
-    .card-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
+/* Section visibility */
+.dash-section{display:none}
+.dash-section.visible{display:block}
 
-    /* =============================================
-       KPI CARDS GRID
-       ============================================= */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-    .kpi-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px 16px;
-      position: relative;
-      overflow: hidden;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .kpi-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
-    .kpi-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--brand-red);
-      border-radius: var(--radius) var(--radius) 0 0;
-    }
-    .kpi-card.accent-green::before { background: var(--success-green); }
-    .kpi-card.accent-yellow::before { background: var(--warning-yellow); }
-    .kpi-card.accent-dark::before { background: var(--primary); }
-    .kpi-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-    }
-    .kpi-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 8px;
-      font-size: 0.67rem;
-      color: var(--text-muted);
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 20px;
-    }
-    .kpi-chip.red { background: var(--brand-red-soft); color: var(--brand-red-dark); border-color: rgba(237,27,58,0.2); }
-    .kpi-chip.green { background: #DCFCE7; color: #166534; border-color: rgba(34,197,94,0.25); }
+.section-page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.section-page-title{font-size:1.15rem;font-weight:700;color:var(--primary);letter-spacing:-.3px}
+.section-page-sub{font-size:.73rem;color:var(--text-muted);margin-top:3px}
+.period-badge{
+  background:var(--brand-red-soft);color:var(--brand-red-dark);
+  font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:20px;
+  border:1px solid rgba(237,27,58,.2);white-space:nowrap;
+}
 
-    /* =============================================
-       GRID LAYOUTS
-       ============================================= */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
-    .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
-    .grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+.section-block{margin-bottom:24px}
+.block-header{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.block-title{font-size:.86rem;font-weight:700;color:var(--primary)}
+.block-divider{flex:1;height:1px;background:var(--border)}
+.block-tag{
+  font-size:.6rem;font-weight:600;letter-spacing:.05em;color:var(--text-muted);
+  text-transform:uppercase;background:var(--bg-soft);border:1px solid var(--border);
+  padding:2px 8px;border-radius:20px;
+}
 
-    /* =============================================
-       CHART CONTAINERS
-       ============================================= */
-    .chart-wrap {
-      position: relative;
-      width: 100%;
-    }
-    .chart-wrap canvas { display: block; }
+/* ================================================================
+   CARDS
+   ================================================================ */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;
+  transition:box-shadow .2s,transform .15s;
+}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card-title{font-size:.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:13px}
 
-    /* =============================================
-       EXECUTIVE SUMMARY CARD
-       ============================================= */
-    .exec-summary {
-      background: var(--primary);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .exec-summary::before {
-      content: '';
-      position: absolute;
-      top: -30px; right: -30px;
-      width: 120px; height: 120px;
-      background: rgba(237,27,58,0.15);
-      border-radius: 50%;
-    }
-    .exec-summary::after {
-      content: '';
-      position: absolute;
-      bottom: -20px; right: 60px;
-      width: 80px; height: 80px;
-      background: rgba(237,27,58,0.08);
-      border-radius: 50%;
-    }
-    .exec-summary-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--brand-red);
-      margin-bottom: 8px;
-    }
-    .exec-summary-text {
-      font-size: 0.82rem;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.78);
-      position: relative;
-      z-index: 1;
-    }
-    .exec-pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      position: relative;
-      z-index: 1;
-    }
-    .exec-pill {
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.7);
-    }
-    .exec-pill.wa  { border-color: rgba(37,211,102,0.4); color: #25d366; }
-    .exec-pill.sms { border-color: rgba(250,204,21,0.4); color: #FACC15; }
-    .exec-pill.em  { border-color: rgba(96,165,250,0.4); color: #93c5fd; }
-    .exec-pill.ivr { border-color: rgba(251,146,60,0.4); color: #fdba74; }
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:18px}
+.kpi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:15px;
+  position:relative;overflow:hidden;transition:box-shadow .2s,transform .15s;
+}
+.kpi-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.kpi-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--brand-red);border-radius:var(--radius) var(--radius) 0 0;
+}
+.kpi-card.g::before{background:var(--success-green)}
+.kpi-card.y::before{background:var(--warning-yellow)}
+.kpi-card.k::before{background:var(--primary)}
+.kpi-label{font-size:.64rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.kpi-value{font-size:1.38rem;font-weight:700;color:var(--primary);letter-spacing:-.4px;line-height:1.1}
+.kpi-sub{display:inline-flex;align-items:center;margin-top:7px;font-size:.62rem;color:var(--text-muted);background:var(--bg-soft);border:1px solid var(--border);padding:2px 7px;border-radius:20px}
 
-    /* =============================================
-       TABLES
-       ============================================= */
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-    thead th {
-      text-align: left;
-      padding: 10px 14px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      background: var(--bg-soft);
-      border-bottom: 1px solid var(--border);
-    }
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--bg-soft); }
-    tbody td {
-      padding: 11px 14px;
-      color: var(--text-main);
-      vertical-align: middle;
-    }
-    .td-muted { color: var(--text-muted); font-size: 0.75rem; }
+/* Grid layouts */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.grid-6040{display:grid;grid-template-columns:1.5fr 1fr;gap:13px}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 
-    /* =============================================
-       BADGES / TAGS
-       ============================================= */
-    .badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 20px;
-      letter-spacing: 0.03em;
-    }
-    .badge-red    { background: #FEE2E2; color: #991B1B; }
-    .badge-yellow { background: #FEF9C3; color: #854D0E; }
-    .badge-green  { background: #DCFCE7; color: #166534; }
-    .badge-gray   { background: var(--bg-soft); color: var(--text-muted); border: 1px solid var(--border); }
-    .badge-blue   { background: #DBEAFE; color: #1E40AF; }
-    .badge-orange { background: #FFEDD5; color: #9A3412; }
+/* Charts */
+.chart-wrap{position:relative;width:100%}
+.chart-wrap canvas{display:block}
+.chart-quadrant-wrap{position:relative}
+.quadrant-labels{
+  position:absolute;inset:0;pointer-events:none;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;padding:18px 8px;
+}
+.ql{
+  display:flex;align-items:flex-start;
+  font-size:.56rem;font-weight:700;color:rgba(17,17,17,.17);
+  text-transform:uppercase;letter-spacing:.04em;padding:3px;
+}
 
-    /* Channel color dots */
-    .ch-dot {
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-    .ch-wa  { background: #25d366; }
-    .ch-sms { background: #FACC15; }
-    .ch-em  { background: #60a5fa; }
-    .ch-ivr { background: #f97316; }
+/* Tables */
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.77rem}
+thead th{
+  text-align:left;padding:9px 12px;font-size:.63rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);
+  background:var(--bg-soft);border-bottom:1px solid var(--border);
+}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg-soft)}
+tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 
-    /* =============================================
-       HEATMAP
-       ============================================= */
-    .heatmap-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: 56px repeat(13, 1fr);
-      gap: 3px;
-      min-width: 600px;
-    }
-    .hm-cell {
-      height: 30px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      font-weight: 500;
-      color: transparent;
-      transition: opacity 0.2s;
-    }
-    .hm-cell:hover { opacity: 0.85; color: #fff; }
-    .hm-label {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      font-weight: 500;
-    }
-    .hm-col-label {
-      font-size: 0.62rem;
-      color: var(--text-muted);
-      text-align: center;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 4px;
-      height: 30px;
-    }
+/* Badges */
+.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.02em}
+.badge-red{background:#FEE2E2;color:#991B1B}
+.badge-yellow{background:#FEF9C3;color:#854D0E}
+.badge-green{background:#DCFCE7;color:#166534}
+.badge-gray{background:var(--bg-soft);color:var(--text-muted);border:1px solid var(--border)}
+.badge-blue{background:#DBEAFE;color:#1E40AF}
+.badge-orange{background:#FFEDD5;color:#9A3412}
 
-    /* =============================================
-       ALERT TABLE — RISK SECTION
-       ============================================= */
-    .alert-row-high td:first-child { border-left: 3px solid var(--risk-red); }
-    .alert-row-medium td:first-child { border-left: 3px solid var(--warning-yellow); }
-    .alert-row-low td:first-child { border-left: 3px solid var(--success-green); }
+/* Channel dots */
+.ch-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.ch-wa{background:#25d366}.ch-sms{background:#FACC15}.ch-em{background:#60a5fa}.ch-ivr{background:#f97316}
 
-    /* =============================================
-       METRIC MINI CARDS
-       ============================================= */
-    .mini-metric-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 0;
-    }
-    .mini-metric {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      text-align: center;
-    }
-    .mini-metric-value {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.3px;
-    }
-    .mini-metric-label {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 500;
-    }
+/* Heatmap */
+.heatmap-scroll{width:100%;overflow-x:auto}
+.heatmap-grid{display:grid;gap:3px;min-width:540px}
+.hm-cell{height:27px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.56rem;color:transparent;cursor:default;transition:opacity .15s}
+.hm-cell:hover{opacity:.8;color:#fff}
+.hm-label{font-size:.63rem;color:var(--text-muted);display:flex;align-items:center;font-weight:500}
+.hm-col-label{font-size:.58rem;color:var(--text-muted);text-align:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;height:27px}
 
-    /* =============================================
-       RECOMMENDED ACTIONS
-       ============================================= */
-    .action-panel {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-    }
-    .action-panel-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .action-panel-title::before {
-      content: '';
-      display: block;
-      width: 4px; height: 14px;
-      background: var(--brand-red);
-      border-radius: 2px;
-    }
-    .action-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.79rem;
-    }
-    .action-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .action-owner {
-      font-size: 0.65rem;
-      font-weight: 700;
-      min-width: 110px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      text-align: center;
-      background: var(--brand-red-soft);
-      color: var(--brand-red-dark);
-      border: 1px solid rgba(237,27,58,0.2);
-    }
-    .action-owner.green { background: #DCFCE7; color: #166534; border-color: rgba(34,197,94,0.25); }
-    .action-owner.blue  { background: #DBEAFE; color: #1E40AF; border-color: rgba(96,165,250,0.25); }
-    .action-text { color: var(--text-muted); line-height: 1.5; }
+/* Mini metrics */
+.mini-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
+.mini-card{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center}
+.mini-value{font-size:1.2rem;font-weight:700;color:var(--primary);letter-spacing:-.3px}
+.mini-label{font-size:.64rem;color:var(--text-muted);margin-top:4px;font-weight:500}
 
-    /* =============================================
-       INSIGHT CARD
-       ============================================= */
-    .insight-card {
-      background: linear-gradient(135deg, #111111 0%, #1F1F1F 100%);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .insight-card::before {
-      content: '';
-      position: absolute;
-      top: -20px; right: -20px;
-      width: 90px; height: 90px;
-      background: rgba(237,27,58,0.2);
-      border-radius: 50%;
-    }
-    .insight-tag {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--brand-red);
-      margin-bottom: 8px;
-    }
-    .insight-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-    .insight-text {
-      font-size: 0.78rem;
-      line-height: 1.65;
-      color: rgba(255,255,255,0.65);
-      position: relative;
-      z-index: 1;
-    }
+/* Peak summary */
+.peak-summary{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:16px;height:100%}
+.peak-summary-title{font-size:.72rem;font-weight:700;color:var(--primary);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.peak-summary-title::before{content:'';display:block;width:3px;height:13px;background:var(--brand-red);border-radius:2px}
+.peak-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.74rem}
+.peak-row:last-child{border-bottom:none;padding-bottom:0}
+.peak-key{font-size:.63rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;min-width:105px;padding-top:1px}
+.peak-val{color:var(--text-main);line-height:1.5}
 
-    /* =============================================
-       MICROCOPY
-       ============================================= */
-    .microcopy {
-      font-size: 0.67rem;
-      color: var(--text-muted);
-      margin-top: 8px;
-      font-style: italic;
-    }
+/* Future note */
+.future-note{
+  background:rgba(237,27,58,.04);border:1px dashed rgba(237,27,58,.25);
+  border-radius:8px;padding:13px 15px;font-size:.74rem;color:var(--text-muted);line-height:1.6;margin-top:14px;
+}
+.future-note strong{color:var(--brand-red)}
 
-    /* =============================================
-       QUADRANT CHART OVERLAY LABELS
-       ============================================= */
-    .quadrant-wrap {
-      position: relative;
-    }
-    .quadrant-labels {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      padding: 16px;
-    }
-    .ql {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: rgba(17,17,17,0.2);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      padding: 4px;
-    }
+/* Methodology */
+.method-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.method-card h3{font-size:.8rem;font-weight:700;color:var(--primary);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.method-card h3::before{content:'';display:block;width:3px;height:13px;background:var(--brand-red);border-radius:2px}
+.method-card p,.method-card li{font-size:.75rem;color:var(--text-muted);line-height:1.7}
+.method-card ul{padding-left:16px;list-style:disc}
+.method-card ul li{margin-bottom:3px}
 
-    /* =============================================
-       FOOTER
-       ============================================= */
-    footer {
-      text-align: center;
-      padding: 24px 0 16px;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border);
-      margin-top: 16px;
-    }
-    footer span { color: var(--brand-red); font-weight: 600; }
+/* Microcopy */
+.microcopy{font-size:.62rem;color:var(--text-muted);margin-top:7px;font-style:italic}
 
-    /* =============================================
-       SCROLLBAR
-       ============================================= */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(17,17,17,0.15); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(17,17,17,0.3); }
+/* Footer */
+footer{text-align:center;padding:18px 0 12px;font-size:.67rem;color:var(--text-muted);border-top:1px solid var(--border);margin-top:10px}
+footer span{color:var(--brand-red);font-weight:600}
 
-    /* =============================================
-       RESPONSIVE
-       ============================================= */
-    @media (max-width: 1200px) {
-      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 900px) {
-      :root { --sidebar-w: 0px; }
-      .sidebar { display: none; }
-      .main { margin-left: 0; }
-      .header-logo-zone { display: none; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .grid-2, .grid-3, .grid-1-2, .grid-2-1, .grid-3-2 { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 480px) {
-      .kpi-grid { grid-template-columns: 1fr 1fr; }
-      .header-filters { display: none; }
-    }
-  </style>
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(17,17,17,.14);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(17,17,17,.26)}
+
+/* Responsive */
+@media(max-width:1280px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:960px){
+  :root{--sidebar-w:0px}
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .header-logo-zone{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.grid-6040,.method-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<!-- =============================================
-     TOP HEADER
-     ============================================= -->
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading dashboard data…</div>
+</div>
+
+<!-- ================================================================
+     HEADER
+     ================================================================ -->
 <header class="header">
   <div class="header-logo-zone">
-    <!-- Replace with actual logo path. Fallback text "OCA" shown if image fails. -->
-    <img
-      src="data:image/jpeg;base64,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"
-      alt="RevoU x OCA x Telkom"
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-    />
-    <span class="logo-fallback" style="display:none;">OCA</span>
+    <!-- Replace assets/logo.png with actual logo file in repository -->
+    <img src="assets/logo.png" alt="OCA Logo"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span class="logo-fallback" style="display:none">OCA</span>
   </div>
-
-  <div class="header-title-block">
-    <div class="header-title">OCA Internal Performance Dashboard</div>
-    <div class="header-subtitle">Unified cross-channel monitoring · WhatsApp, SMS, Email, Call/IVR</div>
-  </div>
-
-  <!-- Static filter controls -->
-  <div class="header-filters">
-    <span class="filter-label">Period</span>
-    <select class="filter-select">
-      <option selected>Q1 2025 (Jan–Mar)</option>
-      <option>Q2 2025 (Apr–Jun)</option>
-      <option>Q4 2024 (Oct–Dec)</option>
-    </select>
-
-    <span class="filter-label">Channel</span>
-    <select class="filter-select">
-      <option selected>All Channels</option>
-      <option>WhatsApp</option>
-      <option>SMS</option>
-      <option>Email</option>
-      <option>Call/IVR</option>
-    </select>
-
-    <span class="filter-label">Status</span>
-    <select class="filter-select">
-      <option selected>All Statuses</option>
-      <option>Success</option>
-      <option>Failed</option>
-      <option>Pending</option>
-    </select>
-
-    <span class="filter-label">User</span>
-    <select class="filter-select">
-      <option selected>All Users</option>
-      <option>Client A Finance</option>
-      <option>Client B Retail</option>
-      <option>Client C Education</option>
-      <option>Client D Healthcare</option>
-      <option>Client E Logistics</option>
-    </select>
+  <div class="header-body">
+    <div class="header-title-block">
+      <div class="header-title">OCA Internal Performance Dashboard</div>
+      <div class="header-subtitle">Unified cross-channel monitoring · WhatsApp, SMS, Email, Call/IVR</div>
+    </div>
+    <div class="header-meta">
+      <div class="data-status-badge" id="dataStatusBadge">
+        <span class="dot"></span>
+        <span id="dataStatusText">Loading…</span>
+      </div>
+      <div class="header-timestamp" id="headerTimestamp"></div>
+      <button class="btn-reset" onclick="resetToSample()">Reset Sample Data</button>
+    </div>
   </div>
 </header>
 
-<!-- =============================================
-     SIDEBAR NAVIGATION
-     ============================================= -->
+<!-- ================================================================
+     SIDEBAR
+     ================================================================ -->
 <nav class="sidebar">
-  <div class="sidebar-section-label">Navigation</div>
-
-  <div class="nav-item active" onclick="scrollToSection('overview')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-    </svg>
-    Overview
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Dashboard</div>
+    <div class="nav-item active" data-section="overview">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>Overview
+    </div>
+    <div class="nav-item" data-section="channel">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 20V10M12 20V4M6 20v-6"/>
+      </svg>Channel Performance
+    </div>
+    <div class="nav-item" data-section="time">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+      </svg>Time Patterns
+    </div>
+    <div class="nav-item" data-section="users">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>User Monitoring
+    </div>
+    <div class="sidebar-section-label">Reference</div>
+    <div class="nav-item" data-section="methodology">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>Methodology
+    </div>
   </div>
 
-  <div class="nav-item" onclick="scrollToSection('channel')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 20V10M12 20V4M6 20v-6"/>
-    </svg>
-    Channel Performance
-  </div>
-
-  <div class="nav-item" onclick="scrollToSection('time')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
-    </svg>
-    Time Patterns
-  </div>
-
-  <div class="nav-item" onclick="scrollToSection('users')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-    </svg>
-    User Monitoring
-  </div>
-
-  <div class="nav-item" onclick="scrollToSection('risk')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-      <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-    Risk &amp; Opportunity
-    <span class="nav-badge">5</span>
-  </div>
-
-  <div class="sidebar-section-label" style="margin-top: 12px;">System</div>
-
-  <div class="nav-item">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-    </svg>
-    Settings
-  </div>
-
-  <div class="sidebar-footer">
-    <div class="sidebar-footer-text">
-      OCA Internal Dashboard<br />
-      RevoU × Telkom Internship<br />
-      Mockup v1.0 · Q1 2025
+  <div class="sidebar-bottom">
+    <div class="sidebar-period">
+      <div class="sidebar-period-title">Data Period</div>
+      <div class="sidebar-period-text" id="sidebarPeriod">Loading…</div>
+    </div>
+    <div class="sidebar-disclaimer">
+      <div class="sidebar-disclaimer-title">Disclaimer</div>
+      <div class="sidebar-disclaimer-text">
+        The data provided is a representation of the original data which amount has been adjusted.
+        The data used is NOT representation of original data, adjusted for educational purposes and
+        does not reflect the actual business condition of the company.
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- =============================================
+<!-- ================================================================
      MAIN CONTENT
-     ============================================= -->
+     ================================================================ -->
 <main class="main">
 
-  <!-- Page Header -->
-  <div class="page-header">
-    <div>
-      <div class="page-title">Executive Overview</div>
-      <div class="page-subtitle">Cross-channel performance summary across all monitored clients</div>
-    </div>
-    <div class="badge-period">Q1 2025 · Jan–Mar</div>
-  </div>
-
-  <!-- ==========================================
-       SECTION 1 — OVERVIEW
-       ========================================== -->
-  <div id="overview" class="section">
-    <div class="section-header">
-      <div class="section-title">Key Performance Indicators</div>
-      <div class="section-divider"></div>
-      <div class="section-tag">Section 1</div>
+  <!-- ============================================================
+       SECTION 1 — EXECUTIVE OVERVIEW
+       ============================================================ -->
+  <div id="sec-overview" class="dash-section visible">
+    <div class="section-page-header">
+      <div>
+        <div class="section-page-title">Executive Overview</div>
+        <div class="section-page-sub">Cross-channel KPI summary across all monitored clients</div>
+      </div>
+      <div class="period-badge" id="overviewPeriodBadge">Q1 2025</div>
     </div>
 
-    <!-- KPI CARDS -->
-    <!-- REPLACE: Update the values below with live data from your pipeline -->
+    <!-- Section-level filters -->
+    <div class="section-filters">
+      <div class="filter-group">
+        <label>Period</label>
+        <select class="filter-select" id="ov-period" onchange="applyOverviewFilters()">
+          <option value="all">All Periods</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Channel Scope</label>
+        <select class="filter-select" id="ov-channel" onchange="applyOverviewFilters()">
+          <option value="all">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="Call/IVR">Call/IVR</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Metric View</label>
+        <select class="filter-select" id="ov-metric" onchange="applyOverviewFilters()">
+          <option value="transactions">Transactions</option>
+          <option value="message_units">Message Units</option>
+          <option value="billable">Billable Amount</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-label">Total Transactions</div>
-        <div class="kpi-value">122,749</div>
-        <div class="kpi-chip">Q1 2025</div>
+        <div class="kpi-value" id="kpi-tx">—</div>
+        <div class="kpi-sub">All channels</div>
       </div>
-      <div class="kpi-card accent-dark">
+      <div class="kpi-card k">
         <div class="kpi-label">Total Message Units</div>
-        <div class="kpi-value">143K+</div>
-        <div class="kpi-chip">Across 4 channels</div>
+        <div class="kpi-value" id="kpi-mu">—</div>
+        <div class="kpi-sub">Across 4 channels</div>
       </div>
-      <div class="kpi-card accent-green">
+      <div class="kpi-card g">
         <div class="kpi-label">Active Users</div>
-        <div class="kpi-value">20</div>
-        <div class="kpi-chip">Monitored clients</div>
+        <div class="kpi-value" id="kpi-users">—</div>
+        <div class="kpi-sub">Unique clients</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Success Rate</div>
-        <div class="kpi-value">74.9%</div>
-        <div class="kpi-chip">Based on delivery outcome</div>
+        <div class="kpi-value" id="kpi-sr">—</div>
+        <div class="kpi-sub">By delivery outcome</div>
       </div>
-      <div class="kpi-card accent-yellow">
+      <div class="kpi-card y">
         <div class="kpi-label">Charge Rate</div>
-        <div class="kpi-value">74.0%</div>
-        <div class="kpi-chip red">Charged records only</div>
+        <div class="kpi-value" id="kpi-cr">—</div>
+        <div class="kpi-sub">Charged records only</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Billable Amount</div>
-        <div class="kpi-value">IDR 25.95M</div>
-        <div class="kpi-chip green">Excl. free-tier credits</div>
+        <div class="kpi-value" id="kpi-bill">—</div>
+        <div class="kpi-sub">Excl. free-tier credits</div>
       </div>
     </div>
 
-    <!-- Executive Summary -->
-    <div class="exec-summary">
-      <div class="exec-summary-title">⬛ Executive Summary</div>
-      <div class="exec-summary-text">
-        Initial profiling shows that channel performance should not be evaluated by transaction count alone.
-        <strong style="color:#fff;">WhatsApp</strong> leads transaction activity, while <strong style="color:#fff;">SMS</strong> shows strong billable value and delivery reliability.
-        <strong style="color:#fff;">Email</strong> behaves more like a high-volume, low-cost engagement channel, and
-        <strong style="color:#fff;">Call/IVR</strong> should be monitored through answered and RNA rates.
+    <!-- Channel Role Matrix -->
+    <div class="section-block">
+      <div class="block-header">
+        <div class="block-title">Channel Role Matrix: Volume vs Billable Value</div>
+        <div class="block-divider"></div>
+        <div class="block-tag">Overview</div>
       </div>
-      <div class="exec-pills">
-        <span class="exec-pill wa">● WhatsApp · High Volume</span>
-        <span class="exec-pill sms">● SMS · High Reliability</span>
-        <span class="exec-pill em">● Email · Engagement Focus</span>
-        <span class="exec-pill ivr">● Call/IVR · RNA Watch</span>
+      <div class="card">
+        <div class="card-title">Transaction Share (%) vs Billable Amount Share (%) · Bubble size = Success / Answered Rate</div>
+        <div class="chart-quadrant-wrap">
+          <div class="chart-wrap" style="height:310px"><canvas id="chartRoleMatrix"></canvas></div>
+          <div class="quadrant-labels" style="pointer-events:none">
+            <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">Value-Dense Channel</div>
+            <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">Core Business Driver</div>
+            <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Secondary / Monitor</div>
+            <div class="ql">Monetization Efficiency Watch</div>
+          </div>
+        </div>
+        <div class="microcopy">X-axis: Transaction Share (%) · Y-axis: Billable Amount Share (%) · Bubble size proportional to success / answered rate</div>
       </div>
     </div>
   </div>
 
-  <!-- ==========================================
+  <!-- ============================================================
        SECTION 2 — CHANNEL PERFORMANCE
-       ========================================== -->
-  <div id="channel" class="section">
-    <div class="section-header">
-      <div class="section-title">Channel Performance</div>
-      <div class="section-divider"></div>
-      <div class="section-tag">Section 2</div>
+       ============================================================ -->
+  <div id="sec-channel" class="dash-section">
+    <div class="section-page-header">
+      <div>
+        <div class="section-page-title">Channel Performance</div>
+        <div class="section-page-sub">Delivery effectiveness, monetization, and channel comparison</div>
+      </div>
+      <div class="period-badge">Q1 2025</div>
     </div>
 
-    <!-- Row 1: Bar + Donut -->
-    <div class="grid-2" style="margin-bottom:16px;">
+    <div class="section-filters">
+      <div class="filter-group">
+        <label>Channel</label>
+        <select class="filter-select" id="ch-channel" onchange="applyChannelFilters()">
+          <option value="all">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="Call/IVR">Call/IVR</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Message Status</label>
+        <select class="filter-select" id="ch-status" onchange="applyChannelFilters()">
+          <option value="all">All Statuses</option>
+          <option value="success">Success</option>
+          <option value="failed">Failed</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Charge Status</label>
+        <select class="filter-select" id="ch-charge" onchange="applyChannelFilters()">
+          <option value="all">All</option>
+          <option value="1">Charged</option>
+          <option value="0">Not Charged</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Metric View</label>
+        <select class="filter-select" id="ch-metric" onchange="applyChannelFilters()">
+          <option value="transactions">Transactions</option>
+          <option value="message_units">Message Units</option>
+          <option value="billable">Billable Amount</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:13px">
       <div class="card">
         <div class="card-title">Billable Amount by Channel (IDR)</div>
-        <!-- REPLACE: billableData labels and values below -->
-        <div class="chart-wrap" style="height:220px;">
-          <canvas id="chartBillable"></canvas>
-        </div>
+        <div class="chart-wrap" style="height:210px"><canvas id="chartBillable"></canvas></div>
         <div class="microcopy">* Billable Amount uses charged transactions only.</div>
       </div>
       <div class="card">
         <div class="card-title">Transaction Share by Channel</div>
-        <!-- REPLACE: txShareData labels and values below -->
-        <div class="chart-wrap" style="height:220px;">
-          <canvas id="chartTxShare"></canvas>
-        </div>
+        <div class="chart-wrap" style="height:210px"><canvas id="chartTxShare"></canvas></div>
       </div>
     </div>
 
-    <!-- Row 2: Grouped Bar (full width) -->
-    <div class="card" style="margin-bottom:16px;">
+    <div class="card" style="margin-bottom:13px">
       <div class="card-title">Outcome Rates by Channel (%)</div>
-      <!-- REPLACE: outcomeData labels and datasets below -->
-      <div class="chart-wrap" style="height:240px;">
-        <canvas id="chartOutcome"></canvas>
-      </div>
+      <div class="chart-wrap" style="height:230px"><canvas id="chartOutcome"></canvas></div>
     </div>
 
-    <!-- Channel Summary Table -->
     <div class="card">
       <div class="card-title">Channel Summary Table</div>
-      <div class="table-wrap">
-        <!-- REPLACE: table rows below with dynamic data -->
-        <table>
-          <thead>
-            <tr>
-              <th>Channel</th>
-              <th>Transactions</th>
-              <th>Charge Rate</th>
-              <th>Success / Answered Rate</th>
-              <th>Risk Signal</th>
-              <th>Billable Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="ch-dot ch-wa"></span><strong>WhatsApp</strong></td>
-              <td>49,999</td>
-              <td>76.2%</td>
-              <td><span class="badge badge-green">84.77%</span></td>
-              <td><span class="badge badge-yellow">Submitted status monitoring</span></td>
-              <td>IDR 10.26M</td>
-            </tr>
-            <tr>
-              <td><span class="ch-dot ch-sms"></span><strong>SMS</strong></td>
-              <td>20,005</td>
-              <td>95.3%</td>
-              <td><span class="badge badge-green">99.67%</span></td>
-              <td><span class="badge badge-green">Stable delivery</span></td>
-              <td>IDR 11.81M</td>
-            </tr>
-            <tr>
-              <td><span class="ch-dot ch-em"></span><strong>Email</strong></td>
-              <td>40,012</td>
-              <td>62.1%</td>
-              <td><span class="badge badge-blue">81.32%</span></td>
-              <td><span class="badge badge-yellow">Processed status monitoring</span></td>
-              <td>IDR 1.57M</td>
-            </tr>
-            <tr>
-              <td><span class="ch-dot ch-ivr"></span><strong>Call/IVR</strong></td>
-              <td>12,733</td>
-              <td>58.0%</td>
-              <td><span class="badge badge-orange">21.87% answered</span></td>
-              <td><span class="badge badge-red">High RNA rate (77.55%)</span></td>
-              <td>IDR 2.30M</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="table-wrap" id="channelTableWrap"></div>
     </div>
   </div>
 
-  <!-- ==========================================
+  <!-- ============================================================
        SECTION 3 — TIME PATTERN MONITORING
-       ========================================== -->
-  <div id="time" class="section">
-    <div class="section-header">
-      <div class="section-title">Time Pattern Monitoring</div>
-      <div class="section-divider"></div>
-      <div class="section-tag">Section 3</div>
+       ============================================================ -->
+  <div id="sec-time" class="dash-section">
+    <div class="section-page-header">
+      <div>
+        <div class="section-page-title">Time Pattern Monitoring</div>
+        <div class="section-page-sub">Traffic trends, peak windows, and operational timing insights</div>
+      </div>
+      <div class="period-badge">Q1 2025</div>
     </div>
 
-    <div class="grid-3-2" style="margin-bottom:16px;">
-      <!-- Daily Trend Line Chart -->
+    <div class="section-filters">
+      <div class="filter-group">
+        <label>Date Range</label>
+        <select class="filter-select" id="tm-range" onchange="applyTimeFilters()">
+          <option value="all">All Q1 2025</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Time Grain</label>
+        <select class="filter-select" id="tm-grain" onchange="applyTimeFilters()">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="hourly">Hourly</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Channel</label>
+        <select class="filter-select" id="tm-channel" onchange="applyTimeFilters()">
+          <option value="all">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="Call/IVR">Call/IVR</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Metric View</label>
+        <select class="filter-select" id="tm-metric" onchange="applyTimeFilters()">
+          <option value="transactions">Transactions</option>
+          <option value="message_units">Message Units</option>
+          <option value="billable">Billable Amount</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="block-header">
+        <div class="block-title">Transaction Trend Over Time</div>
+        <div class="block-divider"></div>
+      </div>
       <div class="card">
-        <div class="card-title">Daily Transactions Trend · Q1 2025</div>
-        <!-- REPLACE: trendData below with actual daily transaction counts -->
-        <div class="chart-wrap" style="height:220px;">
-          <canvas id="chartTrend"></canvas>
-        </div>
-      </div>
-      <!-- Insight Card -->
-      <div class="insight-card" style="display:flex; flex-direction:column; justify-content:center;">
-        <div class="insight-tag">🔍 Insight Detected</div>
-        <div class="insight-title">Peak Window Detected</div>
-        <div class="insight-text">
-          Traffic concentration by day and hour helps Campaign Ops plan optimal sending windows
-          and helps Operations anticipate system load before peak periods.
-          Weekday mornings (10:00–14:00) consistently show the highest throughput.
-        </div>
-        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; position:relative; z-index:1;">
-          <span class="badge badge-red">Mon–Fri Peak</span>
-          <span class="badge badge-gray">10:00–14:00</span>
-          <span class="badge badge-gray">Low weekend activity</span>
-        </div>
+        <div class="chart-wrap" style="height:210px"><canvas id="chartTrend"></canvas></div>
       </div>
     </div>
 
-    <!-- Heatmap -->
-    <div class="card">
-      <div class="card-title">Peak Traffic Heatmap · Day × Hour</div>
-      <div class="heatmap-wrap">
-        <div class="heatmap-grid" id="heatmapGrid">
-          <!-- Built dynamically by JS -->
+    <div class="grid-6040" style="margin-bottom:13px;align-items:start">
+      <div class="card">
+        <div class="card-title">Peak Traffic Heatmap · Day × Hour</div>
+        <div class="heatmap-scroll">
+          <div class="heatmap-grid" id="heatmapGrid"></div>
         </div>
+        <div class="microcopy" style="margin-top:7px">Darker red = higher relative traffic intensity.</div>
       </div>
-      <div class="microcopy" style="margin-top:10px;">Darker red = higher relative traffic intensity. Based on estimated Q1 2025 distribution.</div>
+      <div class="peak-summary" id="peakSummaryCard">
+        <div class="peak-summary-title">Peak Window Summary</div>
+      </div>
     </div>
   </div>
 
-  <!-- ==========================================
+  <!-- ============================================================
        SECTION 4 — USER MONITORING
-       ========================================== -->
-  <div id="users" class="section">
-    <div class="section-header">
-      <div class="section-title">User Monitoring</div>
-      <div class="section-divider"></div>
-      <div class="section-tag">Section 4</div>
+       ============================================================ -->
+  <div id="sec-users" class="dash-section">
+    <div class="section-page-header">
+      <div>
+        <div class="section-page-title">User Monitoring</div>
+        <div class="section-page-sub">Client activity, channel dependency, and engagement segmentation</div>
+      </div>
+      <div class="period-badge">Q1 2025</div>
     </div>
 
-    <!-- Mini Metrics -->
-    <div class="mini-metric-grid" style="margin-bottom:16px;">
-      <div class="mini-metric">
-        <div class="mini-metric-value">38%</div>
-        <div class="mini-metric-label">Top User Concentration<br /><span style="font-size:0.62rem; color:var(--text-muted);">Top 3 users by transaction share</span></div>
+    <div class="section-filters">
+      <div class="filter-group">
+        <label>User / Client</label>
+        <select class="filter-select" id="us-user" onchange="applyUserFilters()">
+          <option value="all">All Users</option>
+        </select>
       </div>
-      <div class="mini-metric">
-        <div class="mini-metric-value" style="color:var(--risk-red);">3</div>
-        <div class="mini-metric-label">Declining Users<br /><span style="font-size:0.62rem; color:var(--text-muted);">Activity drop &gt;20% vs. prior period</span></div>
+      <div class="filter-group">
+        <label>Field of Business</label>
+        <select class="filter-select" id="us-fob" onchange="applyUserFilters()">
+          <option value="all">All Fields</option>
+        </select>
       </div>
-      <div class="mini-metric">
-        <div class="mini-metric-value" style="color:var(--brand-red);">4</div>
-        <div class="mini-metric-label">Upsell Candidates<br /><span style="font-size:0.62rem; color:var(--text-muted);">Mono-channel or high-growth users</span></div>
+      <div class="filter-group">
+        <label>Main Channel</label>
+        <select class="filter-select" id="us-channel" onchange="applyUserFilters()">
+          <option value="all">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="Call/IVR">Call/IVR</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Segment</label>
+        <select class="filter-select" id="us-segment" onchange="applyUserFilters()">
+          <option value="all">All Segments</option>
+          <option value="High Value">High Value</option>
+          <option value="Mono-Channel">Mono-Channel</option>
+          <option value="Stable">Stable</option>
+        </select>
       </div>
     </div>
 
-    <div class="grid-2" style="margin-bottom:16px;">
-      <!-- Top Users Table -->
+    <div class="mini-metrics">
+      <div class="mini-card">
+        <div class="mini-value" id="mu-concentration">—</div>
+        <div class="mini-label">Top User Concentration<br/><span style="font-size:.6rem">Top 3 clients by tx share</span></div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-value" id="mu-mono" style="color:var(--risk-red)">—</div>
+        <div class="mini-label">Mono-Channel Users<br/><span style="font-size:.6rem">&gt;85% share on one channel</span></div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-value" id="mu-hv" style="color:var(--brand-red)">—</div>
+        <div class="mini-label">High-Value Users<br/><span style="font-size:.6rem">Top 30% by billable amount</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:13px">
       <div class="card">
         <div class="card-title">Top Users · Q1 2025</div>
-        <div class="table-wrap">
-          <!-- REPLACE: user rows below with actual user data -->
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Main Channel</th>
-                <th>Transactions</th>
-                <th>Active Days</th>
-                <th>Billable</th>
-                <th>Flag</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Client A Finance</strong></td>
-                <td><span class="ch-dot ch-wa"></span>WhatsApp</td>
-                <td>18,423</td>
-                <td>74</td>
-                <td>IDR 4.2M</td>
-                <td><span class="badge badge-red">High Value</span></td>
-              </tr>
-              <tr>
-                <td><strong>Client B Retail</strong></td>
-                <td><span class="ch-dot ch-sms"></span>SMS</td>
-                <td>12,901</td>
-                <td>45</td>
-                <td>IDR 3.8M</td>
-                <td><span class="badge badge-yellow">Mono-Channel</span></td>
-              </tr>
-              <tr>
-                <td><strong>Client C Education</strong></td>
-                <td><span class="ch-dot ch-em"></span>Email</td>
-                <td>10,554</td>
-                <td>60</td>
-                <td>IDR 1.1M</td>
-                <td><span class="badge badge-orange">Declining Usage</span></td>
-              </tr>
-              <tr>
-                <td><strong>Client D Healthcare</strong></td>
-                <td><span class="ch-dot ch-wa"></span>WhatsApp</td>
-                <td>9,112</td>
-                <td>72</td>
-                <td>IDR 2.4M</td>
-                <td><span class="badge badge-blue">Upsell Candidate</span></td>
-              </tr>
-              <tr>
-                <td><strong>Client E Logistics</strong></td>
-                <td><span class="ch-dot ch-ivr"></span>Call/IVR</td>
-                <td>7,340</td>
-                <td>55</td>
-                <td>IDR 1.6M</td>
-                <td><span class="badge badge-green">Stable</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="table-wrap" id="userTableWrap"></div>
       </div>
-
-      <!-- User Dependency Bubble Chart -->
       <div class="card">
         <div class="card-title">User Dependency Map</div>
-        <div class="quadrant-wrap">
-          <div class="chart-wrap" style="height:260px;">
-            <canvas id="chartBubble"></canvas>
-          </div>
-          <!-- Quadrant Labels -->
-          <div class="quadrant-labels">
-            <div class="ql" style="align-items:flex-end; justify-content:flex-end; border-right:1px dashed rgba(0,0,0,0.07); border-bottom:1px dashed rgba(0,0,0,0.07);">Strategic Client</div>
-            <div class="ql" style="align-items:flex-end; border-bottom:1px dashed rgba(0,0,0,0.07);">Upsell / Risk Priority</div>
-            <div class="ql" style="justify-content:flex-end; border-right:1px dashed rgba(0,0,0,0.07);">Monitor</div>
+        <div class="chart-quadrant-wrap">
+          <div class="chart-wrap" style="height:270px"><canvas id="chartUserBubble"></canvas></div>
+          <div class="quadrant-labels" style="pointer-events:none">
+            <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">Strategic Client</div>
+            <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">Upsell / Risk Priority</div>
+            <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Monitor</div>
             <div class="ql">Nurture</div>
           </div>
         </div>
-        <div class="microcopy">X-axis: Main Channel Share · Y-axis: Transaction Volume</div>
+        <div class="microcopy">X-axis: Main Channel Share (%) · Y-axis: Transaction Volume · Bubble size: Billable Amount</div>
+      </div>
+    </div>
+
+    <div class="future-note">
+      <strong>Future Enhancement:</strong> Automated alert logic for delivery drops, inactive users, dependency risk, and upsell opportunity is planned as a next-phase development after EDA-based monitoring is validated.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 5 — METHODOLOGY
+       ============================================================ -->
+  <div id="sec-methodology" class="dash-section">
+    <div class="section-page-header">
+      <div>
+        <div class="section-page-title">Methodology</div>
+        <div class="section-page-sub">Data definitions, metric calculations, and analytical approach</div>
+      </div>
+    </div>
+    <div class="method-grid">
+      <div class="method-card">
+        <h3>Data Source &amp; Scope</h3>
+        <ul>
+          <li>Dataset: <code>data/dashboard_unified_transactions.csv</code> loaded from the repository.</li>
+          <li>Period covered: Q1 2025 (January – March).</li>
+          <li>Channels monitored: WhatsApp, SMS, Email, Call/IVR.</li>
+          <li>Each row = one transaction event.</li>
+          <li>Fallback sample data used if CSV cannot be fetched.</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h3>Key Metric Definitions</h3>
+        <ul>
+          <li><strong>Transaction Count</strong>: Total rows (one per message/call event).</li>
+          <li><strong>Message Units</strong>: Sum of <code>message_units</code> column.</li>
+          <li><strong>Billable Amount</strong>: Sum of <code>billable_amount</code> where <code>is_charge = 1</code>.</li>
+          <li><strong>Success Rate</strong>: Proportion of records with <code>success_flag = 1</code>.</li>
+          <li><strong>Charge Rate</strong>: Proportion of records with <code>is_charge = 1</code>.</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h3>Channel Role Matrix Logic</h3>
+        <p>Each channel is plotted by its transaction share (X-axis) vs billable amount share (Y-axis). Bubble size encodes the success/answered rate. Quadrant thresholds are set at 25% for both axes to separate high/low regions.</p>
+      </div>
+      <div class="method-card">
+        <h3>User Dependency Map Logic</h3>
+        <p>Each user is plotted by dominant channel share (X-axis) vs total transaction volume (Y-axis). Users with &gt;85% concentration on one channel are flagged as mono-channel. Bubble size encodes billable amount.</p>
+      </div>
+      <div class="method-card">
+        <h3>Heatmap Construction</h3>
+        <p>Traffic is aggregated by day-of-week and hour. Intensity is normalized relative to the peak slot (max = 100). Colors use a linear red scale where full opacity = peak intensity.</p>
+      </div>
+      <div class="method-card">
+        <h3>Limitations &amp; Disclaimers</h3>
+        <ul>
+          <li>All monetary values have been adjusted from original data for educational privacy.</li>
+          <li>User names are anonymized (Client A, B, C, …).</li>
+          <li>This dashboard is for portfolio and internship demonstration only.</li>
+          <li>Data does not reflect actual OCA business performance.</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <!-- ==========================================
-       SECTION 5 — RISK & OPPORTUNITY
-       ========================================== -->
-  <div id="risk" class="section">
-    <div class="section-header">
-      <div class="section-title">Risk &amp; Opportunity Center</div>
-      <div class="section-divider"></div>
-      <div class="section-tag">Section 5</div>
-    </div>
-
-    <!-- Alert Table -->
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">Active Alerts &amp; Monitoring Flags</div>
-      <div class="table-wrap">
-        <!-- REPLACE: alert rows with live alert data -->
-        <table>
-          <thead>
-            <tr>
-              <th>Alert Type</th>
-              <th>Channel / User</th>
-              <th>Severity</th>
-              <th>Status</th>
-              <th>Suggested Action</th>
-              <th>Owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="alert-row-high">
-              <td><strong>Delivery Drop Alert</strong></td>
-              <td><span class="ch-dot ch-wa"></span>WhatsApp</td>
-              <td><span class="badge badge-red">High</span></td>
-              <td><span class="badge badge-orange">Open</span></td>
-              <td class="td-muted">Check gateway/provider stability</td>
-              <td><span class="badge badge-gray">Product / Ops</span></td>
-            </tr>
-            <tr class="alert-row-medium">
-              <td><strong>High RNA Rate</strong></td>
-              <td><span class="ch-dot ch-ivr"></span>Call/IVR</td>
-              <td><span class="badge badge-yellow">Medium</span></td>
-              <td><span class="badge badge-blue">Monitoring</span></td>
-              <td class="td-muted">Review call timing and pickup behavior</td>
-              <td><span class="badge badge-gray">Ops</span></td>
-            </tr>
-            <tr class="alert-row-high">
-              <td><strong>User Inactive 14 Days</strong></td>
-              <td>Client B Retail</td>
-              <td><span class="badge badge-red">High</span></td>
-              <td><span class="badge badge-orange">Open</span></td>
-              <td class="td-muted">Account Manager follow-up required</td>
-              <td><span class="badge badge-gray">Account Manager</span></td>
-            </tr>
-            <tr class="alert-row-medium">
-              <td><strong>Mono-Channel Dependency</strong></td>
-              <td>Client A Finance</td>
-              <td><span class="badge badge-yellow">Medium</span></td>
-              <td><span class="badge badge-orange">Open</span></td>
-              <td class="td-muted">Offer backup channel package</td>
-              <td><span class="badge badge-gray">Account Manager</span></td>
-            </tr>
-            <tr class="alert-row-low">
-              <td><strong>Email Processed Spike</strong></td>
-              <td><span class="ch-dot ch-em"></span>Email</td>
-              <td><span class="badge badge-green">Low</span></td>
-              <td><span class="badge badge-blue">Monitoring</span></td>
-              <td class="td-muted">Validate campaign queue &amp; processing delay</td>
-              <td><span class="badge badge-gray">Product</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Recommended Actions Panel -->
-    <div class="action-panel">
-      <div class="action-panel-title">Recommended Actions by Team</div>
-      <div class="action-item">
-        <span class="action-owner">Product / Ops</span>
-        <span class="action-text">Monitor delivery drops, submitted statuses, and RNA spikes. Set up automated threshold alerts for gateway failures and response-not-answered rates exceeding 70%.</span>
-      </div>
-      <div class="action-item">
-        <span class="action-owner green">Account Manager</span>
-        <span class="action-text">Prioritize inactive high-value users (esp. Client B Retail) and mono-channel users (Client A Finance). Offer bundled multi-channel packages to reduce churn risk.</span>
-      </div>
-      <div class="action-item">
-        <span class="action-owner blue">Campaign Ops</span>
-        <span class="action-text">Use peak day/hour patterns (Mon–Fri, 10:00–14:00) to optimize campaign timing. Avoid scheduling high-volume SMS/WhatsApp blasts during off-peak windows with low server capacity.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
   <footer>
     Dashboard mockup for <span>RevoU × Telkom Indonesia</span> Virtual Internship — <span>OCA Internal Analytics</span> · Q1 2025
   </footer>
-
 </main>
 
-<!-- =============================================
-     JAVASCRIPT — Charts & Interactions
-     ============================================= -->
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
 <script>
-/* ------------------------------------------------
-   Global Chart.js Defaults
-   ------------------------------------------------ */
-Chart.defaults.font.family = "'DM Sans', sans-serif";
-Chart.defaults.font.size   = 12;
-Chart.defaults.color       = '#6B7280';
-Chart.defaults.plugins.legend.position = 'bottom';
-Chart.defaults.plugins.legend.labels.boxWidth = 10;
-Chart.defaults.plugins.legend.labels.padding  = 16;
-Chart.defaults.plugins.tooltip.backgroundColor = '#111111';
-Chart.defaults.plugins.tooltip.titleColor      = '#fff';
-Chart.defaults.plugins.tooltip.bodyColor       = 'rgba(255,255,255,0.75)';
-Chart.defaults.plugins.tooltip.padding         = 10;
-Chart.defaults.plugins.tooltip.cornerRadius    = 8;
+/* ================================================================
+   GLOBAL STATE & REGISTRY
+   ================================================================ */
+let dashboardData = [];
+let dataSourceStatus = 'loading';
 
-/* ========================================================
-   SECTION 2 — CHART 1: Billable Amount by Channel (Bar)
-   REPLACE: labels and data arrays with live values
-   ======================================================== */
-const billableData = {
-  labels: ['SMS', 'WhatsApp', 'Call/IVR', 'Email'],
-  values: [11.81, 10.26, 2.30, 1.57]   // in IDR millions
+// Active filter state per section
+const dashboardState = {
+  overview: { period:'all', channel:'all', metric:'transactions' },
+  channel:  { channel:'all', status:'all', charge:'all', metric:'transactions' },
+  time:     { range:'all', grain:'daily', channel:'all', metric:'transactions' },
+  users:    { user:'all', fob:'all', channel:'all', segment:'all' }
 };
 
-new Chart(document.getElementById('chartBillable'), {
-  type: 'bar',
-  data: {
-    labels: billableData.labels,
-    datasets: [{
-      label: 'Billable (IDR M)',
-      data: billableData.values,
-      backgroundColor: ['#FACC15', '#ED1B3A', '#f97316', '#60a5fa'],
-      borderRadius: 6,
-      borderSkipped: false,
-      maxBarThickness: 48
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: ctx => ` IDR ${ctx.parsed.y.toFixed(2)}M`
-        }
-      }
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: {
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { callback: v => `${v}M` },
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-/* ========================================================
-   SECTION 2 — CHART 2: Transaction Share by Channel (Donut)
-   REPLACE: txShareData labels and values with live data
-   ======================================================== */
-const txShareData = {
-  labels: ['WhatsApp', 'Email', 'SMS', 'Call/IVR'],
-  values: [40.73, 32.59, 16.29, 10.39]
-};
-
-new Chart(document.getElementById('chartTxShare'), {
-  type: 'doughnut',
-  data: {
-    labels: txShareData.labels,
-    datasets: [{
-      data: txShareData.values,
-      backgroundColor: ['#ED1B3A', '#60a5fa', '#FACC15', '#f97316'],
-      borderWidth: 2,
-      borderColor: '#fff',
-      hoverOffset: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '62%',
-    plugins: {
-      tooltip: {
-        callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(2)}%` }
-      }
-    }
-  }
-});
-
-/* ========================================================
-   SECTION 2 — CHART 3: Outcome Rates by Channel (Grouped Bar)
-   REPLACE: outcomeData channels and success/failed/pending rates
-   ======================================================== */
-const outcomeData = {
-  channels: ['WhatsApp', 'SMS', 'Email', 'Call/IVR'],
-  success:  [84.77, 99.67, 81.32, 21.87],   // Answered rate for IVR
-  failed:   [1.75,  0.33,  1.42,  0.58],
-  pending:  [13.47, 0,     17.26, 77.55]    // RNA for IVR
-};
-
-new Chart(document.getElementById('chartOutcome'), {
-  type: 'bar',
-  data: {
-    labels: outcomeData.channels,
-    datasets: [
-      {
-        label: 'Success / Answered',
-        data: outcomeData.success,
-        backgroundColor: '#22C55E',
-        borderRadius: 4,
-        maxBarThickness: 28
-      },
-      {
-        label: 'Failed',
-        data: outcomeData.failed,
-        backgroundColor: '#ED1B3A',
-        borderRadius: 4,
-        maxBarThickness: 28
-      },
-      {
-        label: 'Pending / RNA',
-        data: outcomeData.pending,
-        backgroundColor: '#FACC15',
-        borderRadius: 4,
-        maxBarThickness: 28
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      tooltip: {
-        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%` }
-      }
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: {
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { callback: v => `${v}%` },
-        max: 105,
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-/* ========================================================
-   SECTION 3 — CHART 4: Daily Transactions Trend (Line)
-   REPLACE: trendLabels and trendValues with real daily tx data
-   ======================================================== */
-const trendLabels = [];
-const trendValues = [];
-
-// Simulated Q1 2025 daily data (Jan 1 – Mar 31, 90 days)
-const baselineByDow = [400, 1350, 1500, 1480, 1420, 1300, 450]; // Sun–Sat
-for (let d = 0; d < 90; d++) {
-  const date = new Date(2025, 0, 1 + d);
-  const dow  = date.getDay();
-  const label = date.toLocaleDateString('en-GB', { day:'2-digit', month:'short' });
-  trendLabels.push(label);
-  const noise = (Math.random() - 0.5) * 200;
-  const campaign = (d >= 18 && d <= 22) ? 800 : (d >= 55 && d <= 58) ? 600 : 0;
-  trendValues.push(Math.max(50, Math.round(baselineByDow[dow] + noise + campaign)));
+// Chart instance registry — always destroy before recreating
+const CHARTS = {};
+function destroyChart(id){
+  if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; }
 }
 
-new Chart(document.getElementById('chartTrend'), {
-  type: 'line',
-  data: {
-    labels: trendLabels,
-    datasets: [{
-      label: 'Daily Transactions',
-      data: trendValues,
-      borderColor: '#ED1B3A',
-      backgroundColor: 'rgba(237,27,58,0.07)',
-      pointRadius: 0,
-      pointHoverRadius: 4,
-      pointHoverBackgroundColor: '#ED1B3A',
-      borderWidth: 1.8,
-      fill: true,
-      tension: 0.35
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: {
-          maxTicksLimit: 10,
-          maxRotation: 0
+// Channel colors
+const CH_COLOR = {
+  'WhatsApp':'#25d366',
+  'SMS':'#FACC15',
+  'Email':'#60a5fa',
+  'Call/IVR':'#f97316'
+};
+const CHANNELS = ['WhatsApp','SMS','Email','Call/IVR'];
+
+/* ================================================================
+   SAMPLE DATA
+   This block defines fallback mock data.
+   Replace with your actual CSV export or remove once CSV is live.
+   ================================================================ */
+const sampleData = (function generateSample(){
+  const rows = [];
+  const users    = ['Client A Finance','Client B Retail','Client C Education','Client D Healthcare','Client E Logistics'];
+  const fields   = ['Finance','Retail','Education','Healthcare','Logistics'];
+  const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const months   = ['01','02','03'];
+
+  // Approximate status distributions per channel
+  const statusDist = {
+    'WhatsApp': [{s:'success',w:85},{s:'pending',w:13},{s:'failed',w:2}],
+    'SMS':      [{s:'success',w:99},{s:'failed',w:1}],
+    'Email':    [{s:'success',w:81},{s:'pending',w:17},{s:'failed',w:2}],
+    'Call/IVR': [{s:'rna',w:77},{s:'success',w:22},{s:'failed',w:1}]
+  };
+  // Base daily transactions weight per channel (relative)
+  const txWeight   = {'WhatsApp':41,'SMS':16,'Email':33,'Call/IVR':10};
+  const chargeRate = {'WhatsApp':.76,'SMS':.95,'Email':.62,'Call/IVR':.58};
+  const billUnit   = {'WhatsApp':170,'SMS':510,'Email':33,'Call/IVR':155};
+  const muUnit     = {'WhatsApp':1.4,'SMS':1.2,'Email':1.8,'Call/IVR':1.0};
+
+  function pickStatus(ch){
+    const dist = statusDist[ch];
+    const total = dist.reduce((s,d)=>s+d.w,0);
+    let r = Math.random()*total;
+    for(const d of dist){ r-=d.w; if(r<=0) return d.s; }
+    return dist[0].s;
+  }
+
+  let id=1;
+  months.forEach(mo=>{
+    for(let day=1;day<=28;day++){
+      const dateStr=`2025-${mo}-${String(day).padStart(2,'0')}`;
+      const dowIdx=(new Date(dateStr).getDay()+6)%7; // 0=Mon
+      const dayName=dayNames[dowIdx];
+      const isWeekend=dowIdx>=5;
+
+      CHANNELS.forEach(ch=>{
+        const base = isWeekend
+          ? Math.floor(txWeight[ch]*4)
+          : Math.floor(txWeight[ch]*17);
+        const nTx = Math.max(1, base + Math.floor((Math.random()-.5)*base*.35));
+
+        for(let t=0;t<nTx;t++){
+          const ui = Math.floor(Math.random()*users.length);
+          const st = pickStatus(ch);
+          const isCharge = Math.random()<chargeRate[ch]?1:0;
+          const mu = +(muUnit[ch]*(0.85+Math.random()*.3)).toFixed(1);
+          const bill = isCharge?+(billUnit[ch]*(0.8+Math.random()*.4)).toFixed(0):0;
+          // Hour: peak 10-14 on weekdays
+          const hr = isWeekend
+            ? Math.floor(Math.random()*14)+7
+            : Math.random()<.55 ? Math.floor(Math.random()*5)+10 : Math.floor(Math.random()*9)+7;
+
+          rows.push({
+            transaction_id:`TXN${String(id++).padStart(6,'0')}`,
+            user_id:`U${String(ui+1).padStart(3,'0')}`,
+            user_name:users[ui],
+            field_of_business:fields[ui],
+            channel:ch,
+            message_type:ch==='Call/IVR'?'call':'message',
+            message_status:st,
+            is_charge:isCharge,
+            created_at:`${dateStr} ${String(hr).padStart(2,'0')}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}:00`,
+            date:dateStr,
+            time:`${String(hr).padStart(2,'0')}:00`,
+            hour:hr,
+            day_name:dayName,
+            month:mo,
+            transaction_count:1,
+            message_units:mu,
+            raw_transaction_amount:bill,
+            billable_amount:bill,
+            success_flag:st==='success'?1:0,
+            failed_flag:st==='failed'?1:0,
+            pending_flag:st==='pending'?1:0,
+            rna_flag:st==='rna'?1:0
+          });
         }
+      });
+    }
+  });
+  return rows;
+})();
+
+/* ================================================================
+   NORMALIZE DATA
+   Ensures correct types when parsing CSV string values.
+   ================================================================ */
+function normalizeData(rows){
+  return rows.map(r=>({
+    transaction_id:String(r.transaction_id||''),
+    user_id:String(r.user_id||''),
+    user_name:String(r.user_name||'Unknown'),
+    field_of_business:String(r.field_of_business||''),
+    channel:String(r.channel||''),
+    message_type:String(r.message_type||''),
+    message_status:String(r.message_status||''),
+    is_charge:Number(r.is_charge)||0,
+    created_at:String(r.created_at||''),
+    date:String(r.date||''),
+    time:String(r.time||''),
+    hour:Number(r.hour)||0,
+    day_name:String(r.day_name||''),
+    month:String(r.month||''),
+    transaction_count:Number(r.transaction_count)||1,
+    message_units:Number(r.message_units)||0,
+    raw_transaction_amount:Number(r.raw_transaction_amount)||0,
+    billable_amount:Number(r.billable_amount)||0,
+    success_flag:Number(r.success_flag)||0,
+    failed_flag:Number(r.failed_flag)||0,
+    pending_flag:Number(r.pending_flag)||0,
+    rna_flag:Number(r.rna_flag)||0
+  }));
+}
+
+/* ================================================================
+   DATA LOADING FUNCTIONS
+   ================================================================ */
+
+// Attempt to load CSV from repository; fallback to sample data
+async function loadRepositoryData(){
+  try{
+    const res = await fetch('data/dashboard_unified_transactions.csv');
+    if(!res.ok) throw new Error('CSV not found');
+    const csv = await res.text();
+    Papa.parse(csv,{
+      header:true,
+      skipEmptyLines:true,
+      complete(result){
+        dashboardData = normalizeData(result.data);
+        dataSourceStatus = 'repository';
+        postLoad();
       },
-      y: {
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { callback: v => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v },
-        beginAtZero: true
-      }
+      error(){ loadSampleData(); }
+    });
+  }catch(e){
+    loadSampleData();
+  }
+}
+
+function loadSampleData(){
+  dashboardData = normalizeData(sampleData);
+  dataSourceStatus = 'sample';
+  postLoad();
+}
+
+// Reset button: reload sample data
+function resetToSample(){
+  dashboardData = normalizeData(sampleData);
+  dataSourceStatus = 'sample';
+  postLoad();
+}
+
+// Called after either data source is ready
+function postLoad(){
+  updateHeaderStatus();
+  populateDynamicFilters();
+  updateDashboard();
+  document.getElementById('loadingOverlay').style.display='none';
+}
+
+function updateHeaderStatus(){
+  const badge = document.getElementById('dataStatusBadge');
+  const txt   = document.getElementById('dataStatusText');
+  badge.className = 'data-status-badge '+(dataSourceStatus==='repository'?'loaded':'sample');
+  txt.textContent = dataSourceStatus==='repository'?'Repository data loaded':'Sample data loaded';
+
+  const now = new Date();
+  document.getElementById('headerTimestamp').textContent =
+    'Loaded '+now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+
+    ' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const months = [...new Set(dashboardData.map(r=>r.month))].sort();
+  document.getElementById('sidebarPeriod').textContent =
+    dashboardData.length.toLocaleString()+' records · '+months.length+' month(s)';
+}
+
+// Populate user and FOB dropdowns from actual data
+function populateDynamicFilters(){
+  const users = [...new Set(dashboardData.map(r=>r.user_name))].sort();
+  const fobs  = [...new Set(dashboardData.map(r=>r.field_of_business).filter(Boolean))].sort();
+
+  const uSel = document.getElementById('us-user');
+  // Remove existing options except first
+  while(uSel.options.length>1) uSel.remove(1);
+  users.forEach(u=>{ const o=new Option(u,u); uSel.add(o); });
+
+  const fSel = document.getElementById('us-fob');
+  while(fSel.options.length>1) fSel.remove(1);
+  fobs.forEach(f=>{ const o=new Option(f,f); fSel.add(o); });
+}
+
+/* ================================================================
+   FILTER FUNCTIONS — update state then re-render section only
+   ================================================================ */
+function applyOverviewFilters(){
+  dashboardState.overview.period  = document.getElementById('ov-period').value;
+  dashboardState.overview.channel = document.getElementById('ov-channel').value;
+  dashboardState.overview.metric  = document.getElementById('ov-metric').value;
+  renderOverview(filterData('overview'));
+}
+
+function applyChannelFilters(){
+  dashboardState.channel.channel  = document.getElementById('ch-channel').value;
+  dashboardState.channel.status   = document.getElementById('ch-status').value;
+  dashboardState.channel.charge   = document.getElementById('ch-charge').value;
+  dashboardState.channel.metric   = document.getElementById('ch-metric').value;
+  renderChannelPerformance(filterData('channel'));
+}
+
+function applyTimeFilters(){
+  dashboardState.time.range   = document.getElementById('tm-range').value;
+  dashboardState.time.grain   = document.getElementById('tm-grain').value;
+  dashboardState.time.channel = document.getElementById('tm-channel').value;
+  dashboardState.time.metric  = document.getElementById('tm-metric').value;
+  renderTimePattern(filterData('time'));
+}
+
+function applyUserFilters(){
+  dashboardState.users.user    = document.getElementById('us-user').value;
+  dashboardState.users.fob     = document.getElementById('us-fob').value;
+  dashboardState.users.channel = document.getElementById('us-channel').value;
+  dashboardState.users.segment = document.getElementById('us-segment').value;
+  renderUserMonitoring(filterData('users'));
+}
+
+/* ================================================================
+   FILTER HELPER — returns filtered subset of dashboardData
+   ================================================================ */
+function filterData(section){
+  let data = dashboardData.slice();
+  const s = dashboardState[section];
+
+  if(section==='overview'){
+    if(s.period!=='all')  data=data.filter(r=>r.month===s.period);
+    if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
+  }
+  if(section==='channel'){
+    if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
+    if(s.status!=='all'){
+      if(s.status==='success') data=data.filter(r=>r.success_flag===1);
+      else if(s.status==='failed') data=data.filter(r=>r.failed_flag===1);
+      else if(s.status==='pending') data=data.filter(r=>r.pending_flag===1);
+    }
+    if(s.charge!=='all') data=data.filter(r=>String(r.is_charge)===s.charge);
+  }
+  if(section==='time'){
+    if(s.range!=='all')   data=data.filter(r=>r.month===s.range);
+    if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
+  }
+  if(section==='users'){
+    if(s.user!=='all') data=data.filter(r=>r.user_name===s.user);
+    if(s.fob!=='all')  data=data.filter(r=>r.field_of_business===s.fob);
+    if(s.channel!=='all'){
+      // Keep only users whose dominant channel matches
+      const mainCh = computeMainChannelMap(data);
+      const matchUsers = Object.entries(mainCh)
+        .filter(([,ch])=>ch===s.channel).map(([u])=>u);
+      data=data.filter(r=>matchUsers.includes(r.user_name));
+    }
+    if(s.segment!=='all'){
+      const agg = aggregateUsers(data);
+      const maxBill = Math.max(...agg.map(u=>u.bill))||1;
+      const hvThreshold = agg.length ? agg[Math.max(0,Math.floor(agg.length*.3)-1)].bill : 0;
+      const matchUsers = agg
+        .filter(u=>{
+          if(s.segment==='Mono-Channel') return u.mainShare>85;
+          if(s.segment==='High Value')   return u.bill>=hvThreshold;
+          if(s.segment==='Stable')       return u.mainShare<=85 && u.bill<hvThreshold;
+          return true;
+        })
+        .map(u=>u.name);
+      data=data.filter(r=>matchUsers.includes(r.user_name));
     }
   }
-});
+  return data;
+}
 
-/* ========================================================
-   SECTION 3 — HEATMAP: Peak Traffic by Day & Hour
-   Intensity matrix: rows = days, cols = hour buckets
-   REPLACE: heatMatrix values with real aggregated counts
-   ======================================================== */
-(function buildHeatmap() {
+// Helper: dominant channel map {userName -> channel}
+function computeMainChannelMap(data){
+  const map={};
+  data.forEach(r=>{
+    if(!map[r.user_name]) map[r.user_name]={};
+    map[r.user_name][r.channel]=(map[r.user_name][r.channel]||0)+1;
+  });
+  const result={};
+  Object.entries(map).forEach(([u,c])=>{
+    result[u]=Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0];
+  });
+  return result;
+}
+
+/* ================================================================
+   AGGREGATION FUNCTIONS
+   ================================================================ */
+
+// Aggregate overall KPIs
+function aggregateKpis(data){
+  const total   = data.length;
+  const mu      = data.reduce((s,r)=>s+r.message_units,0);
+  const users   = new Set(data.map(r=>r.user_name)).size;
+  const success = data.filter(r=>r.success_flag===1).length;
+  const charged = data.filter(r=>r.is_charge===1).length;
+  const bill    = data.filter(r=>r.is_charge===1).reduce((s,r)=>s+r.billable_amount,0);
+  return{ total, mu, users,
+    successRate:total?success/total*100:0,
+    chargeRate: total?charged/total*100:0,
+    bill };
+}
+
+// Aggregate per-channel metrics
+function aggregateChannelPerformance(data){
+  const res={};
+  CHANNELS.forEach(ch=>{
+    const d=data.filter(r=>r.channel===ch);
+    const tx=d.length;
+    const charged=d.filter(r=>r.is_charge===1);
+    const bill=charged.reduce((s,r)=>s+r.billable_amount,0);
+    const success=d.filter(r=>r.success_flag===1).length;
+    const failed =d.filter(r=>r.failed_flag===1).length;
+    const pending=d.filter(r=>r.pending_flag===1).length;
+    const rna    =d.filter(r=>r.rna_flag===1).length;
+    const mu     =d.reduce((s,r)=>s+r.message_units,0);
+    res[ch]={
+      tx, bill, mu,
+      chargeRate: tx?charged.length/tx*100:0,
+      successRate:tx?success/tx*100:0,
+      failedRate: tx?failed/tx*100:0,
+      pendingRate:tx?pending/tx*100:0,
+      rnaRate:    tx?rna/tx*100:0
+    };
+  });
+  return res;
+}
+
+// Aggregate time trend
+function aggregateTimeTrend(data, grain){
+  const map={};
+  data.forEach(r=>{
+    let key;
+    if(grain==='daily')        key=r.date;
+    else if(grain==='weekly'){
+      const d=new Date(r.date);
+      key=`${r.month}-W${Math.ceil(d.getDate()/7)}`;
+    }
+    else if(grain==='monthly') key=r.month;
+    else if(grain==='hourly')  key=String(r.hour).padStart(2,'0')+':00';
+    else key=r.date;
+    if(!map[key]) map[key]={tx:0,mu:0,bill:0};
+    map[key].tx++;
+    map[key].mu+=r.message_units;
+    map[key].bill+=r.billable_amount;
+  });
+  const keys=Object.keys(map).sort();
+  return{
+    labels:keys,
+    tx:   keys.map(k=>map[k].tx),
+    mu:   keys.map(k=>+map[k].mu.toFixed(1)),
+    bill: keys.map(k=>+map[k].bill.toFixed(0))
+  };
+}
+
+// Aggregate heatmap matrix
+function aggregateHeatmap(data){
+  const days  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const hours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+  const matrix={};
+  days.forEach(d=>{ matrix[d]={}; hours.forEach(h=>{ matrix[d][h]=0; }); });
+  data.forEach(r=>{
+    if(matrix[r.day_name] && matrix[r.day_name][r.hour]!==undefined)
+      matrix[r.day_name][r.hour]++;
+  });
+  return{days,hours,matrix};
+}
+
+// Aggregate per-user metrics
+function aggregateUsers(data){
+  const map={};
+  data.forEach(r=>{
+    if(!map[r.user_name]) map[r.user_name]={
+      name:r.user_name, fob:r.field_of_business,
+      tx:0, bill:0, days:new Set(), channels:{}
+    };
+    const u=map[r.user_name];
+    u.tx++; u.bill+=r.billable_amount; u.days.add(r.date);
+    u.channels[r.channel]=(u.channels[r.channel]||0)+1;
+  });
+  return Object.values(map).map(u=>{
+    const sorted=Object.entries(u.channels).sort((a,b)=>b[1]-a[1]);
+    const mainCh=sorted[0]?sorted[0][0]:'—';
+    const mainShare=u.tx?sorted[0][1]/u.tx*100:0;
+    return{...u, dayCount:u.days.size, mainCh, mainShare};
+  }).sort((a,b)=>b.tx-a.tx);
+}
+
+/* ================================================================
+   CHART.JS DEFAULTS
+   ================================================================ */
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.font.size=12;
+Chart.defaults.color='#6B7280';
+Chart.defaults.plugins.legend.position='bottom';
+Chart.defaults.plugins.legend.labels.boxWidth=10;
+Chart.defaults.plugins.legend.labels.padding=13;
+Chart.defaults.plugins.tooltip.backgroundColor='#111111';
+Chart.defaults.plugins.tooltip.titleColor='#fff';
+Chart.defaults.plugins.tooltip.bodyColor='rgba(255,255,255,.72)';
+Chart.defaults.plugins.tooltip.padding=10;
+Chart.defaults.plugins.tooltip.cornerRadius=8;
+
+/* Number formatter */
+function fmtNum(n){
+  if(n>=1e6) return (n/1e6).toFixed(2)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'k';
+  return String(Math.round(n));
+}
+
+/* ================================================================
+   RENDER: Executive Overview
+   ================================================================ */
+function renderOverview(data){
+  const kpis = aggregateKpis(data);
+  const chAgg = aggregateChannelPerformance(data);
+  const totalTx   = kpis.total||1;
+  const totalBill = CHANNELS.reduce((s,c)=>s+chAgg[c].bill,0)||1;
+
+  // KPI cards
+  document.getElementById('kpi-tx').textContent   = kpis.total.toLocaleString();
+  document.getElementById('kpi-mu').textContent   = fmtNum(kpis.mu);
+  document.getElementById('kpi-users').textContent= kpis.users;
+  document.getElementById('kpi-sr').textContent   = kpis.successRate.toFixed(1)+'%';
+  document.getElementById('kpi-cr').textContent   = kpis.chargeRate.toFixed(1)+'%';
+  document.getElementById('kpi-bill').textContent = 'IDR '+fmtNum(kpis.bill);
+
+  // Channel Role Matrix (bubble chart)
+  destroyChart('chartRoleMatrix');
+  CHARTS['chartRoleMatrix'] = new Chart(
+    document.getElementById('chartRoleMatrix'),{
+    type:'bubble',
+    data:{
+      datasets: CHANNELS.map(ch=>{
+        const d = chAgg[ch];
+        const txShare  = d.tx/totalTx*100;
+        const billShare= d.bill/totalBill*100;
+        const rate = ch==='Call/IVR'?(100-d.rnaRate):d.successRate;
+        const r = 8+rate*.2;
+        return{
+          label:ch,
+          data:[{x:+txShare.toFixed(2),y:+billShare.toFixed(2),r:+r.toFixed(1)}],
+          backgroundColor:CH_COLOR[ch]+'BB',
+          borderColor:CH_COLOR[ch],
+          borderWidth:1.5
+        };
+      })
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const d=ctx.raw;
+            const ch=ctx.dataset.label;
+            const rate=ch==='Call/IVR'?(100-chAgg[ch].rnaRate):chAgg[ch].successRate;
+            return[` ${ch}`,` Tx Share: ${d.x.toFixed(1)}%`,` Billable Share: ${d.y.toFixed(1)}%`,` Success/Answered: ${rate.toFixed(1)}%`];
+          }
+        }}
+      },
+      scales:{
+        x:{min:0,max:55,title:{display:true,text:'Transaction Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
+        y:{min:0,max:65,title:{display:true,text:'Billable Amount Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}}
+      }
+    }
+  });
+}
+
+/* ================================================================
+   RENDER: Channel Performance
+   ================================================================ */
+function renderChannelPerformance(data){
+  const ch = aggregateChannelPerformance(data);
+  const totalTx = CHANNELS.reduce((s,c)=>s+ch[c].tx,0)||1;
+  const metric  = dashboardState.channel.metric;
+
+  // Billable Amount bar
+  destroyChart('chartBillable');
+  CHARTS['chartBillable'] = new Chart(document.getElementById('chartBillable'),{
+    type:'bar',
+    data:{
+      labels:CHANNELS,
+      datasets:[{
+        label:'Billable Amount (IDR)',
+        data:CHANNELS.map(c=>ch[c].bill),
+        backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),
+        borderRadius:6, borderSkipped:false, maxBarThickness:50
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` IDR ${fmtNum(ctx.parsed.y)}`}}},
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
+      }
+    }
+  });
+
+  // Tx Share donut
+  destroyChart('chartTxShare');
+  CHARTS['chartTxShare'] = new Chart(document.getElementById('chartTxShare'),{
+    type:'doughnut',
+    data:{
+      labels:CHANNELS,
+      datasets:[{
+        data:CHANNELS.map(c=>+(ch[c].tx/totalTx*100).toFixed(2)),
+        backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),
+        borderWidth:2, borderColor:'#fff', hoverOffset:6
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${Number(ctx.parsed).toFixed(1)}%`}}}
+    }
+  });
+
+  // Outcome rates grouped bar
+  destroyChart('chartOutcome');
+  CHARTS['chartOutcome'] = new Chart(document.getElementById('chartOutcome'),{
+    type:'bar',
+    data:{
+      labels:CHANNELS,
+      datasets:[
+        {label:'Success / Answered',data:CHANNELS.map(c=>+ch[c].successRate.toFixed(1)),backgroundColor:'#22C55E',borderRadius:4,maxBarThickness:28},
+        {label:'Failed',data:CHANNELS.map(c=>+ch[c].failedRate.toFixed(1)),backgroundColor:'#ED1B3A',borderRadius:4,maxBarThickness:28},
+        {label:'Pending / RNA',data:CHANNELS.map(c=>+(ch[c].pendingRate+ch[c].rnaRate).toFixed(1)),backgroundColor:'#FACC15',borderRadius:4,maxBarThickness:28}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`},max:105,beginAtZero:true}
+      }
+    }
+  });
+
+  // Channel summary table
+  const riskMap={'WhatsApp':'Submitted status monitoring','SMS':'Stable delivery','Email':'Processed status + engagement monitoring','Call/IVR':'High RNA rate'};
+  const riskBadge={'WhatsApp':'badge-yellow','SMS':'badge-green','Email':'badge-yellow','Call/IVR':'badge-red'};
+  const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
+  let html=`<table><thead><tr>
+    <th>Channel</th><th>Transactions</th><th>Charge Rate</th>
+    <th>Success / Answered</th><th>Risk Signal</th><th>Billable Amount</th>
+  </tr></thead><tbody>`;
+  CHANNELS.forEach(c=>{
+    const d=ch[c];
+    const sr=c==='Call/IVR'?`${(100-d.rnaRate).toFixed(1)}% ans`:`${d.successRate.toFixed(1)}%`;
+    html+=`<tr>
+      <td><span class="ch-dot ${dotCls[c]}"></span><strong>${c}</strong></td>
+      <td>${d.tx.toLocaleString()}</td>
+      <td>${d.chargeRate.toFixed(1)}%</td>
+      <td>${sr}</td>
+      <td><span class="badge ${riskBadge[c]}">${riskMap[c]}</span></td>
+      <td>IDR ${fmtNum(d.bill)}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  document.getElementById('channelTableWrap').innerHTML=html;
+}
+
+/* ================================================================
+   RENDER: Time Pattern
+   ================================================================ */
+function renderTimePattern(data){
+  const grain  = dashboardState.time.grain;
+  const metric = dashboardState.time.metric;
+  const agg    = aggregateTimeTrend(data, grain);
+  const vals   = metric==='message_units'?agg.mu:metric==='billable'?agg.bill:agg.tx;
+  const mLabel = {transactions:'Transactions',message_units:'Message Units',billable:'Billable Amount (IDR)'}[metric];
+
+  // Trend line chart
+  destroyChart('chartTrend');
+  CHARTS['chartTrend'] = new Chart(document.getElementById('chartTrend'),{
+    type:'line',
+    data:{
+      labels:agg.labels,
+      datasets:[{
+        label:mLabel, data:vals,
+        borderColor:'#ED1B3A', backgroundColor:'rgba(237,27,58,.07)',
+        pointRadius:agg.labels.length>60?0:3,
+        pointHoverRadius:5, pointHoverBackgroundColor:'#ED1B3A',
+        borderWidth:2, fill:true, tension:.35
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{display:false},ticks:{maxTicksLimit:12,maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
+      }
+    }
+  });
+
+  // Heatmap
+  const hm = aggregateHeatmap(data);
+  buildHeatmap(hm);
+  buildPeakSummary(hm, data);
+}
+
+function buildHeatmap(hm){
   const grid  = document.getElementById('heatmapGrid');
-  const days  = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const hours = ['06','08','09','10','11','12','13','14','15','16','17','19','21'];
+  const hours = hm.hours;
+  const days  = hm.days;
 
-  // Relative intensity matrix [day][hourBucket], 0–100
-  // REPLACE: this 2D array with real aggregated transaction counts per slot
-  const heatMatrix = [
-    // Mon
-    [5, 20, 55, 85, 90, 82, 88, 78, 60, 50, 35, 10, 4],
-    // Tue
-    [4, 22, 58, 88, 95, 86, 91, 80, 62, 52, 37, 12, 5],
-    // Wed
-    [6, 25, 60, 87, 92, 89, 93, 82, 65, 55, 40, 14, 6],
-    // Thu
-    [5, 23, 56, 84, 90, 84, 90, 79, 61, 51, 36, 11, 4],
-    // Fri
-    [7, 30, 62, 80, 85, 80, 84, 70, 58, 45, 30, 8, 3],
-    // Sat
-    [3, 10, 20, 30, 32, 28, 22, 18, 14, 10, 8, 5, 2],
-    // Sun
-    [2, 6, 10, 15, 14, 12, 10, 8, 6, 5, 4, 3, 1]
-  ];
+  const allVals = [];
+  days.forEach(d=>hours.forEach(h=>allVals.push(hm.matrix[d][h])));
+  const maxVal = Math.max(...allVals)||1;
 
-  const allVals = heatMatrix.flat();
-  const maxVal  = Math.max(...allVals);
+  grid.innerHTML='';
+  grid.style.gridTemplateColumns=`52px repeat(${hours.length},1fr)`;
 
-  // Column header row
-  grid.innerHTML = `<div class="hm-label"></div>`;
-  hours.forEach(h => {
-    const el = document.createElement('div');
-    el.className = 'hm-col-label';
-    el.textContent = h + ':00';
+  // Header row
+  grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-label'}));
+  hours.forEach(h=>{
+    const el=Object.assign(document.createElement('div'),{className:'hm-col-label',textContent:String(h).padStart(2,'0')});
     grid.appendChild(el);
   });
 
-  // Data rows
-  days.forEach((day, di) => {
-    const label = document.createElement('div');
-    label.className = 'hm-label';
-    label.textContent = day;
+  days.forEach(day=>{
+    const label=Object.assign(document.createElement('div'),{className:'hm-label',textContent:day.slice(0,3)});
     grid.appendChild(label);
-
-    hours.forEach((_, hi) => {
-      const val  = heatMatrix[di][hi];
-      const norm = val / maxVal;
-      const alpha = 0.08 + norm * 0.82;
-      const cell = document.createElement('div');
-      cell.className = 'hm-cell';
-      cell.style.background = `rgba(237,27,58,${alpha.toFixed(2)})`;
-      cell.title = `${day} ${hours[hi]}:00 — Relative intensity: ${val}%`;
+    hours.forEach(h=>{
+      const val=hm.matrix[day][h];
+      const alpha=(0.05+val/maxVal*.85).toFixed(2);
+      const cell=Object.assign(document.createElement('div'),{className:'hm-cell'});
+      cell.style.background=`rgba(237,27,58,${alpha})`;
+      cell.title=`${day} ${String(h).padStart(2,'0')}:00 — ${val} tx`;
       grid.appendChild(cell);
     });
   });
-})();
-
-/* ========================================================
-   SECTION 4 — CHART 5: User Dependency Bubble Chart
-   REPLACE: bubbleData array with real user metrics
-   ======================================================== */
-const bubbleData = [
-  { label: 'Client A Finance',   x: 88, y: 18423, r: 18, color: '#ED1B3A' },
-  { label: 'Client B Retail',    x: 95, y: 12901, r: 15, color: '#FACC15' },
-  { label: 'Client C Education', x: 45, y: 10554, r: 13, color: '#60a5fa' },
-  { label: 'Client D Healthcare',x: 72, y:  9112, r: 11, color: '#111111' },
-  { label: 'Client E Logistics', x: 60, y:  7340, r:  9, color: '#f97316' }
-];
-
-new Chart(document.getElementById('chartBubble'), {
-  type: 'bubble',
-  data: {
-    datasets: bubbleData.map(u => ({
-      label: u.label,
-      data: [{ x: u.x, y: u.y, r: u.r }],
-      backgroundColor: u.color + 'CC',
-      borderColor: u.color,
-      borderWidth: 1.5
-    }))
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: true, labels: { boxWidth: 8, padding: 10, font: { size: 11 } } },
-      tooltip: {
-        callbacks: {
-          label: ctx => {
-            const d = ctx.raw;
-            return ` ${ctx.dataset.label} · Share: ${d.x}% · Tx: ${d.y.toLocaleString()}`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        min: 0, max: 100,
-        title: { display: true, text: 'Main Channel Share (%)', font: { size: 11 } },
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { callback: v => `${v}%` }
-      },
-      y: {
-        title: { display: true, text: 'Transaction Volume', font: { size: 11 } },
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { callback: v => v >= 1000 ? `${(v/1000).toFixed(0)}k` : v },
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-/* ------------------------------------------------
-   Sidebar nav active state on scroll
-   ------------------------------------------------ */
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  event.currentTarget.classList.add('active');
 }
 
-// Highlight nav on scroll
-const sections = ['overview','channel','time','users','risk'];
-window.addEventListener('scroll', () => {
-  let current = 'overview';
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top < 120) current = id;
-  });
-  document.querySelectorAll('.nav-item[onclick]').forEach(n => {
-    n.classList.toggle('active', n.getAttribute('onclick').includes(current));
-  });
-}, { passive: true });
-</script>
+function buildPeakSummary(hm, data){
+  const days=hm.days, hours=hm.hours;
+  let peakDay='',peakHour=0,peakVal=0;
+  days.forEach(d=>hours.forEach(h=>{
+    if(hm.matrix[d][h]>peakVal){peakVal=hm.matrix[d][h];peakDay=d;peakHour=h;}
+  }));
+  const threshold=peakVal*.6;
+  const peakHours=hours.filter(h=>days.some(d=>hm.matrix[d][h]>=threshold));
+  const minH=Math.min(...peakHours);
+  const maxH=Math.max(...peakHours);
 
+  const peakData=data.filter(r=>r.hour>=minH&&r.hour<=maxH);
+  const chCount={};
+  peakData.forEach(r=>{ chCount[r.channel]=(chCount[r.channel]||0)+1; });
+  const domCh=Object.entries(chCount).sort((a,b)=>b[1]-a[1])[0];
+
+  document.getElementById('peakSummaryCard').innerHTML=`
+    <div class="peak-summary-title">Peak Window Summary</div>
+    <div class="peak-row"><span class="peak-key">Peak Day</span><span class="peak-val">${peakDay}</span></div>
+    <div class="peak-row"><span class="peak-key">Peak Hour Window</span><span class="peak-val">${String(minH).padStart(2,'0')}:00 – ${String(maxH+1).padStart(2,'0')}:00</span></div>
+    <div class="peak-row"><span class="peak-key">Peak Volume</span><span class="peak-val">${peakVal.toLocaleString()} tx (in peak slot)</span></div>
+    <div class="peak-row"><span class="peak-key">Dominant Channel</span><span class="peak-val">${domCh?domCh[0]:'—'}</span></div>
+    <div class="peak-row"><span class="peak-key">Suggested Use</span><span class="peak-val">Campaign scheduling &amp; capacity planning</span></div>`;
+}
+
+/* ================================================================
+   RENDER: User Monitoring
+   ================================================================ */
+function renderUserMonitoring(data){
+  const users = aggregateUsers(data);
+  const totalTx = users.reduce((s,u)=>s+u.tx,0)||1;
+  const top3    = users.slice(0,3).reduce((s,u)=>s+u.tx,0);
+  const monoCount = users.filter(u=>u.mainShare>85).length;
+  const hvThresh  = users.length?users[Math.max(0,Math.floor(users.length*.3)-1)].bill:0;
+  const hvCount   = users.filter(u=>u.bill>=hvThresh&&hvThresh>0).length;
+
+  document.getElementById('mu-concentration').textContent = (top3/totalTx*100).toFixed(0)+'%';
+  document.getElementById('mu-mono').textContent = monoCount;
+  document.getElementById('mu-hv').textContent   = hvCount;
+
+  // Segment helper
+  function getSegment(u){
+    if(u.mainShare>85) return '<span class="badge badge-yellow">Mono-Channel</span>';
+    if(u.bill>=hvThresh&&hvThresh>0) return '<span class="badge badge-red">High Value</span>';
+    return '<span class="badge badge-green">Stable</span>';
+  }
+  const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
+
+  // Top users table
+  let html=`<table><thead><tr>
+    <th>User</th><th>Main Channel</th><th>Transactions</th>
+    <th>Active Days</th><th>Billable</th><th>Segment</th>
+  </tr></thead><tbody>`;
+  users.slice(0,10).forEach(u=>{
+    html+=`<tr>
+      <td><strong>${u.name}</strong><br/><span style="font-size:.63rem;color:var(--text-muted)">${u.fob}</span></td>
+      <td><span class="ch-dot ${dotCls[u.mainCh]||''}"></span>${u.mainCh}</td>
+      <td>${u.tx.toLocaleString()}</td>
+      <td>${u.dayCount}</td>
+      <td>IDR ${fmtNum(u.bill)}</td>
+      <td>${getSegment(u)}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  document.getElementById('userTableWrap').innerHTML=html;
+
+  // User dependency bubble chart
+  const maxBill=Math.max(...users.map(u=>u.bill))||1;
+  destroyChart('chartUserBubble');
+  CHARTS['chartUserBubble'] = new Chart(document.getElementById('chartUserBubble'),{
+    type:'bubble',
+    data:{
+      datasets:users.slice(0,15).map(u=>{
+        const col=CH_COLOR[u.mainCh]||'#ED1B3A';
+        const r=7+(u.bill/maxBill)*18;
+        return{
+          label:u.name,
+          data:[{x:+u.mainShare.toFixed(1),y:u.tx,r:+r.toFixed(1)}],
+          backgroundColor:col+'BB', borderColor:col, borderWidth:1.5
+        };
+      })
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>{
+          const d=ctx.raw;
+          return[` ${ctx.dataset.label}`,` Channel Share: ${d.x.toFixed(1)}%`,` Transactions: ${d.y.toLocaleString()}`];
+        }}}
+      },
+      scales:{
+        x:{min:0,max:105,title:{display:true,text:'Main Channel Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
+        y:{title:{display:true,text:'Transaction Volume',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
+      }
+    }
+  });
+}
+
+/* ================================================================
+   UPDATE DASHBOARD — renders all sections with current filters
+   ================================================================ */
+function updateDashboard(){
+  renderOverview(filterData('overview'));
+  renderChannelPerformance(filterData('channel'));
+  renderTimePattern(filterData('time'));
+  renderUserMonitoring(filterData('users'));
+}
+
+/* ================================================================
+   SIDEBAR NAVIGATION
+   ================================================================ */
+document.querySelectorAll('.nav-item[data-section]').forEach(item=>{
+  item.addEventListener('click',()=>{
+    const target=item.dataset.section;
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('visible'));
+    document.getElementById('sec-'+target).classList.add('visible');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', loadRepositoryData);
+</script>
 </body>
 </html>
