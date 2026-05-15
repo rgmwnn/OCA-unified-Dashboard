@@ -118,21 +118,22 @@ ul{list-style:none}
   border-top:3px solid var(--brand-red);
 }
 
-/* Logo card inside sidebar */
+/* Logo card inside sidebar — sits at the very top */
 .sidebar-logo-wrap{
-  padding:16px 18px 14px;
+  padding:14px 14px 12px;
   border-bottom:1px solid rgba(255,255,255,.07);
+  flex-shrink:0;
 }
 .sidebar-logo-card{
   background:#ffffff;
   border-radius:10px;
-  padding:8px 10px;
+  padding:10px 14px;
   display:flex;align-items:center;justify-content:center;
-  min-height:44px;
+  min-height:52px;
 }
 .sidebar-logo-card img{
-  max-width:170px;max-height:34px;
-  object-fit:contain;display:block;
+  max-width:190px;max-height:44px;
+  object-fit:contain;display:block;width:100%;
 }
 .sidebar-logo-card .logo-fallback-sb{
   font-size:1rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
@@ -305,6 +306,35 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .risk-row-atrisk td:first-child{border-left:3px solid #f97316}
 .risk-row-watchlist td:first-child{border-left:3px solid #FACC15}
 .risk-row-stable td:first-child{border-left:3px solid #22C55E}
+
+/* ================================================================
+   USER TABLE PAGINATION
+   ================================================================ */
+.pagination-bar{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;padding:12px 0 4px;
+  border-top:1px solid var(--border);margin-top:4px;
+}
+.pagination-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;font-weight:600;
+  padding:5px 14px;border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--bg-soft);color:var(--text-main);
+  cursor:pointer;transition:all .15s;
+  font-family:'DM Sans',sans-serif;
+}
+.pagination-btn:hover:not(:disabled){
+  background:var(--brand-red);color:#fff;border-color:var(--brand-red);
+}
+.pagination-btn:disabled{
+  opacity:.35;cursor:not-allowed;
+}
+.pagination-info{
+  font-size:.72rem;font-weight:600;
+  color:var(--text-muted);
+  min-width:52px;text-align:center;
+}
 
 /* Heatmap */
 .heatmap-scroll{width:100%;overflow-x:auto}
@@ -793,25 +823,27 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
     </div>
 
-    <!-- User Priority Table + Risk vs Value Map side by side -->
-    <div class="grid-2" style="margin-bottom:13px;align-items:start">
-      <div class="card">
-        <div class="card-title">User Priority Table</div>
-        <div class="table-wrap" id="userTableWrap"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">User Risk vs Value Map</div>
-        <div class="chart-quadrant-wrap">
-          <div class="chart-wrap" style="height:310px"><canvas id="chartUserBubble"></canvas></div>
-          <div class="quadrant-labels" style="pointer-events:none">
-            <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">High Value · Low Risk</div>
-            <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">High Value · High Risk</div>
-            <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Low Value · Low Risk</div>
-            <div class="ql">Low Value · High Risk</div>
-          </div>
+    <!-- User Priority Table — full width, 5 rows per page -->
+    <div class="card" style="margin-bottom:13px">
+      <div class="card-title">User Priority Table</div>
+      <div class="table-wrap" id="userTableWrap"></div>
+      <!-- Pagination bar — rendered by JS -->
+      <div class="pagination-bar" id="userPaginationBar"></div>
+    </div>
+
+    <!-- User Risk vs Value Map — full width below table -->
+    <div class="card" style="margin-bottom:13px">
+      <div class="card-title">User Risk vs Value Map</div>
+      <div class="chart-quadrant-wrap">
+        <div class="chart-wrap" style="height:340px"><canvas id="chartUserBubble"></canvas></div>
+        <div class="quadrant-labels" style="pointer-events:none">
+          <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">High Value · Low Risk</div>
+          <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">High Value · High Risk</div>
+          <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Low Value · Low Risk</div>
+          <div class="ql">Low Value · High Risk</div>
         </div>
-        <div class="microcopy">X-axis: Usage Decline (%) · Y-axis: Total Billable (IDR) · Bubble size: Transaction Volume · Color: Risk Segment</div>
       </div>
+      <div class="microcopy">X-axis: Usage Decline (%) · Y-axis: Total Billable (IDR) · Bubble size: Transaction Volume · Color: Risk Segment</div>
     </div>
 
     <div class="future-note">
@@ -1497,30 +1529,61 @@ function renderUserMonitoring(data){
   }
   const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
 
-  /* --- User Priority Table --- */
-  let html=`<table><thead><tr>
-    <th>User</th><th>Field of Business</th><th>Risk Segment</th>
-    <th>Risk Score</th><th>Main Channel</th><th>Ch Share</th>
-    <th>Usage Decline</th><th>Billable Decline</th>
-    <th>Total Billable</th><th>Reason</th>
-  </tr></thead><tbody>`;
-  sorted.forEach(u=>{
-    const reason=u.watchlist_reason?`<span style="font-size:.62rem;color:var(--text-muted);max-width:140px;display:block">${u.watchlist_reason}</span>`:'<span style="color:var(--border)">—</span>';
-    html+=`<tr class="${rowClass(u.contextual_risk_segment)}">
-      <td><strong>${u.user_name}</strong></td>
-      <td style="color:var(--text-muted);font-size:.74rem">${u.field_of_business}</td>
-      <td>${segBadge(u.contextual_risk_segment)}</td>
-      <td><strong style="font-variant-numeric:tabular-nums">${u.contextual_churn_risk_score}</strong></td>
-      <td><span class="ch-dot ${dotCls[u.main_channel]||''}"></span>${u.main_channel}</td>
-      <td>${u.main_channel_share_pct.toFixed(0)}%</td>
-      <td style="color:${u.usage_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.usage_decline_pct.toFixed(0)}%</td>
-      <td style="color:${u.billable_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.billable_decline_pct.toFixed(0)}%</td>
-      <td>${fmtIDR(u.total_billable_amount)}</td>
-      <td style="min-width:130px">${reason}</td>
-    </tr>`;
-  });
-  html+='</tbody></table>';
-  document.getElementById('userTableWrap').innerHTML=html;
+  /* --- User Priority Table with pagination (5 rows/page, no Reason column) --- */
+  const PAGE_SIZE = 5;
+  let currentPage = 1;
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
+
+  function renderTablePage(page){
+    const start = (page - 1) * PAGE_SIZE;
+    const pageRows = sorted.slice(start, start + PAGE_SIZE);
+
+    let html=`<table><thead><tr>
+      <th>User</th><th>Field of Business</th><th>Risk Segment</th>
+      <th>Risk Score</th><th>Main Channel</th><th>Ch Share</th>
+      <th>Usage Decline</th><th>Billable Decline</th>
+      <th>Total Billable</th>
+    </tr></thead><tbody>`;
+    pageRows.forEach(u=>{
+      html+=`<tr class="${rowClass(u.contextual_risk_segment)}">
+        <td><strong>${u.user_name}</strong></td>
+        <td style="color:var(--text-muted);font-size:.74rem">${u.field_of_business}</td>
+        <td>${segBadge(u.contextual_risk_segment)}</td>
+        <td><strong style="font-variant-numeric:tabular-nums">${u.contextual_churn_risk_score}</strong></td>
+        <td><span class="ch-dot ${dotCls[u.main_channel]||''}"></span>${u.main_channel}</td>
+        <td>${u.main_channel_share_pct.toFixed(0)}%</td>
+        <td style="color:${u.usage_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.usage_decline_pct.toFixed(0)}%</td>
+        <td style="color:${u.billable_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.billable_decline_pct.toFixed(0)}%</td>
+        <td>${fmtIDR(u.total_billable_amount)}</td>
+      </tr>`;
+    });
+    html+='</tbody></table>';
+    document.getElementById('userTableWrap').innerHTML=html;
+
+    // Pagination bar
+    const bar = document.getElementById('userPaginationBar');
+    if(totalPages <= 1){ bar.innerHTML=''; return; }
+
+    const prevDisabled = page <= 1 ? 'disabled' : '';
+    const nextDisabled = page >= totalPages ? 'disabled' : '';
+    bar.innerHTML=`
+      <button class="pagination-btn" id="btnPrev" ${prevDisabled} onclick="goUserPage(${page-1})">
+        ← Previous
+      </button>
+      <span class="pagination-info">${page} / ${totalPages}</span>
+      <button class="pagination-btn" id="btnNext" ${nextDisabled} onclick="goUserPage(${page+1})">
+        Next →
+      </button>`;
+  }
+
+  // Expose page navigation globally so onclick works
+  window._userSorted = sorted;
+  window.goUserPage = function(page){
+    currentPage = page;
+    renderTablePage(currentPage);
+  };
+
+  renderTablePage(currentPage);
 
   /* --- User Risk vs Value Map (bubble chart) --- */
   destroyChart('chartUserBubble');
