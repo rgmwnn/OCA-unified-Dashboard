@@ -28,7 +28,7 @@
   --success-green:#22C55E;
   --risk-red:#EF4444;
   --header-h:60px;
-  --sidebar-w:232px;
+  --sidebar-w:238px;
   --radius:10px;
   --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
   --shadow-md:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.06);
@@ -89,29 +89,23 @@ ul{list-style:none}
   display:flex;align-items:center;padding:0 16px;
   border-right:1px solid rgba(255,255,255,.08);height:100%;
 }
-.header-logo-zone img{max-height:42px;max-width:190px;object-fit:contain;display:block}
-.logo-fallback{font-size:1.3rem;font-weight:700;color:var(--brand-red);letter-spacing:-.5px}
+.header-logo-zone img{max-height:36px;max-width:180px;object-fit:contain;display:block}
+.logo-fallback-hdr{font-size:1.2rem;font-weight:700;color:var(--brand-red);letter-spacing:-.5px}
 .header-body{
   flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;
 }
 .header-title-block .header-title{font-size:.9rem;font-weight:700;color:#fff;line-height:1.2}
 .header-title-block .header-subtitle{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:2px}
-.header-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.data-status-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:20px;
-  border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);background:rgba(255,255,255,.05);
+.header-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* Static dataset label — replaces dynamic status badge */
+.dataset-label{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.68rem;font-weight:600;padding:4px 12px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);background:rgba(255,255,255,.05);
 }
-.data-status-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
-.data-status-badge.loaded .dot{background:var(--success-green)}
-.data-status-badge.sample .dot{background:var(--warning-yellow)}
-.header-timestamp{font-size:.64rem;color:rgba(255,255,255,.32);font-family:'DM Mono',monospace}
-.btn-reset{
-  font-size:.68rem;font-weight:600;color:rgba(255,255,255,.55);
-  border:1px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;
-  cursor:pointer;background:transparent;transition:all .15s;
-}
-.btn-reset:hover{background:rgba(237,27,58,.2);border-color:rgba(237,27,58,.5);color:#fff}
+.dataset-label .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3)}
+.header-timestamp{font-size:.63rem;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace}
 
 /* ================================================================
    SIDEBAR
@@ -121,10 +115,32 @@ ul{list-style:none}
   width:var(--sidebar-w);height:calc(100vh - var(--header-h));
   background:var(--bg-sidebar);display:flex;flex-direction:column;
   overflow-y:auto;z-index:90;
+  border-top:3px solid var(--brand-red);
 }
-.sidebar-nav{padding:14px 0}
+
+/* Logo card inside sidebar */
+.sidebar-logo-wrap{
+  padding:16px 18px 14px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sidebar-logo-card{
+  background:#ffffff;
+  border-radius:10px;
+  padding:8px 10px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:44px;
+}
+.sidebar-logo-card img{
+  max-width:170px;max-height:34px;
+  object-fit:contain;display:block;
+}
+.sidebar-logo-card .logo-fallback-sb{
+  font-size:1rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
+}
+
+.sidebar-nav{padding:12px 0}
 .sidebar-section-label{
-  font-size:.58rem;font-weight:700;letter-spacing:.1em;
+  font-size:.59rem;font-weight:700;letter-spacing:.1em;
   color:rgba(255,255,255,.2);padding:12px 16px 4px;text-transform:uppercase;
 }
 .nav-item{
@@ -139,19 +155,32 @@ ul{list-style:none}
 .nav-item.active .nav-icon{opacity:1}
 
 .sidebar-bottom{margin-top:auto;padding-bottom:8px}
+
+/* Data period block */
 .sidebar-period{
-  margin:8px 13px 0;padding:11px 12px;
+  margin:10px 13px 0;padding:11px 12px;
   background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;
 }
-.sidebar-period-title{font-size:.62rem;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
-.sidebar-period-text{font-size:.62rem;line-height:1.55;color:rgba(255,255,255,.32)}
+.sidebar-period-title{
+  font-size:.68rem;font-weight:700;color:rgba(255,255,255,.55);
+  margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;
+}
+.sidebar-period-text{
+  font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.35);
+}
 
+/* Disclaimer */
 .sidebar-disclaimer{
-  margin:12px 13px;padding:11px 11px 11px 13px;
+  margin:12px 13px 14px;padding:11px 11px 11px 13px;
   border-left:2px solid var(--brand-red);background:rgba(237,27,58,.06);border-radius:8px;
 }
-.sidebar-disclaimer-title{font-size:.62rem;font-weight:700;color:#fff;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
-.sidebar-disclaimer-text{font-size:.61rem;line-height:1.55;color:rgba(255,255,255,.48)}
+.sidebar-disclaimer-title{
+  font-size:.68rem;font-weight:700;color:#fff;
+  margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase;
+}
+.sidebar-disclaimer-text{
+  font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.5);
+}
 
 /* ================================================================
    MAIN
@@ -224,7 +253,7 @@ ul{list-style:none}
 
 /* Grid layouts */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .grid-6040{display:grid;grid-template-columns:1.5fr 1fr;gap:13px}
 .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 
@@ -238,7 +267,7 @@ ul{list-style:none}
 }
 .ql{
   display:flex;align-items:flex-start;
-  font-size:.56rem;font-weight:700;color:rgba(17,17,17,.17);
+  font-size:.56rem;font-weight:700;color:rgba(17,17,17,.16);
   text-transform:uppercase;letter-spacing:.04em;padding:3px;
 }
 
@@ -249,6 +278,7 @@ thead th{
   text-align:left;padding:9px 12px;font-size:.63rem;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);
   background:var(--bg-soft);border-bottom:1px solid var(--border);
+  white-space:nowrap;
 }
 tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
 tbody tr:last-child{border-bottom:none}
@@ -256,7 +286,7 @@ tbody tr:hover{background:var(--bg-soft)}
 tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 
 /* Badges */
-.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.02em}
+.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.02em;white-space:nowrap}
 .badge-red{background:#FEE2E2;color:#991B1B}
 .badge-yellow{background:#FEF9C3;color:#854D0E}
 .badge-green{background:#DCFCE7;color:#166534}
@@ -268,6 +298,14 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .ch-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
 .ch-wa{background:#25d366}.ch-sms{background:#FACC15}.ch-em{background:#60a5fa}.ch-ivr{background:#f97316}
 
+/* ================================================================
+   USER PRIORITY TABLE — row highlight by risk segment
+   ================================================================ */
+.risk-row-alert td:first-child{border-left:3px solid #991B1B}
+.risk-row-atrisk td:first-child{border-left:3px solid #f97316}
+.risk-row-watchlist td:first-child{border-left:3px solid #FACC15}
+.risk-row-stable td:first-child{border-left:3px solid #22C55E}
+
 /* Heatmap */
 .heatmap-scroll{width:100%;overflow-x:auto}
 .heatmap-grid{display:grid;gap:3px;min-width:540px}
@@ -276,11 +314,12 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .hm-label{font-size:.63rem;color:var(--text-muted);display:flex;align-items:center;font-weight:500}
 .hm-col-label{font-size:.58rem;color:var(--text-muted);text-align:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;height:27px}
 
-/* Mini metrics */
+/* Mini metrics — User Monitoring */
 .mini-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
 .mini-card{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center}
 .mini-value{font-size:1.2rem;font-weight:700;color:var(--primary);letter-spacing:-.3px}
 .mini-label{font-size:.64rem;color:var(--text-muted);margin-top:4px;font-weight:500}
+.mini-sub{font-size:.6rem;color:var(--text-muted);display:block;margin-top:2px}
 
 /* Peak summary */
 .peak-summary{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:16px;height:100%}
@@ -344,10 +383,9 @@ footer span{color:var(--brand-red);font-weight:600}
      ================================================================ -->
 <header class="header">
   <div class="header-logo-zone">
-    <!-- Replace assets/logo.png with actual logo file in repository -->
-    <img src="assets/logo.png" alt="OCA Logo"
+    <img src="assets/logo.png" alt="RevoU x OCA x Telkom Logo"
          onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-    <span class="logo-fallback" style="display:none">OCA</span>
+    <span class="logo-fallback-hdr" style="display:none">OCA</span>
   </div>
   <div class="header-body">
     <div class="header-title-block">
@@ -355,12 +393,12 @@ footer span{color:var(--brand-red);font-weight:600}
       <div class="header-subtitle">Unified cross-channel monitoring · WhatsApp, SMS, Email, Call/IVR</div>
     </div>
     <div class="header-meta">
-      <div class="data-status-badge" id="dataStatusBadge">
+      <!-- Static educational dataset label — no dynamic status badge -->
+      <div class="dataset-label">
         <span class="dot"></span>
-        <span id="dataStatusText">Loading…</span>
+        Educational Dataset · Q1 2025
       </div>
       <div class="header-timestamp" id="headerTimestamp"></div>
-      <button class="btn-reset" onclick="resetToSample()">Reset Sample Data</button>
     </div>
   </div>
 </header>
@@ -369,6 +407,16 @@ footer span{color:var(--brand-red);font-weight:600}
      SIDEBAR
      ================================================================ -->
 <nav class="sidebar">
+
+  <!-- Logo card -->
+  <div class="sidebar-logo-wrap">
+    <div class="sidebar-logo-card">
+      <img src="assets/logo.png" alt="RevoU x OCA x Telkom Logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"/>
+      <span class="logo-fallback-sb" style="display:none">OCA</span>
+    </div>
+  </div>
+
   <div class="sidebar-nav">
     <div class="sidebar-section-label">Dashboard</div>
     <div class="nav-item active" data-section="overview">
@@ -435,10 +483,9 @@ footer span{color:var(--brand-red);font-weight:600}
         <div class="section-page-title">Executive Overview</div>
         <div class="section-page-sub">Cross-channel KPI summary across all monitored clients</div>
       </div>
-      <div class="period-badge" id="overviewPeriodBadge">Q1 2025</div>
+      <div class="period-badge">Q1 2025</div>
     </div>
 
-    <!-- Section-level filters -->
     <div class="section-filters">
       <div class="filter-group">
         <label>Period</label>
@@ -469,7 +516,6 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
     </div>
 
-    <!-- KPI Cards -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-label">Total Transactions</div>
@@ -503,7 +549,6 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
     </div>
 
-    <!-- Channel Role Matrix -->
     <div class="section-block">
       <div class="block-header">
         <div class="block-title">Channel Role Matrix: Volume vs Billable Value</div>
@@ -676,21 +721,33 @@ footer span{color:var(--brand-red);font-weight:600}
 
   <!-- ============================================================
        SECTION 4 — USER MONITORING
+       Uses userMonitoringData (from data/user_monitoring_summary.csv)
+       Falls back to sampleUserData if CSV is unavailable.
        ============================================================ -->
   <div id="sec-users" class="dash-section">
     <div class="section-page-header">
       <div>
         <div class="section-page-title">User Monitoring</div>
-        <div class="section-page-sub">Client activity, channel dependency, and engagement segmentation</div>
+        <div class="section-page-sub">Client risk segmentation, churn signals, and value prioritization</div>
       </div>
       <div class="period-badge">Q1 2025</div>
     </div>
 
+    <!-- User data source status indicator -->
+    <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <span style="font-size:.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em">User Data Source:</span>
+      <span id="userDataSourceBadge" style="font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--bg-soft);border:1px solid var(--border);color:var(--text-muted)">Loading…</span>
+    </div>
+
     <div class="section-filters">
       <div class="filter-group">
-        <label>User / Client</label>
-        <select class="filter-select" id="us-user" onchange="applyUserFilters()">
-          <option value="all">All Users</option>
+        <label>Risk Segment</label>
+        <select class="filter-select" id="us-segment" onchange="applyUserFilters()">
+          <option value="all">All Segments</option>
+          <option value="Red Alert">Red Alert</option>
+          <option value="At Risk">At Risk</option>
+          <option value="Watchlist">Watchlist</option>
+          <option value="Stable">Stable</option>
         </select>
       </div>
       <div class="filter-group">
@@ -710,48 +767,50 @@ footer span{color:var(--brand-red);font-weight:600}
         </select>
       </div>
       <div class="filter-group">
-        <label>Segment</label>
-        <select class="filter-select" id="us-segment" onchange="applyUserFilters()">
-          <option value="all">All Segments</option>
-          <option value="High Value">High Value</option>
-          <option value="Mono-Channel">Mono-Channel</option>
-          <option value="Stable">Stable</option>
+        <label>User / Client</label>
+        <select class="filter-select" id="us-user" onchange="applyUserFilters()">
+          <option value="all">All Users</option>
         </select>
       </div>
     </div>
 
+    <!-- Summary cards: Users Need Attention / At-Risk / High-Value -->
     <div class="mini-metrics">
-      <div class="mini-card">
-        <div class="mini-value" id="mu-concentration">—</div>
-        <div class="mini-label">Top User Concentration<br/><span style="font-size:.6rem">Top 3 clients by tx share</span></div>
+      <div class="mini-card" style="border-top:3px solid var(--risk-red)">
+        <div class="mini-value" id="mu-attention" style="color:var(--risk-red)">—</div>
+        <div class="mini-label">Users Need Attention</div>
+        <span class="mini-sub">Users requiring Account Manager follow-up</span>
       </div>
-      <div class="mini-card">
-        <div class="mini-value" id="mu-mono" style="color:var(--risk-red)">—</div>
-        <div class="mini-label">Mono-Channel Users<br/><span style="font-size:.6rem">&gt;85% share on one channel</span></div>
+      <div class="mini-card" style="border-top:3px solid #f97316">
+        <div class="mini-value" id="mu-atrisk" style="color:#f97316">—</div>
+        <div class="mini-label">At-Risk Users</div>
+        <span class="mini-sub">Users with contextual risk score 40–69</span>
       </div>
-      <div class="mini-card">
+      <div class="mini-card" style="border-top:3px solid var(--brand-red)">
         <div class="mini-value" id="mu-hv" style="color:var(--brand-red)">—</div>
-        <div class="mini-label">High-Value Users<br/><span style="font-size:.6rem">Top 30% by billable amount</span></div>
+        <div class="mini-label">High-Value Users</div>
+        <span class="mini-sub">Top 30% by billable amount</span>
       </div>
     </div>
 
-    <div class="grid-2" style="margin-bottom:13px">
+    <!-- User Priority Table + Risk vs Value Map side by side -->
+    <div class="grid-2" style="margin-bottom:13px;align-items:start">
       <div class="card">
-        <div class="card-title">Top Users · Q1 2025</div>
+        <div class="card-title">User Priority Table</div>
         <div class="table-wrap" id="userTableWrap"></div>
       </div>
       <div class="card">
-        <div class="card-title">User Dependency Map</div>
+        <div class="card-title">User Risk vs Value Map</div>
         <div class="chart-quadrant-wrap">
-          <div class="chart-wrap" style="height:270px"><canvas id="chartUserBubble"></canvas></div>
+          <div class="chart-wrap" style="height:310px"><canvas id="chartUserBubble"></canvas></div>
           <div class="quadrant-labels" style="pointer-events:none">
-            <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">Strategic Client</div>
-            <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">Upsell / Risk Priority</div>
-            <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Monitor</div>
-            <div class="ql">Nurture</div>
+            <div class="ql" style="justify-content:flex-end;align-items:flex-end;border-right:1px dashed rgba(0,0,0,.06);border-bottom:1px dashed rgba(0,0,0,.06)">High Value · Low Risk</div>
+            <div class="ql" style="align-items:flex-end;border-bottom:1px dashed rgba(0,0,0,.06)">High Value · High Risk</div>
+            <div class="ql" style="justify-content:flex-end;border-right:1px dashed rgba(0,0,0,.06)">Low Value · Low Risk</div>
+            <div class="ql">Low Value · High Risk</div>
           </div>
         </div>
-        <div class="microcopy">X-axis: Main Channel Share (%) · Y-axis: Transaction Volume · Bubble size: Billable Amount</div>
+        <div class="microcopy">X-axis: Usage Decline (%) · Y-axis: Total Billable (IDR) · Bubble size: Transaction Volume · Color: Risk Segment</div>
       </div>
     </div>
 
@@ -774,11 +833,11 @@ footer span{color:var(--brand-red);font-weight:600}
       <div class="method-card">
         <h3>Data Source &amp; Scope</h3>
         <ul>
-          <li>Dataset: <code>data/dashboard_unified_transactions.csv</code> loaded from the repository.</li>
+          <li>Overview, Channel &amp; Time sections: generated sample data (mock transaction events).</li>
+          <li>User Monitoring: <code>data/user_monitoring_summary.csv</code> loaded from repository.</li>
           <li>Period covered: Q1 2025 (January – March).</li>
           <li>Channels monitored: WhatsApp, SMS, Email, Call/IVR.</li>
-          <li>Each row = one transaction event.</li>
-          <li>Fallback sample data used if CSV cannot be fetched.</li>
+          <li>Fallback sample data used for User Monitoring if CSV cannot be fetched.</li>
         </ul>
       </div>
       <div class="method-card">
@@ -792,16 +851,16 @@ footer span{color:var(--brand-red);font-weight:600}
         </ul>
       </div>
       <div class="method-card">
-        <h3>Channel Role Matrix Logic</h3>
-        <p>Each channel is plotted by its transaction share (X-axis) vs billable amount share (Y-axis). Bubble size encodes the success/answered rate. Quadrant thresholds are set at 25% for both axes to separate high/low regions.</p>
+        <h3>User Risk Score Logic</h3>
+        <p><strong>Contextual Churn Risk Score</strong> is a composite metric incorporating usage decline %, billable decline %, inactive days, and channel diversity. Segments: Red Alert (&ge;70), At Risk (40–69), Watchlist (20–39), Stable (&lt;20). Score is pre-computed in the user monitoring summary CSV.</p>
       </div>
       <div class="method-card">
-        <h3>User Dependency Map Logic</h3>
-        <p>Each user is plotted by dominant channel share (X-axis) vs total transaction volume (Y-axis). Users with &gt;85% concentration on one channel are flagged as mono-channel. Bubble size encodes billable amount.</p>
+        <h3>User Risk vs Value Map Logic</h3>
+        <p>Each user is plotted by their usage decline % (X-axis) and total billable amount (Y-axis). Bubble size = transaction volume. Color encodes the contextual risk segment. Higher X = more decline risk; higher Y = higher business value.</p>
       </div>
       <div class="method-card">
         <h3>Heatmap Construction</h3>
-        <p>Traffic is aggregated by day-of-week and hour. Intensity is normalized relative to the peak slot (max = 100). Colors use a linear red scale where full opacity = peak intensity.</p>
+        <p>Traffic is aggregated by day-of-week and hour from transaction-level sample data. Intensity is normalized relative to the peak slot. Colors use a linear red scale — full opacity = peak intensity.</p>
       </div>
       <div class="method-card">
         <h3>Limitations &amp; Disclaimers</h3>
@@ -825,115 +884,91 @@ footer span{color:var(--brand-red);font-weight:600}
      ================================================================ -->
 <script>
 /* ================================================================
-   GLOBAL STATE & REGISTRY
+   GLOBAL STATE & CHART REGISTRY
    ================================================================ */
-let dashboardData = [];
-let dataSourceStatus = 'loading';
+let dashboardData = [];       // sample transaction data (Overview/Channel/Time)
+let userMonitoringData = [];  // loaded from data/user_monitoring_summary.csv
+let userDataSource = 'loading';
 
-// Active filter state per section
 const dashboardState = {
   overview: { period:'all', channel:'all', metric:'transactions' },
   channel:  { channel:'all', status:'all', charge:'all', metric:'transactions' },
   time:     { range:'all', grain:'daily', channel:'all', metric:'transactions' },
-  users:    { user:'all', fob:'all', channel:'all', segment:'all' }
+  users:    { segment:'all', fob:'all', channel:'all', user:'all' }
 };
 
-// Chart instance registry — always destroy before recreating
 const CHARTS = {};
-function destroyChart(id){
-  if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; }
-}
+function destroyChart(id){ if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; } }
 
-// Channel colors
-const CH_COLOR = {
-  'WhatsApp':'#25d366',
-  'SMS':'#FACC15',
-  'Email':'#60a5fa',
-  'Call/IVR':'#f97316'
-};
+const CH_COLOR = { 'WhatsApp':'#25d366','SMS':'#FACC15','Email':'#60a5fa','Call/IVR':'#f97316' };
 const CHANNELS = ['WhatsApp','SMS','Email','Call/IVR'];
 
+/* Risk segment colors for User Risk vs Value Map */
+const RISK_COLOR = {
+  'Red Alert':  '#EF4444',
+  'At Risk':    '#f97316',
+  'Watchlist':  '#FACC15',
+  'Stable':     '#22C55E'
+};
+
 /* ================================================================
-   SAMPLE DATA
-   This block defines fallback mock data.
-   Replace with your actual CSV export or remove once CSV is live.
+   SAMPLE TRANSACTION DATA
+   Used by Overview, Channel Performance, and Time Pattern sections.
+   Replace or remove once real transaction CSV is added.
    ================================================================ */
 const sampleData = (function generateSample(){
-  const rows = [];
+  const rows=[];
   const users    = ['Client A Finance','Client B Retail','Client C Education','Client D Healthcare','Client E Logistics'];
   const fields   = ['Finance','Retail','Education','Healthcare','Logistics'];
   const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   const months   = ['01','02','03'];
-
-  // Approximate status distributions per channel
   const statusDist = {
-    'WhatsApp': [{s:'success',w:85},{s:'pending',w:13},{s:'failed',w:2}],
-    'SMS':      [{s:'success',w:99},{s:'failed',w:1}],
-    'Email':    [{s:'success',w:81},{s:'pending',w:17},{s:'failed',w:2}],
-    'Call/IVR': [{s:'rna',w:77},{s:'success',w:22},{s:'failed',w:1}]
+    'WhatsApp':[{s:'success',w:85},{s:'pending',w:13},{s:'failed',w:2}],
+    'SMS':     [{s:'success',w:99},{s:'failed',w:1}],
+    'Email':   [{s:'success',w:81},{s:'pending',w:17},{s:'failed',w:2}],
+    'Call/IVR':[{s:'rna',w:77},{s:'success',w:22},{s:'failed',w:1}]
   };
-  // Base daily transactions weight per channel (relative)
   const txWeight   = {'WhatsApp':41,'SMS':16,'Email':33,'Call/IVR':10};
   const chargeRate = {'WhatsApp':.76,'SMS':.95,'Email':.62,'Call/IVR':.58};
   const billUnit   = {'WhatsApp':170,'SMS':510,'Email':33,'Call/IVR':155};
   const muUnit     = {'WhatsApp':1.4,'SMS':1.2,'Email':1.8,'Call/IVR':1.0};
 
   function pickStatus(ch){
-    const dist = statusDist[ch];
-    const total = dist.reduce((s,d)=>s+d.w,0);
-    let r = Math.random()*total;
+    const dist=statusDist[ch];
+    const total=dist.reduce((s,d)=>s+d.w,0);
+    let r=Math.random()*total;
     for(const d of dist){ r-=d.w; if(r<=0) return d.s; }
     return dist[0].s;
   }
-
   let id=1;
   months.forEach(mo=>{
     for(let day=1;day<=28;day++){
       const dateStr=`2025-${mo}-${String(day).padStart(2,'0')}`;
-      const dowIdx=(new Date(dateStr).getDay()+6)%7; // 0=Mon
+      const dowIdx=(new Date(dateStr).getDay()+6)%7;
       const dayName=dayNames[dowIdx];
       const isWeekend=dowIdx>=5;
-
       CHANNELS.forEach(ch=>{
-        const base = isWeekend
-          ? Math.floor(txWeight[ch]*4)
-          : Math.floor(txWeight[ch]*17);
-        const nTx = Math.max(1, base + Math.floor((Math.random()-.5)*base*.35));
-
+        const base=isWeekend?Math.floor(txWeight[ch]*4):Math.floor(txWeight[ch]*17);
+        const nTx=Math.max(1,base+Math.floor((Math.random()-.5)*base*.35));
         for(let t=0;t<nTx;t++){
-          const ui = Math.floor(Math.random()*users.length);
-          const st = pickStatus(ch);
-          const isCharge = Math.random()<chargeRate[ch]?1:0;
-          const mu = +(muUnit[ch]*(0.85+Math.random()*.3)).toFixed(1);
-          const bill = isCharge?+(billUnit[ch]*(0.8+Math.random()*.4)).toFixed(0):0;
-          // Hour: peak 10-14 on weekdays
-          const hr = isWeekend
-            ? Math.floor(Math.random()*14)+7
-            : Math.random()<.55 ? Math.floor(Math.random()*5)+10 : Math.floor(Math.random()*9)+7;
-
+          const ui=Math.floor(Math.random()*users.length);
+          const st=pickStatus(ch);
+          const isCharge=Math.random()<chargeRate[ch]?1:0;
+          const mu=+(muUnit[ch]*(0.85+Math.random()*.3)).toFixed(1);
+          const bill=isCharge?+(billUnit[ch]*(0.8+Math.random()*.4)).toFixed(0):0;
+          const hr=isWeekend?Math.floor(Math.random()*14)+7:Math.random()<.55?Math.floor(Math.random()*5)+10:Math.floor(Math.random()*9)+7;
           rows.push({
             transaction_id:`TXN${String(id++).padStart(6,'0')}`,
             user_id:`U${String(ui+1).padStart(3,'0')}`,
-            user_name:users[ui],
-            field_of_business:fields[ui],
-            channel:ch,
-            message_type:ch==='Call/IVR'?'call':'message',
-            message_status:st,
+            user_name:users[ui],field_of_business:fields[ui],channel:ch,
+            message_type:ch==='Call/IVR'?'call':'message',message_status:st,
             is_charge:isCharge,
-            created_at:`${dateStr} ${String(hr).padStart(2,'0')}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}:00`,
-            date:dateStr,
-            time:`${String(hr).padStart(2,'0')}:00`,
-            hour:hr,
-            day_name:dayName,
-            month:mo,
-            transaction_count:1,
-            message_units:mu,
-            raw_transaction_amount:bill,
-            billable_amount:bill,
-            success_flag:st==='success'?1:0,
-            failed_flag:st==='failed'?1:0,
-            pending_flag:st==='pending'?1:0,
-            rna_flag:st==='rna'?1:0
+            created_at:`${dateStr} ${String(hr).padStart(2,'0')}:00:00`,
+            date:dateStr,time:`${String(hr).padStart(2,'0')}:00`,hour:hr,
+            day_name:dayName,month:mo,transaction_count:1,message_units:mu,
+            raw_transaction_amount:bill,billable_amount:bill,
+            success_flag:st==='success'?1:0,failed_flag:st==='failed'?1:0,
+            pending_flag:st==='pending'?1:0,rna_flag:st==='rna'?1:0
           });
         }
       });
@@ -943,9 +978,49 @@ const sampleData = (function generateSample(){
 })();
 
 /* ================================================================
-   NORMALIZE DATA
-   Ensures correct types when parsing CSV string values.
+   FALLBACK USER MONITORING SAMPLE DATA
+   Used when data/user_monitoring_summary.csv cannot be fetched.
+   Expected columns match user_monitoring_summary.csv schema.
    ================================================================ */
+const sampleUserData = [
+  { user_name:'Client A Finance',    field_of_business:'Finance',     contextual_risk_segment:'Red Alert', contextual_churn_risk_score:82, main_channel:'WhatsApp', main_channel_share_pct:62, usage_decline_pct:45, billable_decline_pct:38, total_billable_amount:4200000, total_transactions:18423, watchlist_reason:'Significant usage and revenue drop in last 30 days', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
+  { user_name:'Client B Retail',     field_of_business:'Retail',      contextual_risk_segment:'At Risk',   contextual_churn_risk_score:58, main_channel:'SMS',       main_channel_share_pct:71, usage_decline_pct:28, billable_decline_pct:22, total_billable_amount:3800000, total_transactions:12901, watchlist_reason:'Declining usage trend with moderate revenue impact', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
+  { user_name:'Client C Education',  field_of_business:'Education',   contextual_risk_segment:'Watchlist', contextual_churn_risk_score:34, main_channel:'Email',     main_channel_share_pct:55, usage_decline_pct:12, billable_decline_pct:8,  total_billable_amount:1100000, total_transactions:10554, watchlist_reason:'Minor slowdown in activity; monitor for next 2 weeks', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
+  { user_name:'Client D Healthcare', field_of_business:'Healthcare',  contextual_risk_segment:'Stable',    contextual_churn_risk_score:14, main_channel:'WhatsApp',  main_channel_share_pct:48, usage_decline_pct:2,  billable_decline_pct:0,  total_billable_amount:2400000, total_transactions:9112,  watchlist_reason:'', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:1 },
+  { user_name:'Client E Logistics',  field_of_business:'Logistics',   contextual_risk_segment:'Stable',    contextual_churn_risk_score:9,  main_channel:'Call/IVR',  main_channel_share_pct:44, usage_decline_pct:0,  billable_decline_pct:0,  total_billable_amount:1600000, total_transactions:7340,  watchlist_reason:'', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
+  { user_name:'Client F Banking',    field_of_business:'Banking',     contextual_risk_segment:'At Risk',   contextual_churn_risk_score:52, main_channel:'SMS',       main_channel_share_pct:80, usage_decline_pct:30, billable_decline_pct:25, total_billable_amount:2900000, total_transactions:6800,  watchlist_reason:'Heavy SMS dependency with notable usage drop', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
+  { user_name:'Client G Insurance',  field_of_business:'Insurance',   contextual_risk_segment:'Watchlist', contextual_churn_risk_score:27, main_channel:'WhatsApp',  main_channel_share_pct:53, usage_decline_pct:8,  billable_decline_pct:5,  total_billable_amount:980000,  total_transactions:5420,  watchlist_reason:'Slight dip in engagement metrics', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
+  { user_name:'Client H E-commerce', field_of_business:'E-Commerce',  contextual_risk_segment:'Red Alert', contextual_churn_risk_score:75, main_channel:'Email',     main_channel_share_pct:69, usage_decline_pct:55, billable_decline_pct:48, total_billable_amount:3100000, total_transactions:4900,  watchlist_reason:'Severe email campaign reduction; account at high churn risk', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 }
+];
+
+/* ================================================================
+   NORMALIZE USER MONITORING DATA
+   Handles both CSV strings and JS objects.
+   ================================================================ */
+function normalizeUserData(rows){
+  return rows.map(r=>({
+    user_name:                   String(r.user_name||'Unknown'),
+    field_of_business:           String(r.field_of_business||''),
+    contextual_risk_segment:     String(r.contextual_risk_segment||'Stable'),
+    contextual_churn_risk_score: Number(r.contextual_churn_risk_score)||0,
+    main_channel:                String(r.main_channel||''),
+    main_channel_share_pct:      Number(r.main_channel_share_pct)||0,
+    usage_decline_pct:           Number(r.usage_decline_pct)||0,
+    billable_decline_pct:        Number(r.billable_decline_pct)||0,
+    total_billable_amount:       Number(r.total_billable_amount)||0,
+    total_transactions:          Number(r.total_transactions)||0,
+    watchlist_reason:            String(r.watchlist_reason||''),
+    users_need_attention_flag:   Number(r.users_need_attention_flag)||0,
+    at_risk_user_flag:           Number(r.at_risk_user_flag)||0,
+    high_value_flag:             Number(r.high_value_flag)||0,
+    // Support optional summary count fields at the dataset level
+    users_need_attention_count:  r.users_need_attention_count!==undefined?Number(r.users_need_attention_count):undefined,
+    at_risk_users_count:         r.at_risk_users_count!==undefined?Number(r.at_risk_users_count):undefined,
+    high_value_users_count:      r.high_value_users_count!==undefined?Number(r.high_value_users_count):undefined
+  }));
+}
+
+/* Normalize transaction data */
 function normalizeData(rows){
   return rows.map(r=>({
     transaction_id:String(r.transaction_id||''),
@@ -974,84 +1049,116 @@ function normalizeData(rows){
 }
 
 /* ================================================================
-   DATA LOADING FUNCTIONS
+   DATA LOADING
    ================================================================ */
 
-// Attempt to load CSV from repository; fallback to sample data
-async function loadRepositoryData(){
-  try{
-    const res = await fetch('data/dashboard_unified_transactions.csv');
-    if(!res.ok) throw new Error('CSV not found');
-    const csv = await res.text();
-    Papa.parse(csv,{
-      header:true,
-      skipEmptyLines:true,
-      complete(result){
-        dashboardData = normalizeData(result.data);
-        dataSourceStatus = 'repository';
-        postLoad();
-      },
-      error(){ loadSampleData(); }
-    });
-  }catch(e){
-    loadSampleData();
-  }
-}
-
-function loadSampleData(){
+/* Main init: load sample transaction data for Overview/Channel/Time,
+   then separately try to load the user monitoring CSV. */
+async function initDashboard(){
+  // Load sample transaction data immediately (no CSV needed for these sections)
   dashboardData = normalizeData(sampleData);
-  dataSourceStatus = 'sample';
-  postLoad();
-}
 
-// Reset button: reload sample data
-function resetToSample(){
-  dashboardData = normalizeData(sampleData);
-  dataSourceStatus = 'sample';
-  postLoad();
-}
-
-// Called after either data source is ready
-function postLoad(){
-  updateHeaderStatus();
-  populateDynamicFilters();
-  updateDashboard();
-  document.getElementById('loadingOverlay').style.display='none';
-}
-
-function updateHeaderStatus(){
-  const badge = document.getElementById('dataStatusBadge');
-  const txt   = document.getElementById('dataStatusText');
-  badge.className = 'data-status-badge '+(dataSourceStatus==='repository'?'loaded':'sample');
-  txt.textContent = dataSourceStatus==='repository'?'Repository data loaded':'Sample data loaded';
-
+  // Set header timestamp
   const now = new Date();
   document.getElementById('headerTimestamp').textContent =
     'Loaded '+now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+
     ' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
-  const months = [...new Set(dashboardData.map(r=>r.month))].sort();
+  // Update sidebar period
   document.getElementById('sidebarPeriod').textContent =
-    dashboardData.length.toLocaleString()+' records · '+months.length+' month(s)';
+    'Q1 2025 · Jan–Mar · 4 channels';
+
+  // Render Overview, Channel, Time from sample data
+  renderOverview(filterData('overview'));
+  renderChannelPerformance(filterData('channel'));
+  renderTimePattern(filterData('time'));
+
+  // Now try to load user monitoring CSV
+  await loadUserMonitoringData();
+
+  document.getElementById('loadingOverlay').style.display='none';
 }
 
-// Populate user and FOB dropdowns from actual data
-function populateDynamicFilters(){
-  const users = [...new Set(dashboardData.map(r=>r.user_name))].sort();
-  const fobs  = [...new Set(dashboardData.map(r=>r.field_of_business).filter(Boolean))].sort();
+/* Load data/user_monitoring_summary.csv for User Monitoring section only */
+async function loadUserMonitoringData(){
+  try{
+    const res = await fetch('data/user_monitoring_summary.csv');
+    if(!res.ok) throw new Error('User CSV not found');
+    const csv = await res.text();
+    Papa.parse(csv,{
+      header:true,
+      skipEmptyLines:true,
+      complete(result){
+        userMonitoringData = normalizeUserData(result.data);
+        userDataSource = 'repository';
+        updateUserDataSourceBadge();
+        populateUserFilters();
+        renderUserMonitoring(filterUserData());
+      },
+      error(){ fallbackUserData(); }
+    });
+  }catch(e){
+    fallbackUserData();
+  }
+}
 
-  const uSel = document.getElementById('us-user');
-  // Remove existing options except first
+function fallbackUserData(){
+  userMonitoringData = normalizeUserData(sampleUserData);
+  userDataSource = 'sample';
+  updateUserDataSourceBadge();
+  populateUserFilters();
+  renderUserMonitoring(filterUserData());
+}
+
+function updateUserDataSourceBadge(){
+  const el = document.getElementById('userDataSourceBadge');
+  if(userDataSource==='repository'){
+    el.textContent='Repository CSV loaded';
+    el.style.cssText='font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#DCFCE7;border:1px solid rgba(34,197,94,.3);color:#166534';
+  } else {
+    el.textContent='Sample data loaded';
+    el.style.cssText='font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#FEF9C3;border:1px solid rgba(250,204,21,.3);color:#854D0E';
+  }
+}
+
+/* Populate User Monitoring filter dropdowns from userMonitoringData */
+function populateUserFilters(){
+  const users = [...new Set(userMonitoringData.map(r=>r.user_name))].sort();
+  const fobs  = [...new Set(userMonitoringData.map(r=>r.field_of_business).filter(Boolean))].sort();
+
+  const uSel=document.getElementById('us-user');
   while(uSel.options.length>1) uSel.remove(1);
-  users.forEach(u=>{ const o=new Option(u,u); uSel.add(o); });
+  users.forEach(u=>uSel.add(new Option(u,u)));
 
-  const fSel = document.getElementById('us-fob');
+  const fSel=document.getElementById('us-fob');
   while(fSel.options.length>1) fSel.remove(1);
-  fobs.forEach(f=>{ const o=new Option(f,f); fSel.add(o); });
+  fobs.forEach(f=>fSel.add(new Option(f,f)));
 }
 
 /* ================================================================
-   FILTER FUNCTIONS — update state then re-render section only
+   USER MONITORING FILTER
+   ================================================================ */
+function applyUserFilters(){
+  dashboardState.users.segment = document.getElementById('us-segment').value;
+  dashboardState.users.fob     = document.getElementById('us-fob').value;
+  dashboardState.users.channel = document.getElementById('us-channel').value;
+  dashboardState.users.user    = document.getElementById('us-user').value;
+  renderUserMonitoring(filterUserData());
+}
+
+/* Returns filtered userMonitoringData array */
+function filterUserData(){
+  let data = userMonitoringData.slice();
+  const s = dashboardState.users;
+  if(s.segment!=='all') data=data.filter(r=>r.contextual_risk_segment===s.segment);
+  if(s.fob!=='all')     data=data.filter(r=>r.field_of_business===s.fob);
+  if(s.channel!=='all') data=data.filter(r=>r.main_channel===s.channel);
+  if(s.user!=='all')    data=data.filter(r=>r.user_name===s.user);
+  return data;
+}
+
+/* ================================================================
+   TRANSACTION DATA FILTERS (Overview / Channel / Time)
    ================================================================ */
 function applyOverviewFilters(){
   dashboardState.overview.period  = document.getElementById('ov-period').value;
@@ -1059,7 +1166,6 @@ function applyOverviewFilters(){
   dashboardState.overview.metric  = document.getElementById('ov-metric').value;
   renderOverview(filterData('overview'));
 }
-
 function applyChannelFilters(){
   dashboardState.channel.channel  = document.getElementById('ch-channel').value;
   dashboardState.channel.status   = document.getElementById('ch-status').value;
@@ -1067,7 +1173,6 @@ function applyChannelFilters(){
   dashboardState.channel.metric   = document.getElementById('ch-metric').value;
   renderChannelPerformance(filterData('channel'));
 }
-
 function applyTimeFilters(){
   dashboardState.time.range   = document.getElementById('tm-range').value;
   dashboardState.time.grain   = document.getElementById('tm-grain').value;
@@ -1076,21 +1181,9 @@ function applyTimeFilters(){
   renderTimePattern(filterData('time'));
 }
 
-function applyUserFilters(){
-  dashboardState.users.user    = document.getElementById('us-user').value;
-  dashboardState.users.fob     = document.getElementById('us-fob').value;
-  dashboardState.users.channel = document.getElementById('us-channel').value;
-  dashboardState.users.segment = document.getElementById('us-segment').value;
-  renderUserMonitoring(filterData('users'));
-}
-
-/* ================================================================
-   FILTER HELPER — returns filtered subset of dashboardData
-   ================================================================ */
 function filterData(section){
-  let data = dashboardData.slice();
-  const s = dashboardState[section];
-
+  let data=dashboardData.slice();
+  const s=dashboardState[section];
   if(section==='overview'){
     if(s.period!=='all')  data=data.filter(r=>r.month===s.period);
     if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
@@ -1108,67 +1201,24 @@ function filterData(section){
     if(s.range!=='all')   data=data.filter(r=>r.month===s.range);
     if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
   }
-  if(section==='users'){
-    if(s.user!=='all') data=data.filter(r=>r.user_name===s.user);
-    if(s.fob!=='all')  data=data.filter(r=>r.field_of_business===s.fob);
-    if(s.channel!=='all'){
-      // Keep only users whose dominant channel matches
-      const mainCh = computeMainChannelMap(data);
-      const matchUsers = Object.entries(mainCh)
-        .filter(([,ch])=>ch===s.channel).map(([u])=>u);
-      data=data.filter(r=>matchUsers.includes(r.user_name));
-    }
-    if(s.segment!=='all'){
-      const agg = aggregateUsers(data);
-      const maxBill = Math.max(...agg.map(u=>u.bill))||1;
-      const hvThreshold = agg.length ? agg[Math.max(0,Math.floor(agg.length*.3)-1)].bill : 0;
-      const matchUsers = agg
-        .filter(u=>{
-          if(s.segment==='Mono-Channel') return u.mainShare>85;
-          if(s.segment==='High Value')   return u.bill>=hvThreshold;
-          if(s.segment==='Stable')       return u.mainShare<=85 && u.bill<hvThreshold;
-          return true;
-        })
-        .map(u=>u.name);
-      data=data.filter(r=>matchUsers.includes(r.user_name));
-    }
-  }
   return data;
 }
 
-// Helper: dominant channel map {userName -> channel}
-function computeMainChannelMap(data){
-  const map={};
-  data.forEach(r=>{
-    if(!map[r.user_name]) map[r.user_name]={};
-    map[r.user_name][r.channel]=(map[r.user_name][r.channel]||0)+1;
-  });
-  const result={};
-  Object.entries(map).forEach(([u,c])=>{
-    result[u]=Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0];
-  });
-  return result;
-}
-
 /* ================================================================
-   AGGREGATION FUNCTIONS
+   AGGREGATION — Transaction data
    ================================================================ */
-
-// Aggregate overall KPIs
 function aggregateKpis(data){
-  const total   = data.length;
-  const mu      = data.reduce((s,r)=>s+r.message_units,0);
-  const users   = new Set(data.map(r=>r.user_name)).size;
-  const success = data.filter(r=>r.success_flag===1).length;
-  const charged = data.filter(r=>r.is_charge===1).length;
-  const bill    = data.filter(r=>r.is_charge===1).reduce((s,r)=>s+r.billable_amount,0);
-  return{ total, mu, users,
+  const total=data.length, mu=data.reduce((s,r)=>s+r.message_units,0);
+  const users=new Set(data.map(r=>r.user_name)).size;
+  const success=data.filter(r=>r.success_flag===1).length;
+  const charged=data.filter(r=>r.is_charge===1);
+  const bill=charged.reduce((s,r)=>s+r.billable_amount,0);
+  return{total,mu,users,
     successRate:total?success/total*100:0,
-    chargeRate: total?charged/total*100:0,
-    bill };
+    chargeRate:total?charged.length/total*100:0,
+    bill};
 }
 
-// Aggregate per-channel metrics
 function aggregateChannelPerformance(data){
   const res={};
   CHANNELS.forEach(ch=>{
@@ -1177,80 +1227,43 @@ function aggregateChannelPerformance(data){
     const charged=d.filter(r=>r.is_charge===1);
     const bill=charged.reduce((s,r)=>s+r.billable_amount,0);
     const success=d.filter(r=>r.success_flag===1).length;
-    const failed =d.filter(r=>r.failed_flag===1).length;
+    const failed=d.filter(r=>r.failed_flag===1).length;
     const pending=d.filter(r=>r.pending_flag===1).length;
-    const rna    =d.filter(r=>r.rna_flag===1).length;
-    const mu     =d.reduce((s,r)=>s+r.message_units,0);
-    res[ch]={
-      tx, bill, mu,
-      chargeRate: tx?charged.length/tx*100:0,
+    const rna=d.filter(r=>r.rna_flag===1).length;
+    const mu=d.reduce((s,r)=>s+r.message_units,0);
+    res[ch]={tx,bill,mu,
+      chargeRate:tx?charged.length/tx*100:0,
       successRate:tx?success/tx*100:0,
-      failedRate: tx?failed/tx*100:0,
+      failedRate:tx?failed/tx*100:0,
       pendingRate:tx?pending/tx*100:0,
-      rnaRate:    tx?rna/tx*100:0
-    };
+      rnaRate:tx?rna/tx*100:0};
   });
   return res;
 }
 
-// Aggregate time trend
-function aggregateTimeTrend(data, grain){
+function aggregateTimeTrend(data,grain){
   const map={};
   data.forEach(r=>{
     let key;
-    if(grain==='daily')        key=r.date;
-    else if(grain==='weekly'){
-      const d=new Date(r.date);
-      key=`${r.month}-W${Math.ceil(d.getDate()/7)}`;
-    }
+    if(grain==='daily') key=r.date;
+    else if(grain==='weekly') key=`${r.month}-W${Math.ceil(new Date(r.date).getDate()/7)}`;
     else if(grain==='monthly') key=r.month;
-    else if(grain==='hourly')  key=String(r.hour).padStart(2,'0')+':00';
+    else if(grain==='hourly') key=String(r.hour).padStart(2,'0')+':00';
     else key=r.date;
     if(!map[key]) map[key]={tx:0,mu:0,bill:0};
-    map[key].tx++;
-    map[key].mu+=r.message_units;
-    map[key].bill+=r.billable_amount;
+    map[key].tx++; map[key].mu+=r.message_units; map[key].bill+=r.billable_amount;
   });
   const keys=Object.keys(map).sort();
-  return{
-    labels:keys,
-    tx:   keys.map(k=>map[k].tx),
-    mu:   keys.map(k=>+map[k].mu.toFixed(1)),
-    bill: keys.map(k=>+map[k].bill.toFixed(0))
-  };
+  return{labels:keys,tx:keys.map(k=>map[k].tx),mu:keys.map(k=>+map[k].mu.toFixed(1)),bill:keys.map(k=>+map[k].bill.toFixed(0))};
 }
 
-// Aggregate heatmap matrix
 function aggregateHeatmap(data){
-  const days  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  const hours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+  const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const hours=[6,7,8,9,10,11,12,13,14,15,16,17,18,19];
   const matrix={};
-  days.forEach(d=>{ matrix[d]={}; hours.forEach(h=>{ matrix[d][h]=0; }); });
-  data.forEach(r=>{
-    if(matrix[r.day_name] && matrix[r.day_name][r.hour]!==undefined)
-      matrix[r.day_name][r.hour]++;
-  });
+  days.forEach(d=>{matrix[d]={};hours.forEach(h=>{matrix[d][h]=0;});});
+  data.forEach(r=>{if(matrix[r.day_name]&&matrix[r.day_name][r.hour]!==undefined) matrix[r.day_name][r.hour]++;});
   return{days,hours,matrix};
-}
-
-// Aggregate per-user metrics
-function aggregateUsers(data){
-  const map={};
-  data.forEach(r=>{
-    if(!map[r.user_name]) map[r.user_name]={
-      name:r.user_name, fob:r.field_of_business,
-      tx:0, bill:0, days:new Set(), channels:{}
-    };
-    const u=map[r.user_name];
-    u.tx++; u.bill+=r.billable_amount; u.days.add(r.date);
-    u.channels[r.channel]=(u.channels[r.channel]||0)+1;
-  });
-  return Object.values(map).map(u=>{
-    const sorted=Object.entries(u.channels).sort((a,b)=>b[1]-a[1]);
-    const mainCh=sorted[0]?sorted[0][0]:'—';
-    const mainShare=u.tx?sorted[0][1]/u.tx*100:0;
-    return{...u, dayCount:u.days.size, mainCh, mainShare};
-  }).sort((a,b)=>b.tx-a.tx);
 }
 
 /* ================================================================
@@ -1268,68 +1281,51 @@ Chart.defaults.plugins.tooltip.bodyColor='rgba(255,255,255,.72)';
 Chart.defaults.plugins.tooltip.padding=10;
 Chart.defaults.plugins.tooltip.cornerRadius=8;
 
-/* Number formatter */
 function fmtNum(n){
+  if(n>=1e9) return (n/1e9).toFixed(2)+'B';
   if(n>=1e6) return (n/1e6).toFixed(2)+'M';
   if(n>=1e3) return (n/1e3).toFixed(1)+'k';
   return String(Math.round(n));
 }
+function fmtIDR(n){ return 'IDR '+fmtNum(n); }
 
 /* ================================================================
    RENDER: Executive Overview
    ================================================================ */
 function renderOverview(data){
-  const kpis = aggregateKpis(data);
-  const chAgg = aggregateChannelPerformance(data);
-  const totalTx   = kpis.total||1;
-  const totalBill = CHANNELS.reduce((s,c)=>s+chAgg[c].bill,0)||1;
+  const kpis=aggregateKpis(data);
+  const chAgg=aggregateChannelPerformance(data);
+  const totalTx=kpis.total||1;
+  const totalBill=CHANNELS.reduce((s,c)=>s+chAgg[c].bill,0)||1;
 
-  // KPI cards
-  document.getElementById('kpi-tx').textContent   = kpis.total.toLocaleString();
-  document.getElementById('kpi-mu').textContent   = fmtNum(kpis.mu);
-  document.getElementById('kpi-users').textContent= kpis.users;
-  document.getElementById('kpi-sr').textContent   = kpis.successRate.toFixed(1)+'%';
-  document.getElementById('kpi-cr').textContent   = kpis.chargeRate.toFixed(1)+'%';
-  document.getElementById('kpi-bill').textContent = 'IDR '+fmtNum(kpis.bill);
+  document.getElementById('kpi-tx').textContent  =kpis.total.toLocaleString();
+  document.getElementById('kpi-mu').textContent  =fmtNum(kpis.mu);
+  document.getElementById('kpi-users').textContent=kpis.users;
+  document.getElementById('kpi-sr').textContent  =kpis.successRate.toFixed(1)+'%';
+  document.getElementById('kpi-cr').textContent  =kpis.chargeRate.toFixed(1)+'%';
+  document.getElementById('kpi-bill').textContent=fmtIDR(kpis.bill);
 
-  // Channel Role Matrix (bubble chart)
   destroyChart('chartRoleMatrix');
-  CHARTS['chartRoleMatrix'] = new Chart(
-    document.getElementById('chartRoleMatrix'),{
+  CHARTS['chartRoleMatrix']=new Chart(document.getElementById('chartRoleMatrix'),{
     type:'bubble',
-    data:{
-      datasets: CHANNELS.map(ch=>{
-        const d = chAgg[ch];
-        const txShare  = d.tx/totalTx*100;
-        const billShare= d.bill/totalBill*100;
-        const rate = ch==='Call/IVR'?(100-d.rnaRate):d.successRate;
-        const r = 8+rate*.2;
-        return{
-          label:ch,
-          data:[{x:+txShare.toFixed(2),y:+billShare.toFixed(2),r:+r.toFixed(1)}],
-          backgroundColor:CH_COLOR[ch]+'BB',
-          borderColor:CH_COLOR[ch],
-          borderWidth:1.5
-        };
-      })
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        tooltip:{callbacks:{
-          label:ctx=>{
-            const d=ctx.raw;
-            const ch=ctx.dataset.label;
-            const rate=ch==='Call/IVR'?(100-chAgg[ch].rnaRate):chAgg[ch].successRate;
-            return[` ${ch}`,` Tx Share: ${d.x.toFixed(1)}%`,` Billable Share: ${d.y.toFixed(1)}%`,` Success/Answered: ${rate.toFixed(1)}%`];
-          }
-        }}
-      },
+    data:{datasets:CHANNELS.map(ch=>{
+      const d=chAgg[ch];
+      const txShare=d.tx/totalTx*100;
+      const billShare=d.bill/totalBill*100;
+      const rate=ch==='Call/IVR'?(100-d.rnaRate):d.successRate;
+      return{label:ch,data:[{x:+txShare.toFixed(2),y:+billShare.toFixed(2),r:+(8+rate*.2).toFixed(1)}],
+        backgroundColor:CH_COLOR[ch]+'BB',borderColor:CH_COLOR[ch],borderWidth:1.5};
+    })},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{tooltip:{callbacks:{label:ctx=>{
+        const d=ctx.raw,ch=ctx.dataset.label;
+        const rate=ch==='Call/IVR'?(100-chAgg[ch].rnaRate):chAgg[ch].successRate;
+        return[` ${ch}`,` Tx Share: ${d.x.toFixed(1)}%`,` Billable Share: ${d.y.toFixed(1)}%`,` Rate: ${rate.toFixed(1)}%`];
+      }}}},
       scales:{
         x:{min:0,max:55,title:{display:true,text:'Transaction Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
         y:{min:0,max:65,title:{display:true,text:'Billable Amount Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}}
-      }
-    }
+      }}
   });
 }
 
@@ -1337,92 +1333,49 @@ function renderOverview(data){
    RENDER: Channel Performance
    ================================================================ */
 function renderChannelPerformance(data){
-  const ch = aggregateChannelPerformance(data);
-  const totalTx = CHANNELS.reduce((s,c)=>s+ch[c].tx,0)||1;
-  const metric  = dashboardState.channel.metric;
+  const ch=aggregateChannelPerformance(data);
+  const totalTx=CHANNELS.reduce((s,c)=>s+ch[c].tx,0)||1;
 
-  // Billable Amount bar
   destroyChart('chartBillable');
-  CHARTS['chartBillable'] = new Chart(document.getElementById('chartBillable'),{
+  CHARTS['chartBillable']=new Chart(document.getElementById('chartBillable'),{
     type:'bar',
-    data:{
-      labels:CHANNELS,
-      datasets:[{
-        label:'Billable Amount (IDR)',
-        data:CHANNELS.map(c=>ch[c].bill),
-        backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),
-        borderRadius:6, borderSkipped:false, maxBarThickness:50
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` IDR ${fmtNum(ctx.parsed.y)}`}}},
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
-      }
-    }
+    data:{labels:CHANNELS,datasets:[{label:'Billable Amount (IDR)',data:CHANNELS.map(c=>ch[c].bill),
+      backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),borderRadius:6,borderSkipped:false,maxBarThickness:50}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmtIDR(ctx.parsed.y)}`}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}}}
   });
 
-  // Tx Share donut
   destroyChart('chartTxShare');
-  CHARTS['chartTxShare'] = new Chart(document.getElementById('chartTxShare'),{
+  CHARTS['chartTxShare']=new Chart(document.getElementById('chartTxShare'),{
     type:'doughnut',
-    data:{
-      labels:CHANNELS,
-      datasets:[{
-        data:CHANNELS.map(c=>+(ch[c].tx/totalTx*100).toFixed(2)),
-        backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),
-        borderWidth:2, borderColor:'#fff', hoverOffset:6
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false, cutout:'62%',
-      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${Number(ctx.parsed).toFixed(1)}%`}}}
-    }
+    data:{labels:CHANNELS,datasets:[{data:CHANNELS.map(c=>+(ch[c].tx/totalTx*100).toFixed(2)),
+      backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${Number(ctx.parsed).toFixed(1)}%`}}}}
   });
 
-  // Outcome rates grouped bar
   destroyChart('chartOutcome');
-  CHARTS['chartOutcome'] = new Chart(document.getElementById('chartOutcome'),{
+  CHARTS['chartOutcome']=new Chart(document.getElementById('chartOutcome'),{
     type:'bar',
-    data:{
-      labels:CHANNELS,
-      datasets:[
-        {label:'Success / Answered',data:CHANNELS.map(c=>+ch[c].successRate.toFixed(1)),backgroundColor:'#22C55E',borderRadius:4,maxBarThickness:28},
-        {label:'Failed',data:CHANNELS.map(c=>+ch[c].failedRate.toFixed(1)),backgroundColor:'#ED1B3A',borderRadius:4,maxBarThickness:28},
-        {label:'Pending / RNA',data:CHANNELS.map(c=>+(ch[c].pendingRate+ch[c].rnaRate).toFixed(1)),backgroundColor:'#FACC15',borderRadius:4,maxBarThickness:28}
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
+    data:{labels:CHANNELS,datasets:[
+      {label:'Success / Answered',data:CHANNELS.map(c=>+ch[c].successRate.toFixed(1)),backgroundColor:'#22C55E',borderRadius:4,maxBarThickness:28},
+      {label:'Failed',data:CHANNELS.map(c=>+ch[c].failedRate.toFixed(1)),backgroundColor:'#ED1B3A',borderRadius:4,maxBarThickness:28},
+      {label:'Pending / RNA',data:CHANNELS.map(c=>+(ch[c].pendingRate+ch[c].rnaRate).toFixed(1)),backgroundColor:'#FACC15',borderRadius:4,maxBarThickness:28}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`},max:105,beginAtZero:true}
-      }
-    }
+      scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`},max:105,beginAtZero:true}}}
   });
 
-  // Channel summary table
   const riskMap={'WhatsApp':'Submitted status monitoring','SMS':'Stable delivery','Email':'Processed status + engagement monitoring','Call/IVR':'High RNA rate'};
   const riskBadge={'WhatsApp':'badge-yellow','SMS':'badge-green','Email':'badge-yellow','Call/IVR':'badge-red'};
   const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
-  let html=`<table><thead><tr>
-    <th>Channel</th><th>Transactions</th><th>Charge Rate</th>
-    <th>Success / Answered</th><th>Risk Signal</th><th>Billable Amount</th>
-  </tr></thead><tbody>`;
+  let html=`<table><thead><tr><th>Channel</th><th>Transactions</th><th>Charge Rate</th><th>Success / Answered</th><th>Risk Signal</th><th>Billable Amount</th></tr></thead><tbody>`;
   CHANNELS.forEach(c=>{
     const d=ch[c];
     const sr=c==='Call/IVR'?`${(100-d.rnaRate).toFixed(1)}% ans`:`${d.successRate.toFixed(1)}%`;
-    html+=`<tr>
-      <td><span class="ch-dot ${dotCls[c]}"></span><strong>${c}</strong></td>
-      <td>${d.tx.toLocaleString()}</td>
-      <td>${d.chargeRate.toFixed(1)}%</td>
-      <td>${sr}</td>
-      <td><span class="badge ${riskBadge[c]}">${riskMap[c]}</span></td>
-      <td>IDR ${fmtNum(d.bill)}</td>
-    </tr>`;
+    html+=`<tr><td><span class="ch-dot ${dotCls[c]}"></span><strong>${c}</strong></td><td>${d.tx.toLocaleString()}</td><td>${d.chargeRate.toFixed(1)}%</td><td>${sr}</td><td><span class="badge ${riskBadge[c]}">${riskMap[c]}</span></td><td>${fmtIDR(d.bill)}</td></tr>`;
   });
   html+='</tbody></table>';
   document.getElementById('channelTableWrap').innerHTML=html;
@@ -1432,182 +1385,176 @@ function renderChannelPerformance(data){
    RENDER: Time Pattern
    ================================================================ */
 function renderTimePattern(data){
-  const grain  = dashboardState.time.grain;
-  const metric = dashboardState.time.metric;
-  const agg    = aggregateTimeTrend(data, grain);
-  const vals   = metric==='message_units'?agg.mu:metric==='billable'?agg.bill:agg.tx;
-  const mLabel = {transactions:'Transactions',message_units:'Message Units',billable:'Billable Amount (IDR)'}[metric];
+  const grain=dashboardState.time.grain,metric=dashboardState.time.metric;
+  const agg=aggregateTimeTrend(data,grain);
+  const vals=metric==='message_units'?agg.mu:metric==='billable'?agg.bill:agg.tx;
+  const mLabel={transactions:'Transactions',message_units:'Message Units',billable:'Billable Amount (IDR)'}[metric];
 
-  // Trend line chart
   destroyChart('chartTrend');
-  CHARTS['chartTrend'] = new Chart(document.getElementById('chartTrend'),{
+  CHARTS['chartTrend']=new Chart(document.getElementById('chartTrend'),{
     type:'line',
-    data:{
-      labels:agg.labels,
-      datasets:[{
-        label:mLabel, data:vals,
-        borderColor:'#ED1B3A', backgroundColor:'rgba(237,27,58,.07)',
-        pointRadius:agg.labels.length>60?0:3,
-        pointHoverRadius:5, pointHoverBackgroundColor:'#ED1B3A',
-        borderWidth:2, fill:true, tension:.35
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
+    data:{labels:agg.labels,datasets:[{label:mLabel,data:vals,
+      borderColor:'#ED1B3A',backgroundColor:'rgba(237,27,58,.07)',
+      pointRadius:agg.labels.length>60?0:3,pointHoverRadius:5,
+      pointHoverBackgroundColor:'#ED1B3A',borderWidth:2,fill:true,tension:.35}]},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{display:false},ticks:{maxTicksLimit:12,maxRotation:0}},
-        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
-      }
-    }
+      scales:{x:{grid:{display:false},ticks:{maxTicksLimit:12,maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}}}
   });
 
-  // Heatmap
-  const hm = aggregateHeatmap(data);
+  const hm=aggregateHeatmap(data);
   buildHeatmap(hm);
-  buildPeakSummary(hm, data);
+  buildPeakSummary(hm,data);
 }
 
 function buildHeatmap(hm){
-  const grid  = document.getElementById('heatmapGrid');
-  const hours = hm.hours;
-  const days  = hm.days;
-
-  const allVals = [];
+  const grid=document.getElementById('heatmapGrid');
+  const hours=hm.hours,days=hm.days;
+  const allVals=[];
   days.forEach(d=>hours.forEach(h=>allVals.push(hm.matrix[d][h])));
-  const maxVal = Math.max(...allVals)||1;
-
+  const maxVal=Math.max(...allVals)||1;
   grid.innerHTML='';
   grid.style.gridTemplateColumns=`52px repeat(${hours.length},1fr)`;
-
-  // Header row
   grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-label'}));
-  hours.forEach(h=>{
-    const el=Object.assign(document.createElement('div'),{className:'hm-col-label',textContent:String(h).padStart(2,'0')});
-    grid.appendChild(el);
-  });
-
+  hours.forEach(h=>{grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-col-label',textContent:String(h).padStart(2,'0')}));});
   days.forEach(day=>{
-    const label=Object.assign(document.createElement('div'),{className:'hm-label',textContent:day.slice(0,3)});
-    grid.appendChild(label);
+    grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-label',textContent:day.slice(0,3)}));
     hours.forEach(h=>{
       const val=hm.matrix[day][h];
-      const alpha=(0.05+val/maxVal*.85).toFixed(2);
       const cell=Object.assign(document.createElement('div'),{className:'hm-cell'});
-      cell.style.background=`rgba(237,27,58,${alpha})`;
+      cell.style.background=`rgba(237,27,58,${(0.05+val/maxVal*.85).toFixed(2)})`;
       cell.title=`${day} ${String(h).padStart(2,'0')}:00 — ${val} tx`;
       grid.appendChild(cell);
     });
   });
 }
 
-function buildPeakSummary(hm, data){
-  const days=hm.days, hours=hm.hours;
+function buildPeakSummary(hm,data){
+  const days=hm.days,hours=hm.hours;
   let peakDay='',peakHour=0,peakVal=0;
-  days.forEach(d=>hours.forEach(h=>{
-    if(hm.matrix[d][h]>peakVal){peakVal=hm.matrix[d][h];peakDay=d;peakHour=h;}
-  }));
+  days.forEach(d=>hours.forEach(h=>{if(hm.matrix[d][h]>peakVal){peakVal=hm.matrix[d][h];peakDay=d;peakHour=h;}}));
   const threshold=peakVal*.6;
   const peakHours=hours.filter(h=>days.some(d=>hm.matrix[d][h]>=threshold));
-  const minH=Math.min(...peakHours);
-  const maxH=Math.max(...peakHours);
-
-  const peakData=data.filter(r=>r.hour>=minH&&r.hour<=maxH);
+  const minH=Math.min(...peakHours),maxH=Math.max(...peakHours);
   const chCount={};
-  peakData.forEach(r=>{ chCount[r.channel]=(chCount[r.channel]||0)+1; });
+  data.filter(r=>r.hour>=minH&&r.hour<=maxH).forEach(r=>{chCount[r.channel]=(chCount[r.channel]||0)+1;});
   const domCh=Object.entries(chCount).sort((a,b)=>b[1]-a[1])[0];
-
   document.getElementById('peakSummaryCard').innerHTML=`
     <div class="peak-summary-title">Peak Window Summary</div>
     <div class="peak-row"><span class="peak-key">Peak Day</span><span class="peak-val">${peakDay}</span></div>
     <div class="peak-row"><span class="peak-key">Peak Hour Window</span><span class="peak-val">${String(minH).padStart(2,'0')}:00 – ${String(maxH+1).padStart(2,'0')}:00</span></div>
-    <div class="peak-row"><span class="peak-key">Peak Volume</span><span class="peak-val">${peakVal.toLocaleString()} tx (in peak slot)</span></div>
+    <div class="peak-row"><span class="peak-key">Peak Volume</span><span class="peak-val">${peakVal.toLocaleString()} tx</span></div>
     <div class="peak-row"><span class="peak-key">Dominant Channel</span><span class="peak-val">${domCh?domCh[0]:'—'}</span></div>
     <div class="peak-row"><span class="peak-key">Suggested Use</span><span class="peak-val">Campaign scheduling &amp; capacity planning</span></div>`;
 }
 
 /* ================================================================
    RENDER: User Monitoring
+   Uses userMonitoringData — sorted by risk score DESC, billable DESC
    ================================================================ */
 function renderUserMonitoring(data){
-  const users = aggregateUsers(data);
-  const totalTx = users.reduce((s,u)=>s+u.tx,0)||1;
-  const top3    = users.slice(0,3).reduce((s,u)=>s+u.tx,0);
-  const monoCount = users.filter(u=>u.mainShare>85).length;
-  const hvThresh  = users.length?users[Math.max(0,Math.floor(users.length*.3)-1)].bill:0;
-  const hvCount   = users.filter(u=>u.bill>=hvThresh&&hvThresh>0).length;
+  /* --- Sort: contextual_churn_risk_score DESC, total_billable DESC, usage_decline DESC --- */
+  const sorted=[...data].sort((a,b)=>
+    b.contextual_churn_risk_score-a.contextual_churn_risk_score ||
+    b.total_billable_amount-a.total_billable_amount ||
+    b.usage_decline_pct-a.usage_decline_pct
+  );
 
-  document.getElementById('mu-concentration').textContent = (top3/totalTx*100).toFixed(0)+'%';
-  document.getElementById('mu-mono').textContent = monoCount;
-  document.getElementById('mu-hv').textContent   = hvCount;
+  /* --- Summary card values --- */
+  // Prefer summary count columns if present in first row, else count flags
+  const firstRow=userMonitoringData[0]||{};
 
-  // Segment helper
-  function getSegment(u){
-    if(u.mainShare>85) return '<span class="badge badge-yellow">Mono-Channel</span>';
-    if(u.bill>=hvThresh&&hvThresh>0) return '<span class="badge badge-red">High Value</span>';
-    return '<span class="badge badge-green">Stable</span>';
+  const attentionCount = firstRow.users_need_attention_count!==undefined
+    ? firstRow.users_need_attention_count
+    : userMonitoringData.filter(r=>r.users_need_attention_flag===1).length;
+
+  const atRiskCount = firstRow.at_risk_users_count!==undefined
+    ? firstRow.at_risk_users_count
+    : userMonitoringData.filter(r=>r.at_risk_user_flag===1).length;
+
+  const hvCount = firstRow.high_value_users_count!==undefined
+    ? firstRow.high_value_users_count
+    : userMonitoringData.filter(r=>r.high_value_flag===1).length;
+
+  document.getElementById('mu-attention').textContent = attentionCount;
+  document.getElementById('mu-atrisk').textContent    = atRiskCount;
+  document.getElementById('mu-hv').textContent        = hvCount;
+
+  /* --- Risk segment badge helper --- */
+  function segBadge(seg){
+    const map={
+      'Red Alert': '<span class="badge badge-red">Red Alert</span>',
+      'At Risk':   '<span class="badge badge-orange">At Risk</span>',
+      'Watchlist': '<span class="badge badge-yellow">Watchlist</span>',
+      'Stable':    '<span class="badge badge-green">Stable</span>'
+    };
+    return map[seg]||`<span class="badge badge-gray">${seg}</span>`;
+  }
+  function rowClass(seg){
+    const map={'Red Alert':'risk-row-alert','At Risk':'risk-row-atrisk','Watchlist':'risk-row-watchlist','Stable':'risk-row-stable'};
+    return map[seg]||'';
   }
   const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
 
-  // Top users table
+  /* --- User Priority Table --- */
   let html=`<table><thead><tr>
-    <th>User</th><th>Main Channel</th><th>Transactions</th>
-    <th>Active Days</th><th>Billable</th><th>Segment</th>
+    <th>User</th><th>Field of Business</th><th>Risk Segment</th>
+    <th>Risk Score</th><th>Main Channel</th><th>Ch Share</th>
+    <th>Usage Decline</th><th>Billable Decline</th>
+    <th>Total Billable</th><th>Reason</th>
   </tr></thead><tbody>`;
-  users.slice(0,10).forEach(u=>{
-    html+=`<tr>
-      <td><strong>${u.name}</strong><br/><span style="font-size:.63rem;color:var(--text-muted)">${u.fob}</span></td>
-      <td><span class="ch-dot ${dotCls[u.mainCh]||''}"></span>${u.mainCh}</td>
-      <td>${u.tx.toLocaleString()}</td>
-      <td>${u.dayCount}</td>
-      <td>IDR ${fmtNum(u.bill)}</td>
-      <td>${getSegment(u)}</td>
+  sorted.forEach(u=>{
+    const reason=u.watchlist_reason?`<span style="font-size:.62rem;color:var(--text-muted);max-width:140px;display:block">${u.watchlist_reason}</span>`:'<span style="color:var(--border)">—</span>';
+    html+=`<tr class="${rowClass(u.contextual_risk_segment)}">
+      <td><strong>${u.user_name}</strong></td>
+      <td style="color:var(--text-muted);font-size:.74rem">${u.field_of_business}</td>
+      <td>${segBadge(u.contextual_risk_segment)}</td>
+      <td><strong style="font-variant-numeric:tabular-nums">${u.contextual_churn_risk_score}</strong></td>
+      <td><span class="ch-dot ${dotCls[u.main_channel]||''}"></span>${u.main_channel}</td>
+      <td>${u.main_channel_share_pct.toFixed(0)}%</td>
+      <td style="color:${u.usage_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.usage_decline_pct.toFixed(0)}%</td>
+      <td style="color:${u.billable_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.billable_decline_pct.toFixed(0)}%</td>
+      <td>${fmtIDR(u.total_billable_amount)}</td>
+      <td style="min-width:130px">${reason}</td>
     </tr>`;
   });
   html+='</tbody></table>';
   document.getElementById('userTableWrap').innerHTML=html;
 
-  // User dependency bubble chart
-  const maxBill=Math.max(...users.map(u=>u.bill))||1;
+  /* --- User Risk vs Value Map (bubble chart) --- */
   destroyChart('chartUserBubble');
-  CHARTS['chartUserBubble'] = new Chart(document.getElementById('chartUserBubble'),{
+  const maxTx=Math.max(...sorted.map(u=>u.total_transactions))||1;
+  CHARTS['chartUserBubble']=new Chart(document.getElementById('chartUserBubble'),{
     type:'bubble',
-    data:{
-      datasets:users.slice(0,15).map(u=>{
-        const col=CH_COLOR[u.mainCh]||'#ED1B3A';
-        const r=7+(u.bill/maxBill)*18;
-        return{
-          label:u.name,
-          data:[{x:+u.mainShare.toFixed(1),y:u.tx,r:+r.toFixed(1)}],
-          backgroundColor:col+'BB', borderColor:col, borderWidth:1.5
-        };
-      })
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
+    data:{datasets:sorted.map(u=>{
+      const col=RISK_COLOR[u.contextual_risk_segment]||'#6B7280';
+      const r=7+(u.total_transactions/maxTx)*18;
+      return{
+        label:u.user_name,
+        data:[{x:+u.usage_decline_pct.toFixed(1),y:u.total_billable_amount,r:+r.toFixed(1)}],
+        backgroundColor:col+'BB',borderColor:col,borderWidth:1.5
+      };
+    })},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:ctx=>{
-          const d=ctx.raw;
-          return[` ${ctx.dataset.label}`,` Channel Share: ${d.x.toFixed(1)}%`,` Transactions: ${d.y.toLocaleString()}`];
+          const d=ctx.raw,u=sorted.find(x=>x.user_name===ctx.dataset.label)||{};
+          return[
+            ` ${ctx.dataset.label}`,
+            ` Risk Segment: ${u.contextual_risk_segment||'—'}`,
+            ` Risk Score: ${u.contextual_churn_risk_score||0}`,
+            ` Usage Decline: ${d.x.toFixed(0)}%`,
+            ` Total Billable: ${fmtIDR(d.y)}`
+          ];
         }}}
       },
       scales:{
-        x:{min:0,max:105,title:{display:true,text:'Main Channel Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
-        y:{title:{display:true,text:'Transaction Volume',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
-      }
-    }
+        x:{min:-5,title:{display:true,text:'Usage Decline (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
+        y:{title:{display:true,text:'Total Billable Amount (IDR)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
+      }}
   });
-}
-
-/* ================================================================
-   UPDATE DASHBOARD — renders all sections with current filters
-   ================================================================ */
-function updateDashboard(){
-  renderOverview(filterData('overview'));
-  renderChannelPerformance(filterData('channel'));
-  renderTimePattern(filterData('time'));
-  renderUserMonitoring(filterData('users'));
 }
 
 /* ================================================================
@@ -1627,7 +1574,7 @@ document.querySelectorAll('.nav-item[data-section]').forEach(item=>{
 /* ================================================================
    INIT
    ================================================================ */
-document.addEventListener('DOMContentLoaded', loadRepositoryData);
+document.addEventListener('DOMContentLoaded', initDashboard);
 </script>
 </body>
 </html>
