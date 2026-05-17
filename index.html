@@ -17,7 +17,6 @@
   --bg-sidebar:#111111;
   --card:#FFFFFF;
   --primary:#111111;
-  --primary-soft:#1F1F1F;
   --brand-red:#ED1B3A;
   --brand-red-dark:#B5122B;
   --brand-red-soft:#FDE8EC;
@@ -44,37 +43,25 @@ ul{list-style:none}
    FILTER DROPDOWNS
    ================================================================ */
 .filter-select{
-  background:#1F1F1F;
-  color:#FFFFFF;
+  background:#1F1F1F;color:#FFF;
   border:1px solid rgba(237,27,58,.45);
-  font-family:'DM Sans',sans-serif;
-  font-size:.75rem;
-  padding:6px 26px 6px 10px;
-  border-radius:6px;
-  outline:none;
-  cursor:pointer;
-  appearance:none;
-  -webkit-appearance:none;
+  font-family:'DM Sans',sans-serif;font-size:.75rem;
+  padding:6px 26px 6px 10px;border-radius:6px;
+  outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 8px center;
-  min-width:110px;
-  transition:border-color .15s;
+  background-repeat:no-repeat;background-position:right 8px center;
+  min-width:110px;transition:border-color .15s;
 }
 .filter-select:hover{border-color:var(--brand-red)}
 .filter-select:focus{border-color:var(--brand-red);box-shadow:0 0 0 2px rgba(237,27,58,.15)}
-.filter-select option{background:#FFFFFF;color:#111827;font-size:.8rem}
-.filter-select option:checked{background:#ED1B3A;color:#FFFFFF}
-
+.filter-select option{background:#FFF;color:#111827;font-size:.8rem}
+.filter-select option:checked{background:#ED1B3A;color:#FFF}
 .section-filters{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;
 }
 .filter-group{display:flex;align-items:center;gap:6px}
-.filter-group label{
-  font-size:.65rem;font-weight:600;color:var(--text-muted);
-  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;
-}
+.filter-group label{font-size:.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 
 /* ================================================================
    HEADER
@@ -91,14 +78,10 @@ ul{list-style:none}
 }
 .header-logo-zone img{max-height:36px;max-width:180px;object-fit:contain;display:block}
 .logo-fallback-hdr{font-size:1.2rem;font-weight:700;color:var(--brand-red);letter-spacing:-.5px}
-.header-body{
-  flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;
-}
+.header-body{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
 .header-title-block .header-title{font-size:.9rem;font-weight:700;color:#fff;line-height:1.2}
 .header-title-block .header-subtitle{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:2px}
 .header-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-
-/* Static dataset label — replaces dynamic status badge */
 .dataset-label{
   display:inline-flex;align-items:center;gap:7px;
   font-size:.68rem;font-weight:600;padding:4px 12px;border-radius:20px;
@@ -114,31 +97,22 @@ ul{list-style:none}
   position:fixed;top:var(--header-h);left:0;
   width:var(--sidebar-w);height:calc(100vh - var(--header-h));
   background:var(--bg-sidebar);display:flex;flex-direction:column;
-  overflow-y:auto;z-index:90;
-  border-top:3px solid var(--brand-red);
+  overflow-y:auto;z-index:90;border-top:3px solid var(--brand-red);
 }
-
-/* Logo card inside sidebar — sits at the very top */
+/* Single sidebar logo — dark background, no white card */
 .sidebar-logo-wrap{
-  padding:14px 14px 12px;
-  border-bottom:1px solid rgba(255,255,255,.07);
+  padding:16px 18px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
   flex-shrink:0;
-}
-.sidebar-logo-card{
-  background:#ffffff;
-  border-radius:10px;
-  padding:10px 14px;
   display:flex;align-items:center;justify-content:center;
-  min-height:52px;
 }
-.sidebar-logo-card img{
-  max-width:190px;max-height:44px;
+.sidebar-logo-wrap img{
+  max-width:196px;max-height:50px;
   object-fit:contain;display:block;width:100%;
 }
-.sidebar-logo-card .logo-fallback-sb{
-  font-size:1rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
+.sidebar-logo-wrap .logo-fallback-sb{
+  font-size:1.15rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
 }
-
 .sidebar-nav{padding:12px 0}
 .sidebar-section-label{
   font-size:.59rem;font-weight:700;letter-spacing:.1em;
@@ -154,97 +128,53 @@ ul{list-style:none}
 .nav-item.active{background:rgba(237,27,58,.12);color:#fff;border-left-color:var(--brand-red)}
 .nav-icon{width:15px;height:15px;opacity:.6;flex-shrink:0}
 .nav-item.active .nav-icon{opacity:1}
-
 .sidebar-bottom{margin-top:auto;padding-bottom:8px}
-
-/* Data period block */
 .sidebar-period{
   margin:10px 13px 0;padding:11px 12px;
   background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;
 }
-.sidebar-period-title{
-  font-size:.68rem;font-weight:700;color:rgba(255,255,255,.55);
-  margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;
-}
-.sidebar-period-text{
-  font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.35);
-}
-
-/* Disclaimer */
+.sidebar-period-title{font-size:.68rem;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.sidebar-period-text{font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.35)}
 .sidebar-disclaimer{
   margin:12px 13px 14px;padding:11px 11px 11px 13px;
   border-left:2px solid var(--brand-red);background:rgba(237,27,58,.06);border-radius:8px;
 }
-.sidebar-disclaimer-title{
-  font-size:.68rem;font-weight:700;color:#fff;
-  margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase;
-}
-.sidebar-disclaimer-text{
-  font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.5);
-}
+.sidebar-disclaimer-title{font-size:.68rem;font-weight:700;color:#fff;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+.sidebar-disclaimer-text{font-size:.68rem;line-height:1.6;color:rgba(255,255,255,.5)}
 
 /* ================================================================
    MAIN
    ================================================================ */
 .main{margin-left:var(--sidebar-w);margin-top:var(--header-h);padding:22px;min-height:calc(100vh - var(--header-h))}
-
 #loadingOverlay{
   position:fixed;inset:0;background:rgba(17,17,17,.75);
   display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px;
 }
-.spinner{
-  width:38px;height:38px;border:3px solid rgba(237,27,58,.2);
-  border-top-color:var(--brand-red);border-radius:50%;animation:spin .7s linear infinite;
-}
+.spinner{width:38px;height:38px;border:3px solid rgba(237,27,58,.2);border-top-color:var(--brand-red);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:rgba(255,255,255,.55);font-size:.8rem}
-
-/* Section visibility */
 .dash-section{display:none}
 .dash-section.visible{display:block}
-
 .section-page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
 .section-page-title{font-size:1.15rem;font-weight:700;color:var(--primary);letter-spacing:-.3px}
 .section-page-sub{font-size:.73rem;color:var(--text-muted);margin-top:3px}
-.period-badge{
-  background:var(--brand-red-soft);color:var(--brand-red-dark);
-  font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:20px;
-  border:1px solid rgba(237,27,58,.2);white-space:nowrap;
-}
-
+.period-badge{background:var(--brand-red-soft);color:var(--brand-red-dark);font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid rgba(237,27,58,.2);white-space:nowrap}
 .section-block{margin-bottom:24px}
 .block-header{display:flex;align-items:center;gap:10px;margin-bottom:13px}
 .block-title{font-size:.86rem;font-weight:700;color:var(--primary)}
 .block-divider{flex:1;height:1px;background:var(--border)}
-.block-tag{
-  font-size:.6rem;font-weight:600;letter-spacing:.05em;color:var(--text-muted);
-  text-transform:uppercase;background:var(--bg-soft);border:1px solid var(--border);
-  padding:2px 8px;border-radius:20px;
-}
+.block-tag{font-size:.6rem;font-weight:600;letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;background:var(--bg-soft);border:1px solid var(--border);padding:2px 8px;border-radius:20px}
 
-/* ================================================================
-   CARDS
-   ================================================================ */
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;
-  transition:box-shadow .2s,transform .15s;
-}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;transition:box-shadow .2s,transform .15s}
 .card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
 .card-title{font-size:.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:13px}
 
 /* KPI grid */
 .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:18px}
-.kpi-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);box-shadow:var(--shadow);padding:15px;
-  position:relative;overflow:hidden;transition:box-shadow .2s,transform .15s;
-}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:15px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .15s}
 .kpi-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.kpi-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--brand-red);border-radius:var(--radius) var(--radius) 0 0;
-}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand-red);border-radius:var(--radius) var(--radius) 0 0}
 .kpi-card.g::before{background:var(--success-green)}
 .kpi-card.y::before{background:var(--warning-yellow)}
 .kpi-card.k::before{background:var(--primary)}
@@ -254,7 +184,6 @@ ul{list-style:none}
 
 /* Grid layouts */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .grid-6040{display:grid;grid-template-columns:1.5fr 1fr;gap:13px}
 .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 
@@ -262,25 +191,13 @@ ul{list-style:none}
 .chart-wrap{position:relative;width:100%}
 .chart-wrap canvas{display:block}
 .chart-quadrant-wrap{position:relative}
-.quadrant-labels{
-  position:absolute;inset:0;pointer-events:none;
-  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;padding:18px 8px;
-}
-.ql{
-  display:flex;align-items:flex-start;
-  font-size:.56rem;font-weight:700;color:rgba(17,17,17,.16);
-  text-transform:uppercase;letter-spacing:.04em;padding:3px;
-}
+.quadrant-labels{position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;padding:18px 8px}
+.ql{display:flex;align-items:flex-start;font-size:.56rem;font-weight:700;color:rgba(17,17,17,.16);text-transform:uppercase;letter-spacing:.04em;padding:3px}
 
 /* Tables */
 .table-wrap{width:100%;overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.77rem}
-thead th{
-  text-align:left;padding:9px 12px;font-size:.63rem;font-weight:700;
-  letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);
-  background:var(--bg-soft);border-bottom:1px solid var(--border);
-  white-space:nowrap;
-}
+thead th{text-align:left;padding:9px 12px;font-size:.63rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);background:var(--bg-soft);border-bottom:1px solid var(--border);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--bg-soft)}
@@ -299,42 +216,18 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .ch-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
 .ch-wa{background:#25d366}.ch-sms{background:#FACC15}.ch-em{background:#60a5fa}.ch-ivr{background:#f97316}
 
-/* ================================================================
-   USER PRIORITY TABLE — row highlight by risk segment
-   ================================================================ */
+/* User Priority Table — left-border highlight by risk segment */
 .risk-row-alert td:first-child{border-left:3px solid #991B1B}
 .risk-row-atrisk td:first-child{border-left:3px solid #f97316}
 .risk-row-watchlist td:first-child{border-left:3px solid #FACC15}
 .risk-row-stable td:first-child{border-left:3px solid #22C55E}
 
-/* ================================================================
-   USER TABLE PAGINATION
-   ================================================================ */
-.pagination-bar{
-  display:flex;align-items:center;justify-content:center;
-  gap:10px;padding:12px 0 4px;
-  border-top:1px solid var(--border);margin-top:4px;
-}
-.pagination-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.72rem;font-weight:600;
-  padding:5px 14px;border-radius:6px;
-  border:1px solid var(--border);
-  background:var(--bg-soft);color:var(--text-main);
-  cursor:pointer;transition:all .15s;
-  font-family:'DM Sans',sans-serif;
-}
-.pagination-btn:hover:not(:disabled){
-  background:var(--brand-red);color:#fff;border-color:var(--brand-red);
-}
-.pagination-btn:disabled{
-  opacity:.35;cursor:not-allowed;
-}
-.pagination-info{
-  font-size:.72rem;font-weight:600;
-  color:var(--text-muted);
-  min-width:52px;text-align:center;
-}
+/* Pagination */
+.pagination-bar{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 0 4px;border-top:1px solid var(--border);margin-top:4px}
+.pagination-btn{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text-main);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.pagination-btn:hover:not(:disabled){background:var(--brand-red);color:#fff;border-color:var(--brand-red)}
+.pagination-btn:disabled{opacity:.35;cursor:not-allowed}
+.pagination-info{font-size:.72rem;font-weight:600;color:var(--text-muted);min-width:52px;text-align:center}
 
 /* Heatmap */
 .heatmap-scroll{width:100%;overflow-x:auto}
@@ -344,7 +237,7 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .hm-label{font-size:.63rem;color:var(--text-muted);display:flex;align-items:center;font-weight:500}
 .hm-col-label{font-size:.58rem;color:var(--text-muted);text-align:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;height:27px}
 
-/* Mini metrics — User Monitoring */
+/* Mini metrics */
 .mini-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
 .mini-card{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center}
 .mini-value{font-size:1.2rem;font-weight:700;color:var(--primary);letter-spacing:-.3px}
@@ -361,10 +254,7 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .peak-val{color:var(--text-main);line-height:1.5}
 
 /* Future note */
-.future-note{
-  background:rgba(237,27,58,.04);border:1px dashed rgba(237,27,58,.25);
-  border-radius:8px;padding:13px 15px;font-size:.74rem;color:var(--text-muted);line-height:1.6;margin-top:14px;
-}
+.future-note{background:rgba(237,27,58,.04);border:1px dashed rgba(237,27,58,.25);border-radius:8px;padding:13px 15px;font-size:.74rem;color:var(--text-muted);line-height:1.6;margin-top:14px}
 .future-note strong{color:var(--brand-red)}
 
 /* Methodology */
@@ -375,20 +265,15 @@ tbody td{padding:9px 12px;color:var(--text-main);vertical-align:middle}
 .method-card ul{padding-left:16px;list-style:disc}
 .method-card ul li{margin-bottom:3px}
 
-/* Microcopy */
 .microcopy{font-size:.62rem;color:var(--text-muted);margin-top:7px;font-style:italic}
-
-/* Footer */
 footer{text-align:center;padding:18px 0 12px;font-size:.67rem;color:var(--text-muted);border-top:1px solid var(--border);margin-top:10px}
 footer span{color:var(--brand-red);font-weight:600}
 
-/* Scrollbar */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(17,17,17,.14);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(17,17,17,.26)}
 
-/* Responsive */
 @media(max-width:1280px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:960px){
   :root{--sidebar-w:0px}
@@ -402,19 +287,15 @@ footer span{color:var(--brand-red);font-weight:600}
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
 <div id="loadingOverlay">
   <div class="spinner"></div>
   <div class="loading-text">Loading dashboard data…</div>
 </div>
 
-<!-- ================================================================
-     HEADER
-     ================================================================ -->
+<!-- HEADER -->
 <header class="header">
   <div class="header-logo-zone">
-    <img src="assets/logo.png" alt="RevoU x OCA x Telkom Logo"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <img src="assets/logo.png" alt="OCA Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
     <span class="logo-fallback-hdr" style="display:none">OCA</span>
   </div>
   <div class="header-body">
@@ -423,38 +304,27 @@ footer span{color:var(--brand-red);font-weight:600}
       <div class="header-subtitle">Unified cross-channel monitoring · WhatsApp, SMS, Email, Call/IVR</div>
     </div>
     <div class="header-meta">
-      <!-- Static educational dataset label — no dynamic status badge -->
-      <div class="dataset-label">
-        <span class="dot"></span>
-        Educational Dataset · Q1 2025
-      </div>
+      <div class="dataset-label"><span class="dot"></span>Educational Dataset · Q1 2025</div>
       <div class="header-timestamp" id="headerTimestamp"></div>
     </div>
   </div>
 </header>
 
-<!-- ================================================================
-     SIDEBAR
-     ================================================================ -->
+<!-- SIDEBAR -->
 <nav class="sidebar">
-
-  <!-- Logo card -->
+  <!-- Single logo — dark sidebar background, no white card -->
   <div class="sidebar-logo-wrap">
-    <div class="sidebar-logo-card">
-      <img src="assets/logo.png" alt="RevoU x OCA x Telkom Logo"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"/>
-      <span class="logo-fallback-sb" style="display:none">OCA</span>
-    </div>
+    <img src="assets/logo.png" alt="RevoU x OCA x Telkom"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"/>
+    <span class="logo-fallback-sb" style="display:none">OCA</span>
   </div>
 
   <div class="sidebar-nav">
     <div class="sidebar-section-label">Dashboard</div>
     <div class="nav-item active" data-section="overview">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="3" width="7" height="7" rx="1"/>
-        <rect x="3" y="14" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="7" height="7" rx="1"/>
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>Overview
     </div>
     <div class="nav-item" data-section="channel">
@@ -477,8 +347,7 @@ footer span{color:var(--brand-red);font-weight:600}
     <div class="sidebar-section-label">Reference</div>
     <div class="nav-item" data-section="methodology">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 11l3 3L22 4"/>
-        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
       </svg>Methodology
     </div>
   </div>
@@ -486,7 +355,7 @@ footer span{color:var(--brand-red);font-weight:600}
   <div class="sidebar-bottom">
     <div class="sidebar-period">
       <div class="sidebar-period-title">Data Period</div>
-      <div class="sidebar-period-text" id="sidebarPeriod">Loading…</div>
+      <div class="sidebar-period-text" id="sidebarPeriod">Q1 2025 · Jan–Mar · 4 channels</div>
     </div>
     <div class="sidebar-disclaimer">
       <div class="sidebar-disclaimer-title">Disclaimer</div>
@@ -499,9 +368,7 @@ footer span{color:var(--brand-red);font-weight:600}
   </div>
 </nav>
 
-<!-- ================================================================
-     MAIN CONTENT
-     ================================================================ -->
+<!-- MAIN CONTENT -->
 <main class="main">
 
   <!-- ============================================================
@@ -515,29 +382,20 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
       <div class="period-badge">Q1 2025</div>
     </div>
-
     <div class="section-filters">
-      <div class="filter-group">
-        <label>Period</label>
+      <div class="filter-group"><label>Period</label>
         <select class="filter-select" id="ov-period" onchange="applyOverviewFilters()">
-          <option value="all">All Periods</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
+          <option value="all">All Periods</option><option value="01">January</option>
+          <option value="02">February</option><option value="03">March</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Channel Scope</label>
+      <div class="filter-group"><label>Channel Scope</label>
         <select class="filter-select" id="ov-channel" onchange="applyOverviewFilters()">
-          <option value="all">All Channels</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="SMS">SMS</option>
-          <option value="Email">Email</option>
-          <option value="Call/IVR">Call/IVR</option>
+          <option value="all">All Channels</option><option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option><option value="Email">Email</option><option value="Call/IVR">Call/IVR</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Metric View</label>
+      <div class="filter-group"><label>Metric View</label>
         <select class="filter-select" id="ov-metric" onchange="applyOverviewFilters()">
           <option value="transactions">Transactions</option>
           <option value="message_units">Message Units</option>
@@ -545,45 +403,18 @@ footer span{color:var(--brand-red);font-weight:600}
         </select>
       </div>
     </div>
-
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-label">Total Transactions</div>
-        <div class="kpi-value" id="kpi-tx">—</div>
-        <div class="kpi-sub">All channels</div>
-      </div>
-      <div class="kpi-card k">
-        <div class="kpi-label">Total Message Units</div>
-        <div class="kpi-value" id="kpi-mu">—</div>
-        <div class="kpi-sub">Across 4 channels</div>
-      </div>
-      <div class="kpi-card g">
-        <div class="kpi-label">Active Users</div>
-        <div class="kpi-value" id="kpi-users">—</div>
-        <div class="kpi-sub">Unique clients</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Success Rate</div>
-        <div class="kpi-value" id="kpi-sr">—</div>
-        <div class="kpi-sub">By delivery outcome</div>
-      </div>
-      <div class="kpi-card y">
-        <div class="kpi-label">Charge Rate</div>
-        <div class="kpi-value" id="kpi-cr">—</div>
-        <div class="kpi-sub">Charged records only</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Billable Amount</div>
-        <div class="kpi-value" id="kpi-bill">—</div>
-        <div class="kpi-sub">Excl. free-tier credits</div>
-      </div>
+      <div class="kpi-card"><div class="kpi-label">Total Transactions</div><div class="kpi-value" id="kpi-tx">—</div><div class="kpi-sub">All channels</div></div>
+      <div class="kpi-card k"><div class="kpi-label">Total Message Units</div><div class="kpi-value" id="kpi-mu">—</div><div class="kpi-sub">Across 4 channels</div></div>
+      <div class="kpi-card g"><div class="kpi-label">Active Users</div><div class="kpi-value" id="kpi-users">—</div><div class="kpi-sub">Unique clients</div></div>
+      <div class="kpi-card"><div class="kpi-label">Success Rate</div><div class="kpi-value" id="kpi-sr">—</div><div class="kpi-sub">By delivery outcome</div></div>
+      <div class="kpi-card y"><div class="kpi-label">Charge Rate</div><div class="kpi-value" id="kpi-cr">—</div><div class="kpi-sub">Charged records only</div></div>
+      <div class="kpi-card"><div class="kpi-label">Billable Amount</div><div class="kpi-value" id="kpi-bill">—</div><div class="kpi-sub">Excl. free-tier credits</div></div>
     </div>
-
     <div class="section-block">
       <div class="block-header">
         <div class="block-title">Channel Role Matrix: Volume vs Billable Value</div>
-        <div class="block-divider"></div>
-        <div class="block-tag">Overview</div>
+        <div class="block-divider"></div><div class="block-tag">Overview</div>
       </div>
       <div class="card">
         <div class="card-title">Transaction Share (%) vs Billable Amount Share (%) · Bubble size = Success / Answered Rate</div>
@@ -606,43 +437,28 @@ footer span{color:var(--brand-red);font-weight:600}
        ============================================================ -->
   <div id="sec-channel" class="dash-section">
     <div class="section-page-header">
-      <div>
-        <div class="section-page-title">Channel Performance</div>
-        <div class="section-page-sub">Delivery effectiveness, monetization, and channel comparison</div>
-      </div>
+      <div><div class="section-page-title">Channel Performance</div><div class="section-page-sub">Delivery effectiveness, monetization, and channel comparison</div></div>
       <div class="period-badge">Q1 2025</div>
     </div>
-
     <div class="section-filters">
-      <div class="filter-group">
-        <label>Channel</label>
+      <div class="filter-group"><label>Channel</label>
         <select class="filter-select" id="ch-channel" onchange="applyChannelFilters()">
-          <option value="all">All Channels</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="SMS">SMS</option>
-          <option value="Email">Email</option>
-          <option value="Call/IVR">Call/IVR</option>
+          <option value="all">All Channels</option><option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option><option value="Email">Email</option><option value="Call/IVR">Call/IVR</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Message Status</label>
+      <div class="filter-group"><label>Message Status</label>
         <select class="filter-select" id="ch-status" onchange="applyChannelFilters()">
-          <option value="all">All Statuses</option>
-          <option value="success">Success</option>
-          <option value="failed">Failed</option>
-          <option value="pending">Pending</option>
+          <option value="all">All Statuses</option><option value="success">Success</option>
+          <option value="failed">Failed</option><option value="pending">Pending</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Charge Status</label>
+      <div class="filter-group"><label>Charge Status</label>
         <select class="filter-select" id="ch-charge" onchange="applyChannelFilters()">
-          <option value="all">All</option>
-          <option value="1">Charged</option>
-          <option value="0">Not Charged</option>
+          <option value="all">All</option><option value="1">Charged</option><option value="0">Not Charged</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Metric View</label>
+      <div class="filter-group"><label>Metric View</label>
         <select class="filter-select" id="ch-metric" onchange="applyChannelFilters()">
           <option value="transactions">Transactions</option>
           <option value="message_units">Message Units</option>
@@ -650,7 +466,6 @@ footer span{color:var(--brand-red);font-weight:600}
         </select>
       </div>
     </div>
-
     <div class="grid-2" style="margin-bottom:13px">
       <div class="card">
         <div class="card-title">Billable Amount by Channel (IDR)</div>
@@ -662,12 +477,10 @@ footer span{color:var(--brand-red);font-weight:600}
         <div class="chart-wrap" style="height:210px"><canvas id="chartTxShare"></canvas></div>
       </div>
     </div>
-
     <div class="card" style="margin-bottom:13px">
       <div class="card-title">Outcome Rates by Channel (%)</div>
       <div class="chart-wrap" style="height:230px"><canvas id="chartOutcome"></canvas></div>
     </div>
-
     <div class="card">
       <div class="card-title">Channel Summary Table</div>
       <div class="table-wrap" id="channelTableWrap"></div>
@@ -679,44 +492,29 @@ footer span{color:var(--brand-red);font-weight:600}
        ============================================================ -->
   <div id="sec-time" class="dash-section">
     <div class="section-page-header">
-      <div>
-        <div class="section-page-title">Time Pattern Monitoring</div>
-        <div class="section-page-sub">Traffic trends, peak windows, and operational timing insights</div>
-      </div>
+      <div><div class="section-page-title">Time Pattern Monitoring</div><div class="section-page-sub">Traffic trends, peak windows, and operational timing insights</div></div>
       <div class="period-badge">Q1 2025</div>
     </div>
-
     <div class="section-filters">
-      <div class="filter-group">
-        <label>Date Range</label>
+      <div class="filter-group"><label>Date Range</label>
         <select class="filter-select" id="tm-range" onchange="applyTimeFilters()">
-          <option value="all">All Q1 2025</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
+          <option value="all">All Q1 2025</option><option value="01">January</option>
+          <option value="02">February</option><option value="03">March</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Time Grain</label>
+      <div class="filter-group"><label>Time Grain</label>
         <select class="filter-select" id="tm-grain" onchange="applyTimeFilters()">
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="hourly">Hourly</option>
+          <option value="daily">Daily</option><option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option><option value="hourly">Hourly</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Channel</label>
+      <div class="filter-group"><label>Channel</label>
         <select class="filter-select" id="tm-channel" onchange="applyTimeFilters()">
-          <option value="all">All Channels</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="SMS">SMS</option>
-          <option value="Email">Email</option>
-          <option value="Call/IVR">Call/IVR</option>
+          <option value="all">All Channels</option><option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option><option value="Email">Email</option><option value="Call/IVR">Call/IVR</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Metric View</label>
+      <div class="filter-group"><label>Metric View</label>
         <select class="filter-select" id="tm-metric" onchange="applyTimeFilters()">
           <option value="transactions">Transactions</option>
           <option value="message_units">Message Units</option>
@@ -724,87 +522,61 @@ footer span{color:var(--brand-red);font-weight:600}
         </select>
       </div>
     </div>
-
     <div class="section-block">
-      <div class="block-header">
-        <div class="block-title">Transaction Trend Over Time</div>
-        <div class="block-divider"></div>
-      </div>
-      <div class="card">
-        <div class="chart-wrap" style="height:210px"><canvas id="chartTrend"></canvas></div>
-      </div>
+      <div class="block-header"><div class="block-title">Transaction Trend Over Time</div><div class="block-divider"></div></div>
+      <div class="card"><div class="chart-wrap" style="height:210px"><canvas id="chartTrend"></canvas></div></div>
     </div>
-
     <div class="grid-6040" style="margin-bottom:13px;align-items:start">
       <div class="card">
         <div class="card-title">Peak Traffic Heatmap · Day × Hour</div>
-        <div class="heatmap-scroll">
-          <div class="heatmap-grid" id="heatmapGrid"></div>
-        </div>
+        <div class="heatmap-scroll"><div class="heatmap-grid" id="heatmapGrid"></div></div>
         <div class="microcopy" style="margin-top:7px">Darker red = higher relative traffic intensity.</div>
       </div>
-      <div class="peak-summary" id="peakSummaryCard">
-        <div class="peak-summary-title">Peak Window Summary</div>
-      </div>
+      <div class="peak-summary" id="peakSummaryCard"><div class="peak-summary-title">Peak Window Summary</div></div>
     </div>
   </div>
 
   <!-- ============================================================
        SECTION 4 — USER MONITORING
-       Uses userMonitoringData (from data/user_monitoring_summary.csv)
-       Falls back to sampleUserData if CSV is unavailable.
+       Data source: data/user_monitoring_summary.csv (GitHub repo)
+       Fallback: sampleUserData defined in JS below
        ============================================================ -->
   <div id="sec-users" class="dash-section">
     <div class="section-page-header">
-      <div>
-        <div class="section-page-title">User Monitoring</div>
-        <div class="section-page-sub">Client risk segmentation, churn signals, and value prioritization</div>
-      </div>
+      <div><div class="section-page-title">User Monitoring</div><div class="section-page-sub">Client risk segmentation, churn signals, and value prioritization</div></div>
       <div class="period-badge">Q1 2025</div>
     </div>
 
-    <!-- User data source status indicator -->
+    <!-- User data source status -->
     <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px">
       <span style="font-size:.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em">User Data Source:</span>
       <span id="userDataSourceBadge" style="font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--bg-soft);border:1px solid var(--border);color:var(--text-muted)">Loading…</span>
+      <span id="userDataSourcePath" style="font-size:.62rem;color:var(--text-muted);font-family:'DM Mono',monospace"></span>
     </div>
 
     <div class="section-filters">
-      <div class="filter-group">
-        <label>Risk Segment</label>
+      <div class="filter-group"><label>Risk Segment</label>
         <select class="filter-select" id="us-segment" onchange="applyUserFilters()">
-          <option value="all">All Segments</option>
-          <option value="Red Alert">Red Alert</option>
-          <option value="At Risk">At Risk</option>
-          <option value="Watchlist">Watchlist</option>
+          <option value="all">All Segments</option><option value="Red Alert">Red Alert</option>
+          <option value="At Risk">At Risk</option><option value="Watchlist">Watchlist</option>
           <option value="Stable">Stable</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Field of Business</label>
-        <select class="filter-select" id="us-fob" onchange="applyUserFilters()">
-          <option value="all">All Fields</option>
-        </select>
+      <div class="filter-group"><label>Field of Business</label>
+        <select class="filter-select" id="us-fob" onchange="applyUserFilters()"><option value="all">All Fields</option></select>
       </div>
-      <div class="filter-group">
-        <label>Main Channel</label>
+      <div class="filter-group"><label>Main Channel</label>
         <select class="filter-select" id="us-channel" onchange="applyUserFilters()">
-          <option value="all">All Channels</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="SMS">SMS</option>
-          <option value="Email">Email</option>
-          <option value="Call/IVR">Call/IVR</option>
+          <option value="all">All Channels</option><option value="WhatsApp">WhatsApp</option>
+          <option value="SMS">SMS</option><option value="Email">Email</option><option value="Call/IVR">Call/IVR</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>User / Client</label>
-        <select class="filter-select" id="us-user" onchange="applyUserFilters()">
-          <option value="all">All Users</option>
-        </select>
+      <div class="filter-group"><label>User / Client</label>
+        <select class="filter-select" id="us-user" onchange="applyUserFilters()"><option value="all">All Users</option></select>
       </div>
     </div>
 
-    <!-- Summary cards: Users Need Attention / At-Risk / High-Value -->
+    <!-- Summary cards -->
     <div class="mini-metrics">
       <div class="mini-card" style="border-top:3px solid var(--risk-red)">
         <div class="mini-value" id="mu-attention" style="color:var(--risk-red)">—</div>
@@ -823,11 +595,10 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
     </div>
 
-    <!-- User Priority Table — full width, 5 rows per page -->
+    <!-- User Priority Table — full width, 5 rows/page -->
     <div class="card" style="margin-bottom:13px">
       <div class="card-title">User Priority Table</div>
       <div class="table-wrap" id="userTableWrap"></div>
-      <!-- Pagination bar — rendered by JS -->
       <div class="pagination-bar" id="userPaginationBar"></div>
     </div>
 
@@ -843,7 +614,7 @@ footer span{color:var(--brand-red);font-weight:600}
           <div class="ql">Low Value · High Risk</div>
         </div>
       </div>
-      <div class="microcopy">X-axis: Usage Decline (%) · Y-axis: Total Billable (IDR) · Bubble size: Transaction Volume · Color: Risk Segment</div>
+      <div class="microcopy">X-axis: Usage Change Rate (%) · Y-axis: Total Billable (IDR) · Bubble size: Transaction Volume · Color: Risk Segment</div>
     </div>
 
     <div class="future-note">
@@ -856,27 +627,21 @@ footer span{color:var(--brand-red);font-weight:600}
        ============================================================ -->
   <div id="sec-methodology" class="dash-section">
     <div class="section-page-header">
-      <div>
-        <div class="section-page-title">Methodology</div>
-        <div class="section-page-sub">Data definitions, metric calculations, and analytical approach</div>
-      </div>
+      <div><div class="section-page-title">Methodology</div><div class="section-page-sub">Data definitions, metric calculations, and analytical approach</div></div>
     </div>
     <div class="method-grid">
       <div class="method-card">
         <h3>Data Source &amp; Scope</h3>
         <ul>
           <li>Overview, Channel &amp; Time sections: generated sample data (mock transaction events).</li>
-          <li>User Monitoring: <code>data/user_monitoring_summary.csv</code> loaded from repository.</li>
-          <li>Period covered: Q1 2025 (January – March).</li>
-          <li>Channels monitored: WhatsApp, SMS, Email, Call/IVR.</li>
-          <li>Fallback sample data used for User Monitoring if CSV cannot be fetched.</li>
+          <li>User Monitoring: <code>data/user_monitoring_summary.csv</code> fetched from repository root.</li>
+          <li>Period covered: Q1 2025 (January – March). Channels: WhatsApp, SMS, Email, Call/IVR.</li>
+          <li>Fallback sample data used if CSV cannot be fetched (e.g. local preview without server).</li>
         </ul>
       </div>
       <div class="method-card">
         <h3>Key Metric Definitions</h3>
         <ul>
-          <li><strong>Transaction Count</strong>: Total rows (one per message/call event).</li>
-          <li><strong>Message Units</strong>: Sum of <code>message_units</code> column.</li>
           <li><strong>Billable Amount</strong>: Sum of <code>billable_amount</code> where <code>is_charge = 1</code>.</li>
           <li><strong>Success Rate</strong>: Proportion of records with <code>success_flag = 1</code>.</li>
           <li><strong>Charge Rate</strong>: Proportion of records with <code>is_charge = 1</code>.</li>
@@ -884,22 +649,21 @@ footer span{color:var(--brand-red);font-weight:600}
       </div>
       <div class="method-card">
         <h3>User Risk Score Logic</h3>
-        <p><strong>Contextual Churn Risk Score</strong> is a composite metric incorporating usage decline %, billable decline %, inactive days, and channel diversity. Segments: Red Alert (&ge;70), At Risk (40–69), Watchlist (20–39), Stable (&lt;20). Score is pre-computed in the user monitoring summary CSV.</p>
+        <p><strong>Contextual Churn Risk Score</strong> is a composite metric: usage decline %, billable decline %, inactive days, and channel diversity. Segments: Red Alert (≥70), At Risk (40–69), Watchlist (20–39), Stable (&lt;20). Pre-computed in the user monitoring summary CSV.</p>
       </div>
       <div class="method-card">
-        <h3>User Risk vs Value Map Logic</h3>
-        <p>Each user is plotted by their usage decline % (X-axis) and total billable amount (Y-axis). Bubble size = transaction volume. Color encodes the contextual risk segment. Higher X = more decline risk; higher Y = higher business value.</p>
+        <h3>User Risk vs Value Map</h3>
+        <p>X-axis: usage decline %. Y-axis: total billable amount. Bubble size = transaction volume. Color = contextual risk segment. Higher X = more usage decline risk; higher Y = higher business value to OCA.</p>
       </div>
       <div class="method-card">
         <h3>Heatmap Construction</h3>
-        <p>Traffic is aggregated by day-of-week and hour from transaction-level sample data. Intensity is normalized relative to the peak slot. Colors use a linear red scale — full opacity = peak intensity.</p>
+        <p>Aggregated by day-of-week × hour from sample transaction data. Intensity normalized relative to peak slot. Full red opacity = peak traffic window.</p>
       </div>
       <div class="method-card">
         <h3>Limitations &amp; Disclaimers</h3>
         <ul>
-          <li>All monetary values have been adjusted from original data for educational privacy.</li>
-          <li>User names are anonymized (Client A, B, C, …).</li>
-          <li>This dashboard is for portfolio and internship demonstration only.</li>
+          <li>All monetary values adjusted from original data for educational privacy.</li>
+          <li>User names are anonymized. This dashboard is for portfolio/internship demonstration only.</li>
           <li>Data does not reflect actual OCA business performance.</li>
         </ul>
       </div>
@@ -916,92 +680,54 @@ footer span{color:var(--brand-red);font-weight:600}
      ================================================================ -->
 <script>
 /* ================================================================
-   GLOBAL STATE & CHART REGISTRY
+   GLOBAL STATE
    ================================================================ */
-let dashboardData = [];       // sample transaction data (Overview/Channel/Time)
+let dashboardData      = [];  // sample transaction data (Overview / Channel / Time)
 let userMonitoringData = [];  // loaded from data/user_monitoring_summary.csv
-let userDataSource = 'loading';
+let userDataSource     = 'loading';
 
 const dashboardState = {
-  overview: { period:'all', channel:'all', metric:'transactions' },
-  channel:  { channel:'all', status:'all', charge:'all', metric:'transactions' },
-  time:     { range:'all', grain:'daily', channel:'all', metric:'transactions' },
-  users:    { segment:'all', fob:'all', channel:'all', user:'all' }
+  overview:{ period:'all', channel:'all', metric:'transactions' },
+  channel: { channel:'all', status:'all', charge:'all', metric:'transactions' },
+  time:    { range:'all', grain:'daily', channel:'all', metric:'transactions' },
+  users:   { segment:'all', fob:'all', channel:'all', user:'all' }
 };
 
 const CHARTS = {};
 function destroyChart(id){ if(CHARTS[id]){ CHARTS[id].destroy(); delete CHARTS[id]; } }
 
-const CH_COLOR = { 'WhatsApp':'#25d366','SMS':'#FACC15','Email':'#60a5fa','Call/IVR':'#f97316' };
-const CHANNELS = ['WhatsApp','SMS','Email','Call/IVR'];
-
-/* Risk segment colors for User Risk vs Value Map */
-const RISK_COLOR = {
-  'Red Alert':  '#EF4444',
-  'At Risk':    '#f97316',
-  'Watchlist':  '#FACC15',
-  'Stable':     '#22C55E'
-};
+const CH_COLOR  = { WhatsApp:'#25d366', SMS:'#FACC15', Email:'#60a5fa', 'Call/IVR':'#f97316' };
+const CHANNELS  = ['WhatsApp','SMS','Email','Call/IVR'];
+const RISK_COLOR= { 'Red Alert':'#EF4444', 'At Risk':'#f97316', Watchlist:'#FACC15', Stable:'#22C55E' };
 
 /* ================================================================
-   SAMPLE TRANSACTION DATA
-   Used by Overview, Channel Performance, and Time Pattern sections.
-   Replace or remove once real transaction CSV is added.
+   SAMPLE TRANSACTION DATA — Overview / Channel / Time sections
    ================================================================ */
-const sampleData = (function generateSample(){
-  const rows=[];
-  const users    = ['Client A Finance','Client B Retail','Client C Education','Client D Healthcare','Client E Logistics'];
-  const fields   = ['Finance','Retail','Education','Healthcare','Logistics'];
-  const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  const months   = ['01','02','03'];
-  const statusDist = {
-    'WhatsApp':[{s:'success',w:85},{s:'pending',w:13},{s:'failed',w:2}],
-    'SMS':     [{s:'success',w:99},{s:'failed',w:1}],
-    'Email':   [{s:'success',w:81},{s:'pending',w:17},{s:'failed',w:2}],
-    'Call/IVR':[{s:'rna',w:77},{s:'success',w:22},{s:'failed',w:1}]
-  };
-  const txWeight   = {'WhatsApp':41,'SMS':16,'Email':33,'Call/IVR':10};
-  const chargeRate = {'WhatsApp':.76,'SMS':.95,'Email':.62,'Call/IVR':.58};
-  const billUnit   = {'WhatsApp':170,'SMS':510,'Email':33,'Call/IVR':155};
-  const muUnit     = {'WhatsApp':1.4,'SMS':1.2,'Email':1.8,'Call/IVR':1.0};
-
-  function pickStatus(ch){
-    const dist=statusDist[ch];
-    const total=dist.reduce((s,d)=>s+d.w,0);
-    let r=Math.random()*total;
-    for(const d of dist){ r-=d.w; if(r<=0) return d.s; }
-    return dist[0].s;
-  }
+const sampleData = (function(){
+  const rows=[], users=['Client A Finance','Client B Retail','Client C Education','Client D Healthcare','Client E Logistics'],
+    fields=['Finance','Retail','Education','Healthcare','Logistics'],
+    dayNames=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+    months=['01','02','03'],
+    statusDist={ WhatsApp:[{s:'success',w:85},{s:'pending',w:13},{s:'failed',w:2}], SMS:[{s:'success',w:99},{s:'failed',w:1}], Email:[{s:'success',w:81},{s:'pending',w:17},{s:'failed',w:2}], 'Call/IVR':[{s:'rna',w:77},{s:'success',w:22},{s:'failed',w:1}] },
+    txW={'WhatsApp':41,'SMS':16,'Email':33,'Call/IVR':10},
+    crW={'WhatsApp':.76,'SMS':.95,'Email':.62,'Call/IVR':.58},
+    bW={'WhatsApp':170,'SMS':510,'Email':33,'Call/IVR':155},
+    mW={'WhatsApp':1.4,'SMS':1.2,'Email':1.8,'Call/IVR':1.0};
+  function pick(ch){ const d=statusDist[ch],t=d.reduce((s,x)=>s+x.w,0);let r=Math.random()*t;for(const x of d){r-=x.w;if(r<=0)return x.s;}return d[0].s; }
   let id=1;
   months.forEach(mo=>{
     for(let day=1;day<=28;day++){
-      const dateStr=`2025-${mo}-${String(day).padStart(2,'0')}`;
-      const dowIdx=(new Date(dateStr).getDay()+6)%7;
-      const dayName=dayNames[dowIdx];
-      const isWeekend=dowIdx>=5;
+      const ds=`2025-${mo}-${String(day).padStart(2,'0')}`,dow=(new Date(ds).getDay()+6)%7,dn=dayNames[dow],we=dow>=5;
       CHANNELS.forEach(ch=>{
-        const base=isWeekend?Math.floor(txWeight[ch]*4):Math.floor(txWeight[ch]*17);
-        const nTx=Math.max(1,base+Math.floor((Math.random()-.5)*base*.35));
+        const base=we?Math.floor(txW[ch]*4):Math.floor(txW[ch]*17),nTx=Math.max(1,base+Math.floor((Math.random()-.5)*base*.35));
         for(let t=0;t<nTx;t++){
-          const ui=Math.floor(Math.random()*users.length);
-          const st=pickStatus(ch);
-          const isCharge=Math.random()<chargeRate[ch]?1:0;
-          const mu=+(muUnit[ch]*(0.85+Math.random()*.3)).toFixed(1);
-          const bill=isCharge?+(billUnit[ch]*(0.8+Math.random()*.4)).toFixed(0):0;
-          const hr=isWeekend?Math.floor(Math.random()*14)+7:Math.random()<.55?Math.floor(Math.random()*5)+10:Math.floor(Math.random()*9)+7;
-          rows.push({
-            transaction_id:`TXN${String(id++).padStart(6,'0')}`,
-            user_id:`U${String(ui+1).padStart(3,'0')}`,
-            user_name:users[ui],field_of_business:fields[ui],channel:ch,
-            message_type:ch==='Call/IVR'?'call':'message',message_status:st,
-            is_charge:isCharge,
-            created_at:`${dateStr} ${String(hr).padStart(2,'0')}:00:00`,
-            date:dateStr,time:`${String(hr).padStart(2,'0')}:00`,hour:hr,
-            day_name:dayName,month:mo,transaction_count:1,message_units:mu,
-            raw_transaction_amount:bill,billable_amount:bill,
-            success_flag:st==='success'?1:0,failed_flag:st==='failed'?1:0,
-            pending_flag:st==='pending'?1:0,rna_flag:st==='rna'?1:0
-          });
+          const ui=Math.floor(Math.random()*users.length),st=pick(ch),ic=Math.random()<crW[ch]?1:0,
+            mu=+(mW[ch]*(0.85+Math.random()*.3)).toFixed(1),
+            bill=ic?+(bW[ch]*(0.8+Math.random()*.4)).toFixed(0):0,
+            hr=we?Math.floor(Math.random()*14)+7:Math.random()<.55?Math.floor(Math.random()*5)+10:Math.floor(Math.random()*9)+7;
+          rows.push({user_name:users[ui],field_of_business:fields[ui],channel:ch,is_charge:ic,
+            date:ds,hour:hr,day_name:dn,month:mo,message_units:mu,billable_amount:bill,
+            success_flag:st==='success'?1:0,failed_flag:st==='failed'?1:0,pending_flag:st==='pending'?1:0,rna_flag:st==='rna'?1:0});
         }
       });
     }
@@ -1012,185 +738,172 @@ const sampleData = (function generateSample(){
 /* ================================================================
    FALLBACK USER MONITORING SAMPLE DATA
    Used when data/user_monitoring_summary.csv cannot be fetched.
-   Expected columns match user_monitoring_summary.csv schema.
+   Columns match the expected CSV schema.
    ================================================================ */
 const sampleUserData = [
-  { user_name:'Client A Finance',    field_of_business:'Finance',     contextual_risk_segment:'Red Alert', contextual_churn_risk_score:82, main_channel:'WhatsApp', main_channel_share_pct:62, usage_decline_pct:45, billable_decline_pct:38, total_billable_amount:4200000, total_transactions:18423, watchlist_reason:'Significant usage and revenue drop in last 30 days', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
-  { user_name:'Client B Retail',     field_of_business:'Retail',      contextual_risk_segment:'At Risk',   contextual_churn_risk_score:58, main_channel:'SMS',       main_channel_share_pct:71, usage_decline_pct:28, billable_decline_pct:22, total_billable_amount:3800000, total_transactions:12901, watchlist_reason:'Declining usage trend with moderate revenue impact', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
-  { user_name:'Client C Education',  field_of_business:'Education',   contextual_risk_segment:'Watchlist', contextual_churn_risk_score:34, main_channel:'Email',     main_channel_share_pct:55, usage_decline_pct:12, billable_decline_pct:8,  total_billable_amount:1100000, total_transactions:10554, watchlist_reason:'Minor slowdown in activity; monitor for next 2 weeks', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
-  { user_name:'Client D Healthcare', field_of_business:'Healthcare',  contextual_risk_segment:'Stable',    contextual_churn_risk_score:14, main_channel:'WhatsApp',  main_channel_share_pct:48, usage_decline_pct:2,  billable_decline_pct:0,  total_billable_amount:2400000, total_transactions:9112,  watchlist_reason:'', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:1 },
-  { user_name:'Client E Logistics',  field_of_business:'Logistics',   contextual_risk_segment:'Stable',    contextual_churn_risk_score:9,  main_channel:'Call/IVR',  main_channel_share_pct:44, usage_decline_pct:0,  billable_decline_pct:0,  total_billable_amount:1600000, total_transactions:7340,  watchlist_reason:'', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
-  { user_name:'Client F Banking',    field_of_business:'Banking',     contextual_risk_segment:'At Risk',   contextual_churn_risk_score:52, main_channel:'SMS',       main_channel_share_pct:80, usage_decline_pct:30, billable_decline_pct:25, total_billable_amount:2900000, total_transactions:6800,  watchlist_reason:'Heavy SMS dependency with notable usage drop', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 },
-  { user_name:'Client G Insurance',  field_of_business:'Insurance',   contextual_risk_segment:'Watchlist', contextual_churn_risk_score:27, main_channel:'WhatsApp',  main_channel_share_pct:53, usage_decline_pct:8,  billable_decline_pct:5,  total_billable_amount:980000,  total_transactions:5420,  watchlist_reason:'Slight dip in engagement metrics', users_need_attention_flag:0, at_risk_user_flag:0, high_value_flag:0 },
-  { user_name:'Client H E-commerce', field_of_business:'E-Commerce',  contextual_risk_segment:'Red Alert', contextual_churn_risk_score:75, main_channel:'Email',     main_channel_share_pct:69, usage_decline_pct:55, billable_decline_pct:48, total_billable_amount:3100000, total_transactions:4900,  watchlist_reason:'Severe email campaign reduction; account at high churn risk', users_need_attention_flag:1, at_risk_user_flag:1, high_value_flag:1 }
+  {user_name:'Client A Finance',    field_of_business:'Finance',    contextual_risk_segment:'Red Alert', contextual_churn_risk_score:82,main_channel:'WhatsApp',main_channel_share_pct:62,usage_change_rate_pct:-45.00,billable_decline_pct:38,total_billable_amount:4200000,total_transactions:18423,watchlist_reason:'Significant usage and revenue drop in last 30 days',           users_need_attention_flag:1,at_risk_user_flag:1,high_value_flag:1},
+  {user_name:'Client H E-commerce', field_of_business:'E-Commerce', contextual_risk_segment:'Red Alert', contextual_churn_risk_score:75,main_channel:'Email',   main_channel_share_pct:69,usage_change_rate_pct:-55.00,billable_decline_pct:48,total_billable_amount:3100000,total_transactions:4900, watchlist_reason:'Severe email campaign reduction; account at high churn risk',    users_need_attention_flag:1,at_risk_user_flag:1,high_value_flag:1},
+  {user_name:'Client B Retail',     field_of_business:'Retail',     contextual_risk_segment:'At Risk',   contextual_churn_risk_score:58,main_channel:'SMS',     main_channel_share_pct:71,usage_change_rate_pct:-28.00,billable_decline_pct:22,total_billable_amount:3800000,total_transactions:12901,watchlist_reason:'Declining usage trend with moderate revenue impact',            users_need_attention_flag:1,at_risk_user_flag:1,high_value_flag:1},
+  {user_name:'Client F Banking',    field_of_business:'Banking',    contextual_risk_segment:'At Risk',   contextual_churn_risk_score:52,main_channel:'SMS',     main_channel_share_pct:80,usage_change_rate_pct:-30.00,billable_decline_pct:25,total_billable_amount:2900000,total_transactions:6800, watchlist_reason:'Heavy SMS dependency with notable usage drop',                   users_need_attention_flag:1,at_risk_user_flag:1,high_value_flag:1},
+  {user_name:'Client C Education',  field_of_business:'Education',  contextual_risk_segment:'Watchlist', contextual_churn_risk_score:34,main_channel:'Email',   main_channel_share_pct:55,usage_change_rate_pct:-12.00,billable_decline_pct:8, total_billable_amount:1100000,total_transactions:10554,watchlist_reason:'Minor slowdown in activity; monitor for next 2 weeks',           users_need_attention_flag:0,at_risk_user_flag:0,high_value_flag:0},
+  {user_name:'Client G Insurance',  field_of_business:'Insurance',  contextual_risk_segment:'Watchlist', contextual_churn_risk_score:27,main_channel:'WhatsApp',main_channel_share_pct:53,usage_change_rate_pct:-8.00, billable_decline_pct:5, total_billable_amount:980000, total_transactions:5420, watchlist_reason:'Slight dip in engagement metrics',                              users_need_attention_flag:0,at_risk_user_flag:0,high_value_flag:0},
+  {user_name:'Client D Healthcare', field_of_business:'Healthcare', contextual_risk_segment:'Stable',    contextual_churn_risk_score:14,main_channel:'WhatsApp',main_channel_share_pct:48,usage_change_rate_pct:2.50,  billable_decline_pct:0, total_billable_amount:2400000,total_transactions:9112, watchlist_reason:'',                                                               users_need_attention_flag:0,at_risk_user_flag:0,high_value_flag:1},
+  {user_name:'Client E Logistics',  field_of_business:'Logistics',  contextual_risk_segment:'Stable',    contextual_churn_risk_score:9, main_channel:'Call/IVR',main_channel_share_pct:44,usage_change_rate_pct:7.03,  billable_decline_pct:0, total_billable_amount:1600000,total_transactions:7340, watchlist_reason:'',                                                               users_need_attention_flag:0,at_risk_user_flag:0,high_value_flag:0}
 ];
 
 /* ================================================================
-   NORMALIZE USER MONITORING DATA
-   Handles both CSV strings and JS objects.
+   NORMALIZE DATA
    ================================================================ */
 function normalizeUserData(rows){
   return rows.map(r=>({
-    user_name:                   String(r.user_name||'Unknown'),
-    field_of_business:           String(r.field_of_business||''),
-    contextual_risk_segment:     String(r.contextual_risk_segment||'Stable'),
-    contextual_churn_risk_score: Number(r.contextual_churn_risk_score)||0,
-    main_channel:                String(r.main_channel||''),
-    main_channel_share_pct:      Number(r.main_channel_share_pct)||0,
-    usage_decline_pct:           Number(r.usage_decline_pct)||0,
-    billable_decline_pct:        Number(r.billable_decline_pct)||0,
-    total_billable_amount:       Number(r.total_billable_amount)||0,
-    total_transactions:          Number(r.total_transactions)||0,
-    watchlist_reason:            String(r.watchlist_reason||''),
-    users_need_attention_flag:   Number(r.users_need_attention_flag)||0,
-    at_risk_user_flag:           Number(r.at_risk_user_flag)||0,
-    high_value_flag:             Number(r.high_value_flag)||0,
-    // Support optional summary count fields at the dataset level
-    users_need_attention_count:  r.users_need_attention_count!==undefined?Number(r.users_need_attention_count):undefined,
-    at_risk_users_count:         r.at_risk_users_count!==undefined?Number(r.at_risk_users_count):undefined,
-    high_value_users_count:      r.high_value_users_count!==undefined?Number(r.high_value_users_count):undefined
-  }));
-}
-
-/* Normalize transaction data */
-function normalizeData(rows){
-  return rows.map(r=>({
-    transaction_id:String(r.transaction_id||''),
-    user_id:String(r.user_id||''),
     user_name:String(r.user_name||'Unknown'),
     field_of_business:String(r.field_of_business||''),
-    channel:String(r.channel||''),
-    message_type:String(r.message_type||''),
-    message_status:String(r.message_status||''),
-    is_charge:Number(r.is_charge)||0,
-    created_at:String(r.created_at||''),
-    date:String(r.date||''),
-    time:String(r.time||''),
-    hour:Number(r.hour)||0,
-    day_name:String(r.day_name||''),
-    month:String(r.month||''),
-    transaction_count:Number(r.transaction_count)||1,
-    message_units:Number(r.message_units)||0,
-    raw_transaction_amount:Number(r.raw_transaction_amount)||0,
-    billable_amount:Number(r.billable_amount)||0,
-    success_flag:Number(r.success_flag)||0,
-    failed_flag:Number(r.failed_flag)||0,
-    pending_flag:Number(r.pending_flag)||0,
-    rna_flag:Number(r.rna_flag)||0
+    contextual_risk_segment:String(r.contextual_risk_segment||'Stable'),
+    contextual_churn_risk_score:Number(r.contextual_churn_risk_score)||0,
+    main_channel:String(r.main_channel||''),
+    main_channel_share_pct:Number(r.main_channel_share_pct)||0,
+    // usage_change_rate_pct: signed %, negative = decline, positive = growth
+    usage_change_rate_pct: r.usage_change_rate_pct!==undefined && r.usage_change_rate_pct!==''
+      ? parseFloat(r.usage_change_rate_pct)
+      : (r.usage_decline_pct!==undefined ? -Math.abs(Number(r.usage_decline_pct)) : 0),
+    billable_decline_pct:Number(r.billable_decline_pct)||0,
+    total_billable_amount:Number(r.total_billable_amount)||0,
+    total_transactions:Number(r.total_transactions)||0,
+    watchlist_reason:String(r.watchlist_reason||''),
+    users_need_attention_flag:Number(r.users_need_attention_flag)||0,
+    at_risk_user_flag:Number(r.at_risk_user_flag)||0,
+    high_value_flag:Number(r.high_value_flag)||0,
+    users_need_attention_count:r.users_need_attention_count!==undefined&&r.users_need_attention_count!==''?Number(r.users_need_attention_count):undefined,
+    at_risk_users_count:r.at_risk_users_count!==undefined&&r.at_risk_users_count!==''?Number(r.at_risk_users_count):undefined,
+    high_value_users_count:r.high_value_users_count!==undefined&&r.high_value_users_count!==''?Number(r.high_value_users_count):undefined
   }));
 }
 
 /* ================================================================
    DATA LOADING
    ================================================================ */
-
-/* Main init: load sample transaction data for Overview/Channel/Time,
-   then separately try to load the user monitoring CSV. */
 async function initDashboard(){
-  // Load sample transaction data immediately (no CSV needed for these sections)
-  dashboardData = normalizeData(sampleData);
+  dashboardData = sampleData;
 
-  // Set header timestamp
-  const now = new Date();
-  document.getElementById('headerTimestamp').textContent =
+  const now=new Date();
+  document.getElementById('headerTimestamp').textContent=
     'Loaded '+now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+
     ' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
-  // Update sidebar period
-  document.getElementById('sidebarPeriod').textContent =
-    'Q1 2025 · Jan–Mar · 4 channels';
-
-  // Render Overview, Channel, Time from sample data
   renderOverview(filterData('overview'));
   renderChannelPerformance(filterData('channel'));
   renderTimePattern(filterData('time'));
 
-  // Now try to load user monitoring CSV
   await loadUserMonitoringData();
 
   document.getElementById('loadingOverlay').style.display='none';
 }
 
-/* Load data/user_monitoring_summary.csv for User Monitoring section only */
+/*
+ * Fetch data/user_monitoring_summary.csv from the GitHub Pages repo.
+ *
+ * Key fixes for GitHub Pages:
+ *  1. Use a relative path — works correctly when index.html is at repo root
+ *     and the CSV is in the data/ folder at the same level.
+ *  2. Append a cache-busting timestamp so GitHub CDN doesn't return a cached
+ *     404 from a previous failed load.
+ *  3. Check response.ok explicitly — GitHub Pages returns 404 as HTML, not an error.
+ *  4. Log the attempt to the console so you can debug in DevTools.
+ *
+ * IMPORTANT: Make sure the file in your repo is named EXACTLY:
+ *   data/user_monitoring_summary.csv
+ * (no spaces, all lowercase, underscore separators)
+ */
 async function loadUserMonitoringData(){
+  // Exact path — must match the actual filename in the GitHub repo
+  const CSV_PATH = 'data/user_monitoring_summary.csv';
+  const url = CSV_PATH + '?v=20260513';
+
+  console.log('[OCA Dashboard] Fetching user monitoring CSV:', url);
+
   try{
-    const res = await fetch('data/user_monitoring_summary.csv');
-    if(!res.ok) throw new Error('User CSV not found');
-    const csv = await res.text();
-    Papa.parse(csv,{
-      header:true,
-      skipEmptyLines:true,
+    const res = await fetch(url, { cache: 'no-store' });
+    console.log('[OCA Dashboard] Fetch response status:', res.status, res.statusText);
+
+    if(!res.ok){
+      console.warn('[OCA Dashboard] CSV not found (HTTP '+res.status+'). Using fallback sample data.');
+      fallbackUserData('HTTP ' + res.status);
+      return;
+    }
+
+    const csvText = await res.text();
+    console.log('[OCA Dashboard] CSV loaded, length:', csvText.length, 'chars');
+
+    if(!csvText || csvText.trim().length < 10){
+      console.warn('[OCA Dashboard] CSV appears empty. Using fallback sample data.');
+      fallbackUserData('Empty file');
+      return;
+    }
+
+    Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true,
       complete(result){
+        console.log('[OCA Dashboard] CSV parsed:', result.data.length, 'rows');
+        if(!result.data || result.data.length === 0){
+          console.warn('[OCA Dashboard] CSV parsed to 0 rows. Using fallback sample data.');
+          fallbackUserData('0 rows parsed');
+          return;
+        }
         userMonitoringData = normalizeUserData(result.data);
         userDataSource = 'repository';
-        updateUserDataSourceBadge();
+        updateUserDataSourceBadge(CSV_PATH);
         populateUserFilters();
         renderUserMonitoring(filterUserData());
       },
-      error(){ fallbackUserData(); }
+      error(err){
+        console.error('[OCA Dashboard] PapaParse error:', err);
+        fallbackUserData('Parse error');
+      }
     });
-  }catch(e){
-    fallbackUserData();
+
+  } catch(e){
+    console.error('[OCA Dashboard] Fetch error:', e.message);
+    fallbackUserData(e.message);
   }
 }
 
-function fallbackUserData(){
+function fallbackUserData(reason){
+  console.log('[OCA Dashboard] Loading fallback user data. Reason:', reason||'unknown');
   userMonitoringData = normalizeUserData(sampleUserData);
   userDataSource = 'sample';
-  updateUserDataSourceBadge();
+  updateUserDataSourceBadge(null, reason);
   populateUserFilters();
   renderUserMonitoring(filterUserData());
 }
 
-function updateUserDataSourceBadge(){
-  const el = document.getElementById('userDataSourceBadge');
-  if(userDataSource==='repository'){
-    el.textContent='Repository CSV loaded';
-    el.style.cssText='font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#DCFCE7;border:1px solid rgba(34,197,94,.3);color:#166534';
+function updateUserDataSourceBadge(path, errorReason){
+  const badge = document.getElementById('userDataSourceBadge');
+  const pathEl = document.getElementById('userDataSourcePath');
+  if(userDataSource === 'repository'){
+    badge.textContent = 'Repository CSV loaded';
+    badge.style.cssText = 'font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#DCFCE7;border:1px solid rgba(34,197,94,.3);color:#166534';
+    if(pathEl) pathEl.textContent = path || '';
   } else {
-    el.textContent='Sample data loaded';
-    el.style.cssText='font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#FEF9C3;border:1px solid rgba(250,204,21,.3);color:#854D0E';
+    badge.textContent = 'Sample data (CSV not found)';
+    badge.style.cssText = 'font-size:.65rem;font-weight:600;padding:2px 9px;border-radius:20px;background:#FEF9C3;border:1px solid rgba(250,204,21,.3);color:#854D0E';
+    if(pathEl) pathEl.textContent = errorReason ? '— ' + errorReason : '';
   }
 }
 
-/* Populate User Monitoring filter dropdowns from userMonitoringData */
 function populateUserFilters(){
-  const users = [...new Set(userMonitoringData.map(r=>r.user_name))].sort();
-  const fobs  = [...new Set(userMonitoringData.map(r=>r.field_of_business).filter(Boolean))].sort();
-
+  const users=[...new Set(userMonitoringData.map(r=>r.user_name))].sort();
+  const fobs=[...new Set(userMonitoringData.map(r=>r.field_of_business).filter(Boolean))].sort();
   const uSel=document.getElementById('us-user');
   while(uSel.options.length>1) uSel.remove(1);
   users.forEach(u=>uSel.add(new Option(u,u)));
-
   const fSel=document.getElementById('us-fob');
   while(fSel.options.length>1) fSel.remove(1);
   fobs.forEach(f=>fSel.add(new Option(f,f)));
 }
 
 /* ================================================================
-   USER MONITORING FILTER
-   ================================================================ */
-function applyUserFilters(){
-  dashboardState.users.segment = document.getElementById('us-segment').value;
-  dashboardState.users.fob     = document.getElementById('us-fob').value;
-  dashboardState.users.channel = document.getElementById('us-channel').value;
-  dashboardState.users.user    = document.getElementById('us-user').value;
-  renderUserMonitoring(filterUserData());
-}
-
-/* Returns filtered userMonitoringData array */
-function filterUserData(){
-  let data = userMonitoringData.slice();
-  const s = dashboardState.users;
-  if(s.segment!=='all') data=data.filter(r=>r.contextual_risk_segment===s.segment);
-  if(s.fob!=='all')     data=data.filter(r=>r.field_of_business===s.fob);
-  if(s.channel!=='all') data=data.filter(r=>r.main_channel===s.channel);
-  if(s.user!=='all')    data=data.filter(r=>r.user_name===s.user);
-  return data;
-}
-
-/* ================================================================
-   TRANSACTION DATA FILTERS (Overview / Channel / Time)
+   FILTERS
    ================================================================ */
 function applyOverviewFilters(){
   dashboardState.overview.period  = document.getElementById('ov-period').value;
@@ -1199,10 +912,10 @@ function applyOverviewFilters(){
   renderOverview(filterData('overview'));
 }
 function applyChannelFilters(){
-  dashboardState.channel.channel  = document.getElementById('ch-channel').value;
-  dashboardState.channel.status   = document.getElementById('ch-status').value;
-  dashboardState.channel.charge   = document.getElementById('ch-charge').value;
-  dashboardState.channel.metric   = document.getElementById('ch-metric').value;
+  dashboardState.channel.channel = document.getElementById('ch-channel').value;
+  dashboardState.channel.status  = document.getElementById('ch-status').value;
+  dashboardState.channel.charge  = document.getElementById('ch-charge').value;
+  dashboardState.channel.metric  = document.getElementById('ch-metric').value;
   renderChannelPerformance(filterData('channel'));
 }
 function applyTimeFilters(){
@@ -1211,6 +924,13 @@ function applyTimeFilters(){
   dashboardState.time.channel = document.getElementById('tm-channel').value;
   dashboardState.time.metric  = document.getElementById('tm-metric').value;
   renderTimePattern(filterData('time'));
+}
+function applyUserFilters(){
+  dashboardState.users.segment = document.getElementById('us-segment').value;
+  dashboardState.users.fob     = document.getElementById('us-fob').value;
+  dashboardState.users.channel = document.getElementById('us-channel').value;
+  dashboardState.users.user    = document.getElementById('us-user').value;
+  renderUserMonitoring(filterUserData());
 }
 
 function filterData(section){
@@ -1222,11 +942,9 @@ function filterData(section){
   }
   if(section==='channel'){
     if(s.channel!=='all') data=data.filter(r=>r.channel===s.channel);
-    if(s.status!=='all'){
-      if(s.status==='success') data=data.filter(r=>r.success_flag===1);
-      else if(s.status==='failed') data=data.filter(r=>r.failed_flag===1);
-      else if(s.status==='pending') data=data.filter(r=>r.pending_flag===1);
-    }
+    if(s.status==='success') data=data.filter(r=>r.success_flag===1);
+    else if(s.status==='failed') data=data.filter(r=>r.failed_flag===1);
+    else if(s.status==='pending') data=data.filter(r=>r.pending_flag===1);
     if(s.charge!=='all') data=data.filter(r=>String(r.is_charge)===s.charge);
   }
   if(section==='time'){
@@ -1235,44 +953,40 @@ function filterData(section){
   }
   return data;
 }
+function filterUserData(){
+  let data=userMonitoringData.slice();
+  const s=dashboardState.users;
+  if(s.segment!=='all') data=data.filter(r=>r.contextual_risk_segment===s.segment);
+  if(s.fob!=='all')     data=data.filter(r=>r.field_of_business===s.fob);
+  if(s.channel!=='all') data=data.filter(r=>r.main_channel===s.channel);
+  if(s.user!=='all')    data=data.filter(r=>r.user_name===s.user);
+  return data;
+}
 
 /* ================================================================
-   AGGREGATION — Transaction data
+   AGGREGATION
    ================================================================ */
 function aggregateKpis(data){
-  const total=data.length, mu=data.reduce((s,r)=>s+r.message_units,0);
+  const total=data.length,mu=data.reduce((s,r)=>s+r.message_units,0);
   const users=new Set(data.map(r=>r.user_name)).size;
   const success=data.filter(r=>r.success_flag===1).length;
   const charged=data.filter(r=>r.is_charge===1);
   const bill=charged.reduce((s,r)=>s+r.billable_amount,0);
-  return{total,mu,users,
-    successRate:total?success/total*100:0,
-    chargeRate:total?charged.length/total*100:0,
-    bill};
+  return{total,mu,users,successRate:total?success/total*100:0,chargeRate:total?charged.length/total*100:0,bill};
 }
-
 function aggregateChannelPerformance(data){
   const res={};
   CHANNELS.forEach(ch=>{
-    const d=data.filter(r=>r.channel===ch);
-    const tx=d.length;
-    const charged=d.filter(r=>r.is_charge===1);
-    const bill=charged.reduce((s,r)=>s+r.billable_amount,0);
-    const success=d.filter(r=>r.success_flag===1).length;
-    const failed=d.filter(r=>r.failed_flag===1).length;
-    const pending=d.filter(r=>r.pending_flag===1).length;
-    const rna=d.filter(r=>r.rna_flag===1).length;
-    const mu=d.reduce((s,r)=>s+r.message_units,0);
-    res[ch]={tx,bill,mu,
-      chargeRate:tx?charged.length/tx*100:0,
-      successRate:tx?success/tx*100:0,
-      failedRate:tx?failed/tx*100:0,
-      pendingRate:tx?pending/tx*100:0,
-      rnaRate:tx?rna/tx*100:0};
+    const d=data.filter(r=>r.channel===ch),tx=d.length;
+    const charged=d.filter(r=>r.is_charge===1),bill=charged.reduce((s,r)=>s+r.billable_amount,0);
+    const success=d.filter(r=>r.success_flag===1).length,failed=d.filter(r=>r.failed_flag===1).length,
+          pending=d.filter(r=>r.pending_flag===1).length,rna=d.filter(r=>r.rna_flag===1).length,
+          mu=d.reduce((s,r)=>s+r.message_units,0);
+    res[ch]={tx,bill,mu,chargeRate:tx?charged.length/tx*100:0,successRate:tx?success/tx*100:0,
+      failedRate:tx?failed/tx*100:0,pendingRate:tx?pending/tx*100:0,rnaRate:tx?rna/tx*100:0};
   });
   return res;
 }
-
 function aggregateTimeTrend(data,grain){
   const map={};
   data.forEach(r=>{
@@ -1283,77 +997,53 @@ function aggregateTimeTrend(data,grain){
     else if(grain==='hourly') key=String(r.hour).padStart(2,'0')+':00';
     else key=r.date;
     if(!map[key]) map[key]={tx:0,mu:0,bill:0};
-    map[key].tx++; map[key].mu+=r.message_units; map[key].bill+=r.billable_amount;
+    map[key].tx++;map[key].mu+=r.message_units;map[key].bill+=r.billable_amount;
   });
   const keys=Object.keys(map).sort();
   return{labels:keys,tx:keys.map(k=>map[k].tx),mu:keys.map(k=>+map[k].mu.toFixed(1)),bill:keys.map(k=>+map[k].bill.toFixed(0))};
 }
-
 function aggregateHeatmap(data){
-  const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  const hours=[6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+  const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],hours=[6,7,8,9,10,11,12,13,14,15,16,17,18,19];
   const matrix={};
   days.forEach(d=>{matrix[d]={};hours.forEach(h=>{matrix[d][h]=0;});});
-  data.forEach(r=>{if(matrix[r.day_name]&&matrix[r.day_name][r.hour]!==undefined) matrix[r.day_name][r.hour]++;});
+  data.forEach(r=>{if(matrix[r.day_name]&&matrix[r.day_name][r.hour]!==undefined)matrix[r.day_name][r.hour]++;});
   return{days,hours,matrix};
 }
 
 /* ================================================================
-   CHART.JS DEFAULTS
+   CHART DEFAULTS
    ================================================================ */
-Chart.defaults.font.family="'DM Sans',sans-serif";
-Chart.defaults.font.size=12;
-Chart.defaults.color='#6B7280';
-Chart.defaults.plugins.legend.position='bottom';
-Chart.defaults.plugins.legend.labels.boxWidth=10;
-Chart.defaults.plugins.legend.labels.padding=13;
-Chart.defaults.plugins.tooltip.backgroundColor='#111111';
-Chart.defaults.plugins.tooltip.titleColor='#fff';
-Chart.defaults.plugins.tooltip.bodyColor='rgba(255,255,255,.72)';
-Chart.defaults.plugins.tooltip.padding=10;
-Chart.defaults.plugins.tooltip.cornerRadius=8;
+Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=12;Chart.defaults.color='#6B7280';
+Chart.defaults.plugins.legend.position='bottom';Chart.defaults.plugins.legend.labels.boxWidth=10;Chart.defaults.plugins.legend.labels.padding=13;
+Chart.defaults.plugins.tooltip.backgroundColor='#111111';Chart.defaults.plugins.tooltip.titleColor='#fff';
+Chart.defaults.plugins.tooltip.bodyColor='rgba(255,255,255,.72)';Chart.defaults.plugins.tooltip.padding=10;Chart.defaults.plugins.tooltip.cornerRadius=8;
 
-function fmtNum(n){
-  if(n>=1e9) return (n/1e9).toFixed(2)+'B';
-  if(n>=1e6) return (n/1e6).toFixed(2)+'M';
-  if(n>=1e3) return (n/1e3).toFixed(1)+'k';
-  return String(Math.round(n));
-}
+function fmtNum(n){ if(n>=1e9)return(n/1e9).toFixed(2)+'B'; if(n>=1e6)return(n/1e6).toFixed(2)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'k'; return String(Math.round(n)); }
 function fmtIDR(n){ return 'IDR '+fmtNum(n); }
 
 /* ================================================================
    RENDER: Executive Overview
    ================================================================ */
 function renderOverview(data){
-  const kpis=aggregateKpis(data);
-  const chAgg=aggregateChannelPerformance(data);
-  const totalTx=kpis.total||1;
-  const totalBill=CHANNELS.reduce((s,c)=>s+chAgg[c].bill,0)||1;
-
-  document.getElementById('kpi-tx').textContent  =kpis.total.toLocaleString();
-  document.getElementById('kpi-mu').textContent  =fmtNum(kpis.mu);
-  document.getElementById('kpi-users').textContent=kpis.users;
-  document.getElementById('kpi-sr').textContent  =kpis.successRate.toFixed(1)+'%';
-  document.getElementById('kpi-cr').textContent  =kpis.chargeRate.toFixed(1)+'%';
-  document.getElementById('kpi-bill').textContent=fmtIDR(kpis.bill);
-
+  const kpis=aggregateKpis(data),chAgg=aggregateChannelPerformance(data);
+  const totalTx=kpis.total||1,totalBill=CHANNELS.reduce((s,c)=>s+chAgg[c].bill,0)||1;
+  document.getElementById('kpi-tx').textContent    = kpis.total.toLocaleString();
+  document.getElementById('kpi-mu').textContent    = fmtNum(kpis.mu);
+  document.getElementById('kpi-users').textContent = kpis.users;
+  document.getElementById('kpi-sr').textContent    = kpis.successRate.toFixed(1)+'%';
+  document.getElementById('kpi-cr').textContent    = kpis.chargeRate.toFixed(1)+'%';
+  document.getElementById('kpi-bill').textContent  = fmtIDR(kpis.bill);
   destroyChart('chartRoleMatrix');
   CHARTS['chartRoleMatrix']=new Chart(document.getElementById('chartRoleMatrix'),{
     type:'bubble',
     data:{datasets:CHANNELS.map(ch=>{
-      const d=chAgg[ch];
-      const txShare=d.tx/totalTx*100;
-      const billShare=d.bill/totalBill*100;
-      const rate=ch==='Call/IVR'?(100-d.rnaRate):d.successRate;
+      const d=chAgg[ch],txShare=d.tx/totalTx*100,billShare=d.bill/totalBill*100,rate=ch==='Call/IVR'?(100-d.rnaRate):d.successRate;
       return{label:ch,data:[{x:+txShare.toFixed(2),y:+billShare.toFixed(2),r:+(8+rate*.2).toFixed(1)}],
         backgroundColor:CH_COLOR[ch]+'BB',borderColor:CH_COLOR[ch],borderWidth:1.5};
     })},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{tooltip:{callbacks:{label:ctx=>{
-        const d=ctx.raw,ch=ctx.dataset.label;
-        const rate=ch==='Call/IVR'?(100-chAgg[ch].rnaRate):chAgg[ch].successRate;
-        return[` ${ch}`,` Tx Share: ${d.x.toFixed(1)}%`,` Billable Share: ${d.y.toFixed(1)}%`,` Rate: ${rate.toFixed(1)}%`];
-      }}}},
+      plugins:{tooltip:{callbacks:{label:ctx=>{const d=ctx.raw,ch=ctx.dataset.label,rate=ch==='Call/IVR'?(100-chAgg[ch].rnaRate):chAgg[ch].successRate;
+        return[` ${ch}`,` Tx Share: ${d.x.toFixed(1)}%`,` Billable Share: ${d.y.toFixed(1)}%`,` Rate: ${rate.toFixed(1)}%`];}}}},
       scales:{
         x:{min:0,max:55,title:{display:true,text:'Transaction Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
         y:{min:0,max:65,title:{display:true,text:'Billable Amount Share (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}}
@@ -1365,28 +1055,20 @@ function renderOverview(data){
    RENDER: Channel Performance
    ================================================================ */
 function renderChannelPerformance(data){
-  const ch=aggregateChannelPerformance(data);
-  const totalTx=CHANNELS.reduce((s,c)=>s+ch[c].tx,0)||1;
-
+  const ch=aggregateChannelPerformance(data),totalTx=CHANNELS.reduce((s,c)=>s+ch[c].tx,0)||1;
   destroyChart('chartBillable');
   CHARTS['chartBillable']=new Chart(document.getElementById('chartBillable'),{
-    type:'bar',
-    data:{labels:CHANNELS,datasets:[{label:'Billable Amount (IDR)',data:CHANNELS.map(c=>ch[c].bill),
+    type:'bar',data:{labels:CHANNELS,datasets:[{label:'Billable Amount (IDR)',data:CHANNELS.map(c=>ch[c].bill),
       backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),borderRadius:6,borderSkipped:false,maxBarThickness:50}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmtIDR(ctx.parsed.y)}`}}},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmtIDR(ctx.parsed.y)}`}}},
       scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}}}
   });
-
   destroyChart('chartTxShare');
   CHARTS['chartTxShare']=new Chart(document.getElementById('chartTxShare'),{
-    type:'doughnut',
-    data:{labels:CHANNELS,datasets:[{data:CHANNELS.map(c=>+(ch[c].tx/totalTx*100).toFixed(2)),
+    type:'doughnut',data:{labels:CHANNELS,datasets:[{data:CHANNELS.map(c=>+(ch[c].tx/totalTx*100).toFixed(2)),
       backgroundColor:CHANNELS.map(c=>CH_COLOR[c]),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${Number(ctx.parsed).toFixed(1)}%`}}}}
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${Number(ctx.parsed).toFixed(1)}%`}}}}
   });
-
   destroyChart('chartOutcome');
   CHARTS['chartOutcome']=new Chart(document.getElementById('chartOutcome'),{
     type:'bar',
@@ -1395,22 +1077,18 @@ function renderChannelPerformance(data){
       {label:'Failed',data:CHANNELS.map(c=>+ch[c].failedRate.toFixed(1)),backgroundColor:'#ED1B3A',borderRadius:4,maxBarThickness:28},
       {label:'Pending / RNA',data:CHANNELS.map(c=>+(ch[c].pendingRate+ch[c].rnaRate).toFixed(1)),backgroundColor:'#FACC15',borderRadius:4,maxBarThickness:28}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
       scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`},max:105,beginAtZero:true}}}
   });
-
-  const riskMap={'WhatsApp':'Submitted status monitoring','SMS':'Stable delivery','Email':'Processed status + engagement monitoring','Call/IVR':'High RNA rate'};
-  const riskBadge={'WhatsApp':'badge-yellow','SMS':'badge-green','Email':'badge-yellow','Call/IVR':'badge-red'};
-  const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
+  const rM={'WhatsApp':'Submitted status monitoring','SMS':'Stable delivery','Email':'Processed status + engagement monitoring','Call/IVR':'High RNA rate'};
+  const rB={'WhatsApp':'badge-yellow','SMS':'badge-green','Email':'badge-yellow','Call/IVR':'badge-red'};
+  const dC={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
   let html=`<table><thead><tr><th>Channel</th><th>Transactions</th><th>Charge Rate</th><th>Success / Answered</th><th>Risk Signal</th><th>Billable Amount</th></tr></thead><tbody>`;
   CHANNELS.forEach(c=>{
-    const d=ch[c];
-    const sr=c==='Call/IVR'?`${(100-d.rnaRate).toFixed(1)}% ans`:`${d.successRate.toFixed(1)}%`;
-    html+=`<tr><td><span class="ch-dot ${dotCls[c]}"></span><strong>${c}</strong></td><td>${d.tx.toLocaleString()}</td><td>${d.chargeRate.toFixed(1)}%</td><td>${sr}</td><td><span class="badge ${riskBadge[c]}">${riskMap[c]}</span></td><td>${fmtIDR(d.bill)}</td></tr>`;
+    const d=ch[c],sr=c==='Call/IVR'?`${(100-d.rnaRate).toFixed(1)}% ans`:`${d.successRate.toFixed(1)}%`;
+    html+=`<tr><td><span class="ch-dot ${dC[c]}"></span><strong>${c}</strong></td><td>${d.tx.toLocaleString()}</td><td>${d.chargeRate.toFixed(1)}%</td><td>${sr}</td><td><span class="badge ${rB[c]}">${rM[c]}</span></td><td>${fmtIDR(d.bill)}</td></tr>`;
   });
-  html+='</tbody></table>';
-  document.getElementById('channelTableWrap').innerHTML=html;
+  document.getElementById('channelTableWrap').innerHTML=html+'</tbody></table>';
 }
 
 /* ================================================================
@@ -1421,35 +1099,25 @@ function renderTimePattern(data){
   const agg=aggregateTimeTrend(data,grain);
   const vals=metric==='message_units'?agg.mu:metric==='billable'?agg.bill:agg.tx;
   const mLabel={transactions:'Transactions',message_units:'Message Units',billable:'Billable Amount (IDR)'}[metric];
-
   destroyChart('chartTrend');
   CHARTS['chartTrend']=new Chart(document.getElementById('chartTrend'),{
-    type:'line',
-    data:{labels:agg.labels,datasets:[{label:mLabel,data:vals,
+    type:'line',data:{labels:agg.labels,datasets:[{label:mLabel,data:vals,
       borderColor:'#ED1B3A',backgroundColor:'rgba(237,27,58,.07)',
-      pointRadius:agg.labels.length>60?0:3,pointHoverRadius:5,
-      pointHoverBackgroundColor:'#ED1B3A',borderWidth:2,fill:true,tension:.35}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{maxTicksLimit:12,maxRotation:0}},
-        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}}}
+      pointRadius:agg.labels.length>60?0:3,pointHoverRadius:5,pointHoverBackgroundColor:'#ED1B3A',
+      borderWidth:2,fill:true,tension:.35}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{maxTicksLimit:12,maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}}}
   });
-
   const hm=aggregateHeatmap(data);
-  buildHeatmap(hm);
-  buildPeakSummary(hm,data);
+  buildHeatmap(hm);buildPeakSummary(hm,data);
 }
-
 function buildHeatmap(hm){
-  const grid=document.getElementById('heatmapGrid');
-  const hours=hm.hours,days=hm.days;
-  const allVals=[];
-  days.forEach(d=>hours.forEach(h=>allVals.push(hm.matrix[d][h])));
+  const grid=document.getElementById('heatmapGrid'),{hours,days}=hm;
+  const allVals=[];days.forEach(d=>hours.forEach(h=>allVals.push(hm.matrix[d][h])));
   const maxVal=Math.max(...allVals)||1;
-  grid.innerHTML='';
-  grid.style.gridTemplateColumns=`52px repeat(${hours.length},1fr)`;
+  grid.innerHTML='';grid.style.gridTemplateColumns=`52px repeat(${hours.length},1fr)`;
   grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-label'}));
-  hours.forEach(h=>{grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-col-label',textContent:String(h).padStart(2,'0')}));});
+  hours.forEach(h=>grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-col-label',textContent:String(h).padStart(2,'0')})));
   days.forEach(day=>{
     grid.appendChild(Object.assign(document.createElement('div'),{className:'hm-label',textContent:day.slice(0,3)}));
     hours.forEach(h=>{
@@ -1461,161 +1129,148 @@ function buildHeatmap(hm){
     });
   });
 }
-
 function buildPeakSummary(hm,data){
-  const days=hm.days,hours=hm.hours;
-  let peakDay='',peakHour=0,peakVal=0;
-  days.forEach(d=>hours.forEach(h=>{if(hm.matrix[d][h]>peakVal){peakVal=hm.matrix[d][h];peakDay=d;peakHour=h;}}));
-  const threshold=peakVal*.6;
-  const peakHours=hours.filter(h=>days.some(d=>hm.matrix[d][h]>=threshold));
-  const minH=Math.min(...peakHours),maxH=Math.max(...peakHours);
+  const {days,hours}=hm;
+  let pDay='',pVal=0;
+  days.forEach(d=>hours.forEach(h=>{if(hm.matrix[d][h]>pVal){pVal=hm.matrix[d][h];pDay=d;}}));
+  const thr=pVal*.6,peakHs=hours.filter(h=>days.some(d=>hm.matrix[d][h]>=thr));
+  const minH=Math.min(...peakHs),maxH=Math.max(...peakHs);
   const chCount={};
   data.filter(r=>r.hour>=minH&&r.hour<=maxH).forEach(r=>{chCount[r.channel]=(chCount[r.channel]||0)+1;});
   const domCh=Object.entries(chCount).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById('peakSummaryCard').innerHTML=`
     <div class="peak-summary-title">Peak Window Summary</div>
-    <div class="peak-row"><span class="peak-key">Peak Day</span><span class="peak-val">${peakDay}</span></div>
+    <div class="peak-row"><span class="peak-key">Peak Day</span><span class="peak-val">${pDay}</span></div>
     <div class="peak-row"><span class="peak-key">Peak Hour Window</span><span class="peak-val">${String(minH).padStart(2,'0')}:00 – ${String(maxH+1).padStart(2,'0')}:00</span></div>
-    <div class="peak-row"><span class="peak-key">Peak Volume</span><span class="peak-val">${peakVal.toLocaleString()} tx</span></div>
+    <div class="peak-row"><span class="peak-key">Peak Volume</span><span class="peak-val">${pVal.toLocaleString()} tx</span></div>
     <div class="peak-row"><span class="peak-key">Dominant Channel</span><span class="peak-val">${domCh?domCh[0]:'—'}</span></div>
     <div class="peak-row"><span class="peak-key">Suggested Use</span><span class="peak-val">Campaign scheduling &amp; capacity planning</span></div>`;
 }
 
 /* ================================================================
    RENDER: User Monitoring
-   Uses userMonitoringData — sorted by risk score DESC, billable DESC
    ================================================================ */
 function renderUserMonitoring(data){
-  /* --- Sort: contextual_churn_risk_score DESC, total_billable DESC, usage_decline DESC --- */
-  const sorted=[...data].sort((a,b)=>
-    b.contextual_churn_risk_score-a.contextual_churn_risk_score ||
-    b.total_billable_amount-a.total_billable_amount ||
-    b.usage_decline_pct-a.usage_decline_pct
-  );
+  /*
+   * Sort: usage_change_rate_pct ASC (most negative = biggest decline first)
+   */
+  const sorted=[...data].sort((a,b)=> a.usage_change_rate_pct - b.usage_change_rate_pct);
 
-  /* --- Summary card values --- */
-  // Prefer summary count columns if present in first row, else count flags
-  const firstRow=userMonitoringData[0]||{};
-
-  const attentionCount = firstRow.users_need_attention_count!==undefined
-    ? firstRow.users_need_attention_count
+  // Summary card counts — prefer pre-aggregated columns, else count flags from full dataset
+  const base=userMonitoringData[0]||{};
+  document.getElementById('mu-attention').textContent =
+    base.users_need_attention_count!==undefined ? base.users_need_attention_count
     : userMonitoringData.filter(r=>r.users_need_attention_flag===1).length;
-
-  const atRiskCount = firstRow.at_risk_users_count!==undefined
-    ? firstRow.at_risk_users_count
+  document.getElementById('mu-atrisk').textContent =
+    base.at_risk_users_count!==undefined ? base.at_risk_users_count
     : userMonitoringData.filter(r=>r.at_risk_user_flag===1).length;
-
-  const hvCount = firstRow.high_value_users_count!==undefined
-    ? firstRow.high_value_users_count
+  document.getElementById('mu-hv').textContent =
+    base.high_value_users_count!==undefined ? base.high_value_users_count
     : userMonitoringData.filter(r=>r.high_value_flag===1).length;
 
-  document.getElementById('mu-attention').textContent = attentionCount;
-  document.getElementById('mu-atrisk').textContent    = atRiskCount;
-  document.getElementById('mu-hv').textContent        = hvCount;
+  /*
+   * User Priority Table — 3 columns only:
+   *   User Name | Field of Business | Usage Change Rate %
+   * Sorted ascending by usage_change_rate_pct (most negative first)
+   * 5 rows per page, paginated
+   */
+  const PAGE_SIZE=5;
+  let currentPage=1;
+  const totalPages=Math.ceil(sorted.length/PAGE_SIZE);
 
-  /* --- Risk segment badge helper --- */
-  function segBadge(seg){
-    const map={
-      'Red Alert': '<span class="badge badge-red">Red Alert</span>',
-      'At Risk':   '<span class="badge badge-orange">At Risk</span>',
-      'Watchlist': '<span class="badge badge-yellow">Watchlist</span>',
-      'Stable':    '<span class="badge badge-green">Stable</span>'
-    };
-    return map[seg]||`<span class="badge badge-gray">${seg}</span>`;
+  function fmtChangeRate(val){
+    // Always show sign + 2 decimal places, e.g. -22.33% or +7.03% or 0.00%
+    if(isNaN(val)) return '—';
+    const sign = val > 0 ? '+' : '';
+    return sign + val.toFixed(2) + '%';
   }
-  function rowClass(seg){
-    const map={'Red Alert':'risk-row-alert','At Risk':'risk-row-atrisk','Watchlist':'risk-row-watchlist','Stable':'risk-row-stable'};
-    return map[seg]||'';
-  }
-  const dotCls={'WhatsApp':'ch-wa','SMS':'ch-sms','Email':'ch-em','Call/IVR':'ch-ivr'};
 
-  /* --- User Priority Table with pagination (5 rows/page, no Reason column) --- */
-  const PAGE_SIZE = 5;
-  let currentPage = 1;
-  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
-
-  function renderTablePage(page){
-    const start = (page - 1) * PAGE_SIZE;
-    const pageRows = sorted.slice(start, start + PAGE_SIZE);
-
+  function renderPage(page){
+    const rows=sorted.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
     let html=`<table><thead><tr>
-      <th>User</th><th>Field of Business</th><th>Risk Segment</th>
-      <th>Risk Score</th><th>Main Channel</th><th>Ch Share</th>
-      <th>Usage Decline</th><th>Billable Decline</th>
-      <th>Total Billable</th>
+      <th>User Name</th>
+      <th>Field of Business</th>
+      <th>Usage Change Rate %</th>
     </tr></thead><tbody>`;
-    pageRows.forEach(u=>{
-      html+=`<tr class="${rowClass(u.contextual_risk_segment)}">
+    rows.forEach(u=>{
+      const rate = u.usage_change_rate_pct;
+      const rateColor = rate < 0 ? 'var(--risk-red)' : rate > 0 ? 'var(--success-green)' : 'var(--text-muted)';
+      html+=`<tr>
         <td><strong>${u.user_name}</strong></td>
         <td style="color:var(--text-muted);font-size:.74rem">${u.field_of_business}</td>
-        <td>${segBadge(u.contextual_risk_segment)}</td>
-        <td><strong style="font-variant-numeric:tabular-nums">${u.contextual_churn_risk_score}</strong></td>
-        <td><span class="ch-dot ${dotCls[u.main_channel]||''}"></span>${u.main_channel}</td>
-        <td>${u.main_channel_share_pct.toFixed(0)}%</td>
-        <td style="color:${u.usage_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.usage_decline_pct.toFixed(0)}%</td>
-        <td style="color:${u.billable_decline_pct>20?'var(--risk-red)':'var(--text-main)'}">${u.billable_decline_pct.toFixed(0)}%</td>
-        <td>${fmtIDR(u.total_billable_amount)}</td>
+        <td style="color:${rateColor};font-weight:600;font-variant-numeric:tabular-nums">${fmtChangeRate(rate)}</td>
       </tr>`;
     });
     html+='</tbody></table>';
     document.getElementById('userTableWrap').innerHTML=html;
 
     // Pagination bar
-    const bar = document.getElementById('userPaginationBar');
-    if(totalPages <= 1){ bar.innerHTML=''; return; }
-
-    const prevDisabled = page <= 1 ? 'disabled' : '';
-    const nextDisabled = page >= totalPages ? 'disabled' : '';
+    const bar=document.getElementById('userPaginationBar');
+    if(totalPages<=1){ bar.innerHTML=''; return; }
     bar.innerHTML=`
-      <button class="pagination-btn" id="btnPrev" ${prevDisabled} onclick="goUserPage(${page-1})">
-        ← Previous
-      </button>
+      <button class="pagination-btn" onclick="window._goUserPage(${page-1})" ${page<=1?'disabled':''}>← Previous</button>
       <span class="pagination-info">${page} / ${totalPages}</span>
-      <button class="pagination-btn" id="btnNext" ${nextDisabled} onclick="goUserPage(${page+1})">
-        Next →
-      </button>`;
+      <button class="pagination-btn" onclick="window._goUserPage(${page+1})" ${page>=totalPages?'disabled':''}>Next →</button>`;
   }
 
-  // Expose page navigation globally so onclick works
-  window._userSorted = sorted;
-  window.goUserPage = function(page){
-    currentPage = page;
-    renderTablePage(currentPage);
-  };
+  window._goUserPage=function(page){ currentPage=page; renderPage(currentPage); };
+  renderPage(currentPage);
 
-  renderTablePage(currentPage);
-
-  /* --- User Risk vs Value Map (bubble chart) --- */
+  /*
+   * User Risk vs Value Map bubble chart
+   * X-axis: usage_change_rate_pct (signed, negative = decline)
+   * Y-axis: total_billable_amount
+   * Bubble size: total_transactions
+   * Color: contextual_risk_segment
+   */
   destroyChart('chartUserBubble');
-  const maxTx=Math.max(...sorted.map(u=>u.total_transactions))||1;
+  const maxTx=Math.max(...sorted.map(u=>u.total_transactions),1);
+
+  // Compute X-axis bounds from actual data with padding
+  const xVals = sorted.map(u=>u.usage_change_rate_pct).filter(v=>!isNaN(v));
+  const xMin  = xVals.length ? Math.floor(Math.min(...xVals) * 1.2) : -30;
+  const xMax  = xVals.length ? Math.ceil(Math.max(...xVals)  * 1.2 + 5) : 30;
+
   CHARTS['chartUserBubble']=new Chart(document.getElementById('chartUserBubble'),{
     type:'bubble',
     data:{datasets:sorted.map(u=>{
       const col=RISK_COLOR[u.contextual_risk_segment]||'#6B7280';
-      const r=7+(u.total_transactions/maxTx)*18;
+      const r = +(7+(u.total_transactions/maxTx)*18).toFixed(1);
       return{
         label:u.user_name,
-        data:[{x:+u.usage_decline_pct.toFixed(1),y:u.total_billable_amount,r:+r.toFixed(1)}],
+        data:[{
+          x: isNaN(u.usage_change_rate_pct) ? 0 : u.usage_change_rate_pct,
+          y: u.total_billable_amount,
+          r: r
+        }],
         backgroundColor:col+'BB',borderColor:col,borderWidth:1.5
       };
     })},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
+      plugins:{legend:{display:false},
         tooltip:{callbacks:{label:ctx=>{
           const d=ctx.raw,u=sorted.find(x=>x.user_name===ctx.dataset.label)||{};
           return[
             ` ${ctx.dataset.label}`,
-            ` Risk Segment: ${u.contextual_risk_segment||'—'}`,
-            ` Risk Score: ${u.contextual_churn_risk_score||0}`,
-            ` Usage Decline: ${d.x.toFixed(0)}%`,
+            ` Segment: ${u.contextual_risk_segment||'—'}`,
+            ` Usage Change Rate: ${fmtChangeRate(d.x)}`,
             ` Total Billable: ${fmtIDR(d.y)}`
           ];
-        }}}
-      },
+        }}}},
       scales:{
-        x:{min:-5,title:{display:true,text:'Usage Decline (%)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>`${v}%`}},
-        y:{title:{display:true,text:'Total Billable Amount (IDR)',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>fmtNum(v)},beginAtZero:true}
+        x:{
+          min: xMin,
+          max: xMax,
+          title:{display:true,text:'Usage Change Rate (%)',font:{size:11}},
+          grid:{color:'rgba(0,0,0,.05)'},
+          ticks:{callback:v=>`${v}%`}
+        },
+        y:{
+          title:{display:true,text:'Total Billable Amount (IDR)',font:{size:11}},
+          grid:{color:'rgba(0,0,0,.05)'},
+          ticks:{callback:v=>fmtNum(v)},
+          beginAtZero:true
+        }
       }}
   });
 }
@@ -1625,11 +1280,11 @@ function renderUserMonitoring(data){
    ================================================================ */
 document.querySelectorAll('.nav-item[data-section]').forEach(item=>{
   item.addEventListener('click',()=>{
-    const target=item.dataset.section;
+    const t=item.dataset.section;
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
     item.classList.add('active');
     document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('visible'));
-    document.getElementById('sec-'+target).classList.add('visible');
+    document.getElementById('sec-'+t).classList.add('visible');
     window.scrollTo({top:0,behavior:'smooth'});
   });
 });
