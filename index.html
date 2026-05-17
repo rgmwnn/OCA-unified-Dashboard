@@ -99,19 +99,25 @@ ul{list-style:none}
   background:var(--bg-sidebar);display:flex;flex-direction:column;
   overflow-y:auto;z-index:90;border-top:3px solid var(--brand-red);
 }
-/* Single sidebar logo — dark background, no white card */
+/* Sidebar logo — white card background */
 .sidebar-logo-wrap{
-  padding:16px 18px 14px;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:14px 14px 12px;
+  border-bottom:1px solid rgba(255,255,255,.07);
   flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
 }
-.sidebar-logo-wrap img{
-  max-width:196px;max-height:50px;
+.sidebar-logo-card{
+  background:#ffffff;
+  border-radius:10px;
+  padding:10px 14px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:52px;
+}
+.sidebar-logo-card img{
+  max-width:192px;max-height:46px;
   object-fit:contain;display:block;width:100%;
 }
-.sidebar-logo-wrap .logo-fallback-sb{
-  font-size:1.15rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
+.sidebar-logo-card .logo-fallback-sb{
+  font-size:1rem;font-weight:700;color:var(--brand-red);letter-spacing:-.3px;
 }
 .sidebar-nav{padding:12px 0}
 .sidebar-section-label{
@@ -294,10 +300,8 @@ footer span{color:var(--brand-red);font-weight:600}
 
 <!-- HEADER -->
 <header class="header">
-  <div class="header-logo-zone">
-    <img src="assets/logo.png" alt="OCA Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-    <span class="logo-fallback-hdr" style="display:none">OCA</span>
-  </div>
+  <!-- Header logo zone hidden — logo lives in sidebar only -->
+  <div class="header-logo-zone" style="visibility:hidden;pointer-events:none"></div>
   <div class="header-body">
     <div class="header-title-block">
       <div class="header-title">OCA Internal Performance Dashboard</div>
@@ -312,11 +316,13 @@ footer span{color:var(--brand-red);font-weight:600}
 
 <!-- SIDEBAR -->
 <nav class="sidebar">
-  <!-- Single logo — dark sidebar background, no white card -->
+  <!-- Logo in white card — sidebar only -->
   <div class="sidebar-logo-wrap">
-    <img src="assets/logo.png" alt="RevoU x OCA x Telkom"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"/>
-    <span class="logo-fallback-sb" style="display:none">OCA</span>
+    <div class="sidebar-logo-card">
+      <img src="assets/logo.png" alt="RevoU x OCA x Telkom"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"/>
+      <span class="logo-fallback-sb" style="display:none">OCA</span>
+    </div>
   </div>
 
   <div class="sidebar-nav">
